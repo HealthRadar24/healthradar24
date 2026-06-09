@@ -3,7 +3,6 @@ import { defineRailway, github, preserve, project, service } from "railway/iac";
 function seedBundle(name: string, cronSchedule: string) {
   return service(name, {
     source: github("HealthRadar24/healthradar24", { branch: "main" }),
-    root: ".",
     build: {
       builder: "DOCKERFILE",
       dockerfilePath: "Dockerfile.seed-bundles",
