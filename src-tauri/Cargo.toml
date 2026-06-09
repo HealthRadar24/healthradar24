@@ -1,8 +1,8 @@
 [package]
 name = "world-monitor"
 version = "2.8.0"
-description = "World Monitor desktop application"
-authors = ["World Monitor"]
+description = "HealthRadar24 desktop application"
+authors = ["HealthRadar24"]
 edition = "2021"
 
 [build-dependencies]

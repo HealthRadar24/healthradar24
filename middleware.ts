@@ -47,11 +47,11 @@ const BRIEF_CAROUSEL_PATH_RE =
   /^\/api\/brief\/carousel\/[^/]+\/\d{4}-\d{2}-\d{2}-\d{4}\/[0-2]\/?$/;
 
 const VARIANT_HOST_MAP: Record<string, string> = {
-  'tech.worldmonitor.app': 'tech',
-  'finance.worldmonitor.app': 'finance',
-  'commodity.worldmonitor.app': 'commodity',
-  'happy.worldmonitor.app': 'happy',
-  'energy.worldmonitor.app': 'energy',
+  'tech.healthradar24.com': 'tech',
+  'finance.healthradar24.com': 'finance',
+  'commodity.healthradar24.com': 'commodity',
+  'happy.healthradar24.com': 'happy',
+  'energy.healthradar24.com': 'energy',
 };
 
 // Source of truth: src/config/variant-meta.ts — keep in sync when variant metadata changes.
@@ -63,41 +63,41 @@ const VARIANT_OG: Record<string, { name: string; title: string; description: str
     name: 'Tech Monitor',
     title: 'Tech Monitor - Real-Time AI & Tech Industry Dashboard',
     description: 'Real-time AI and tech industry dashboard tracking tech giants, AI labs, startup ecosystems, funding rounds, and tech events worldwide.',
-    image: 'https://tech.worldmonitor.app/favico/tech/og-image.png',
-    url: 'https://tech.worldmonitor.app/',
+    image: 'https://tech.healthradar24.com/favico/tech/og-image.png',
+    url: 'https://tech.healthradar24.com/',
   },
   finance: {
     name: 'Finance Monitor',
     title: 'Finance Monitor - Real-Time Markets & Trading Dashboard',
     description: 'Real-time finance and trading dashboard tracking global markets, stock exchanges, central banks, commodities, forex, crypto, and economic indicators worldwide.',
-    image: 'https://finance.worldmonitor.app/favico/finance/og-image.png',
-    url: 'https://finance.worldmonitor.app/',
+    image: 'https://finance.healthradar24.com/favico/finance/og-image.png',
+    url: 'https://finance.healthradar24.com/',
   },
   commodity: {
     name: 'Commodity Monitor',
     title: 'Commodity Monitor - Real-Time Commodity Markets & Supply Chain Dashboard',
     description: 'Real-time commodity markets dashboard tracking mining sites, processing plants, commodity ports, supply chains, and global commodity trade flows.',
-    image: 'https://commodity.worldmonitor.app/favico/commodity/og-image.png',
-    url: 'https://commodity.worldmonitor.app/',
+    image: 'https://commodity.healthradar24.com/favico/commodity/og-image.png',
+    url: 'https://commodity.healthradar24.com/',
   },
   happy: {
     name: 'Happy Monitor',
     title: 'Happy Monitor - Good News & Global Progress',
     description: 'Curated positive news, progress data, and uplifting stories from around the world.',
-    image: 'https://happy.worldmonitor.app/favico/happy/og-image.png',
-    url: 'https://happy.worldmonitor.app/',
+    image: 'https://happy.healthradar24.com/favico/happy/og-image.png',
+    url: 'https://happy.healthradar24.com/',
   },
   energy: {
     name: 'Energy Atlas',
     title: 'Energy Atlas - Real-Time Global Energy Intelligence Dashboard',
     description: 'Real-time global energy atlas tracking oil and gas pipelines, storage facilities, chokepoints, fuel shortages, tanker flows, and disruption events worldwide.',
-    image: 'https://energy.worldmonitor.app/favico/energy/og-image.png',
-    url: 'https://energy.worldmonitor.app/',
+    image: 'https://energy.healthradar24.com/favico/energy/og-image.png',
+    url: 'https://energy.healthradar24.com/',
   },
 };
 
 const ALLOWED_HOSTS = new Set([
-  'worldmonitor.app',
+  'healthradar24.com',
   ...Object.keys(VARIANT_HOST_MAP),
 ]);
 const VERCEL_PREVIEW_RE = /^[a-z0-9-]+-[a-z0-9]{8,}\.vercel\.app$/;
@@ -161,12 +161,11 @@ export default function middleware(request: Request) {
             screenshot: og.image,
             isPartOf: {
               '@type': 'WebSite',
-              name: 'World Monitor',
-              url: 'https://www.worldmonitor.app/',
+              name: 'HealthRadar24',
+              url: 'https://www.healthradar24.com/',
             },
             sameAs: [
-              'https://github.com/koala73/worldmonitor',
-              'https://x.com/worldmonitorai',
+              'https://github.com/HealthRadar24/healthradar24',
             ],
           })}</script>` : '';
           const aiBody = isAI ? `
@@ -174,14 +173,14 @@ export default function middleware(request: Request) {
 <p>${eDesc}</p>
 <h2>Explore the platform</h2>
 <ul>
-<li><a href="https://www.worldmonitor.app/">World Monitor — geopolitics &amp; intelligence</a></li>
-<li><a href="https://tech.worldmonitor.app/">Tech Monitor</a></li>
-<li><a href="https://finance.worldmonitor.app/">Finance Monitor</a></li>
-<li><a href="https://commodity.worldmonitor.app/">Commodity Monitor</a></li>
-<li><a href="https://happy.worldmonitor.app/">Happy Monitor</a></li>
-<li><a href="https://www.worldmonitor.app/pro">World Monitor Pro</a></li>
-<li><a href="https://www.worldmonitor.app/blog/">Blog</a></li>
-<li><a href="https://github.com/koala73/worldmonitor">Open source on GitHub</a></li>
+<li><a href="https://www.healthradar24.com/">HealthRadar24 — geopolitics &amp; intelligence</a></li>
+<li><a href="https://tech.healthradar24.com/">Tech Monitor</a></li>
+<li><a href="https://finance.healthradar24.com/">Finance Monitor</a></li>
+<li><a href="https://commodity.healthradar24.com/">Commodity Monitor</a></li>
+<li><a href="https://happy.healthradar24.com/">Happy Monitor</a></li>
+<li><a href="https://www.healthradar24.com/pro">HealthRadar24 Pro</a></li>
+<li><a href="https://www.healthradar24.com/blog/">Blog</a></li>
+<li><a href="https://github.com/HealthRadar24/healthradar24">Open source on GitHub</a></li>
 </ul>
 <h2>Sources</h2>
 <p>Data ingested live from <a href="https://acleddata.com/">ACLED</a>, <a href="https://ucdp.uu.se/">UCDP</a>, <a href="https://firms.modaps.eosdis.nasa.gov/">NASA FIRMS</a>, <a href="https://earthquake.usgs.gov/">USGS</a>, <a href="https://opensky-network.org/">OpenSky</a>, <a href="https://aisstream.io/">AISStream</a>, <a href="https://fred.stlouisfed.org/">FRED</a>, <a href="https://www.imf.org/en/Data">IMF</a>, and <a href="https://www.bis.org/">BIS</a>.</p>` : '';

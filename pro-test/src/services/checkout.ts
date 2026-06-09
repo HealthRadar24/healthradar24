@@ -9,7 +9,7 @@ import * as Sentry from '@sentry/react';
 import type { Clerk } from '@clerk/clerk-js';
 import type { CheckoutEvent } from 'dodopayments-checkout';
 
-const API_BASE = 'https://api.worldmonitor.app/api';
+const API_BASE = 'https://api.healthradar24.com/api';
 const DODO_PORTAL_FALLBACK_URL = 'https://customer.dodopayments.com';
 const ACTIVE_SUBSCRIPTION_EXISTS = 'ACTIVE_SUBSCRIPTION_EXISTS';
 
@@ -219,10 +219,10 @@ export function initOverlay(onSuccess?: () => void): void {
       // status endpoint is authoritative for the entitlement; the
       // URL params are informational at this point.
       if (reason === 'event-redirect') {
-        window.location.href = redirectTo || 'https://worldmonitor.app/?wm_checkout=success';
+        window.location.href = redirectTo || 'https://healthradar24.com/?wm_checkout=success';
       } else {
         safeCloseOverlay();
-        window.location.href = 'https://worldmonitor.app/?wm_checkout=success';
+        window.location.href = 'https://healthradar24.com/?wm_checkout=success';
       }
     };
 
@@ -417,7 +417,7 @@ async function doCheckout(
       },
       body: JSON.stringify({
         productId,
-        returnUrl: 'https://worldmonitor.app/?wm_checkout=success',
+        returnUrl: 'https://healthradar24.com/?wm_checkout=success',
         discountCode: options.discountCode,
         referralCode: options.referralCode,
       }),

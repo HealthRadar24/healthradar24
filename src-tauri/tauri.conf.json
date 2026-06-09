@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "World Monitor",
+  "productName": "HealthRadar24",
   "mainBinaryName": "world-monitor",
   "version": "2.8.0",
   "identifier": "app.worldmonitor.desktop",
@@ -13,7 +13,7 @@
   "app": {
     "windows": [
       {
-        "title": "World Monitor",
+        "title": "HealthRadar24",
         "width": 1440,
         "height": 900,
         "minWidth": 1200,
@@ -29,7 +29,7 @@
       }
     ],
     "security": {
-      "csp": "default-src 'self'; connect-src 'self' https: http://localhost:5173 http://127.0.0.1:* ws: wss: blob: data: https://abacus.worldmonitor.app; img-src 'self' data: blob: https:; style-src 'self' 'unsafe-inline'; script-src 'self' 'wasm-unsafe-eval' https://www.youtube.com https://abacus.worldmonitor.app https://*.clerk.accounts.dev; worker-src 'self' blob:; font-src 'self' data: https:; media-src 'self' data: blob: https: http://127.0.0.1:* http://localhost:*; frame-src 'self' http://127.0.0.1:* http://localhost:* https://worldmonitor.app https://tech.worldmonitor.app https://finance.worldmonitor.app https://commodity.worldmonitor.app https://happy.worldmonitor.app https://energy.worldmonitor.app https://www.youtube.com https://www.youtube-nocookie.com https://webcams.windy.com https://*.clerk.accounts.dev;"
+      "csp": "default-src 'self'; connect-src 'self' https: http://localhost:5173 http://127.0.0.1:* ws: wss: blob: data: https://abacus.healthradar24.com; img-src 'self' data: blob: https:; style-src 'self' 'unsafe-inline'; script-src 'self' 'wasm-unsafe-eval' https://www.youtube.com https://abacus.healthradar24.com https://*.clerk.accounts.dev; worker-src 'self' blob:; font-src 'self' data: https:; media-src 'self' data: blob: https: http://127.0.0.1:* http://localhost:*; frame-src 'self' http://127.0.0.1:* http://localhost:* https://healthradar24.com https://tech.healthradar24.com https://finance.healthradar24.com https://commodity.healthradar24.com https://happy.healthradar24.com https://energy.healthradar24.com https://www.youtube.com https://www.youtube-nocookie.com https://webcams.windy.com https://*.clerk.accounts.dev;"
     }
   },
   "bundle": {
@@ -42,8 +42,8 @@
       "appimage"
     ],
     "category": "Productivity",
-    "shortDescription": "World Monitor desktop app (supports World and Tech variants)",
-    "longDescription": "World Monitor desktop app for real-time global intelligence. Build with VITE_VARIANT=tech to package Tech Monitor branding and dataset defaults.",
+    "shortDescription": "HealthRadar24 desktop app (supports World and Tech variants)",
+    "longDescription": "HealthRadar24 desktop app for real-time global intelligence. Build with VITE_VARIANT=tech to package Tech Monitor branding and dataset defaults.",
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",

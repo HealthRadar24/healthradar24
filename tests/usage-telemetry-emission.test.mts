@@ -117,8 +117,8 @@ describe('gateway telemetry payload — domain extraction', () => {
 
     const recorder = makeRecordingCtx();
     const res = await handler(
-      new Request('https://worldmonitor.app/api/v2/shipping/route-intelligence', {
-        headers: { Origin: 'https://worldmonitor.app' },
+      new Request('https://healthradar24.com/api/v2/shipping/route-intelligence', {
+        headers: { Origin: 'https://healthradar24.com' },
       }),
       recorder.ctx,
     );
@@ -152,8 +152,8 @@ describe('gateway telemetry payload — domain extraction', () => {
 
     const recorder = makeRecordingCtx();
     const res = await handler(
-      new Request('https://worldmonitor.app/api/market/v1/list-market-quotes?symbols=AAPL', {
-        headers: { Origin: 'https://worldmonitor.app', 'X-WorldMonitor-Key': SESSION_TOKEN },
+      new Request('https://healthradar24.com/api/market/v1/list-market-quotes?symbols=AAPL', {
+        headers: { Origin: 'https://healthradar24.com', 'X-WorldMonitor-Key': SESSION_TOKEN },
       }),
       recorder.ctx,
     );
@@ -186,8 +186,8 @@ describe('gateway telemetry payload — domain extraction', () => {
 
     const recorder = makeRecordingCtx();
     const res = await handler(
-      new Request('https://worldmonitor.app/api/market/v1/list-market-quotes?symbols=AAPL', {
-        headers: { Origin: 'https://worldmonitor.app', 'X-WorldMonitor-Key': SESSION_TOKEN },
+      new Request('https://healthradar24.com/api/market/v1/list-market-quotes?symbols=AAPL', {
+        headers: { Origin: 'https://healthradar24.com', 'X-WorldMonitor-Key': SESSION_TOKEN },
       }),
       recorder.ctx,
     );
@@ -265,9 +265,9 @@ describe('gateway telemetry payload — bearer identity propagation', () => {
     const token = await signToken({ sub: 'user_pro', plan: 'pro' });
     const recorder = makeRecordingCtx();
     const res = await handler(
-      new Request('https://worldmonitor.app/api/resilience/v1/get-resilience-score?countryCode=US', {
+      new Request('https://healthradar24.com/api/resilience/v1/get-resilience-score?countryCode=US', {
         headers: {
-          Origin: 'https://worldmonitor.app',
+          Origin: 'https://healthradar24.com',
           Authorization: `Bearer ${token}`,
         },
       }),
@@ -326,9 +326,9 @@ describe('gateway telemetry payload — bearer identity propagation', () => {
     const token = await signToken({ sub: 'user_api', plan: 'api' });
     const recorder = makeRecordingCtx();
     const res = await handler(
-      new Request('https://worldmonitor.app/api/market/v1/analyze-stock?symbol=AAPL', {
+      new Request('https://healthradar24.com/api/market/v1/analyze-stock?symbol=AAPL', {
         headers: {
-          Origin: 'https://worldmonitor.app',
+          Origin: 'https://healthradar24.com',
           Authorization: `Bearer ${token}`,
         },
       }),
@@ -365,9 +365,9 @@ describe('gateway telemetry payload — bearer identity propagation', () => {
 
     const recorder = makeRecordingCtx();
     const res = await handler(
-      new Request('https://worldmonitor.app/api/resilience/v1/get-resilience-score?countryCode=US', {
+      new Request('https://healthradar24.com/api/resilience/v1/get-resilience-score?countryCode=US', {
         headers: {
-          Origin: 'https://worldmonitor.app',
+          Origin: 'https://healthradar24.com',
           Authorization: 'Bearer not-a-real-token',
         },
       }),
@@ -400,8 +400,8 @@ describe('gateway telemetry payload — ctx-optional safety', () => {
     ]);
 
     const res = await handler(
-      new Request('https://worldmonitor.app/api/market/v1/list-market-quotes?symbols=AAPL', {
-        headers: { Origin: 'https://worldmonitor.app', 'X-WorldMonitor-Key': SESSION_TOKEN },
+      new Request('https://healthradar24.com/api/market/v1/list-market-quotes?symbols=AAPL', {
+        headers: { Origin: 'https://healthradar24.com', 'X-WorldMonitor-Key': SESSION_TOKEN },
       }),
     );
     assert.equal(res.status, 200);
@@ -440,8 +440,8 @@ describe('gateway telemetry payload — unmatched route reason labels', () => {
 
     const recorder = makeRecordingCtx();
     const res = await handler(
-      new Request('https://worldmonitor.app/api/trade/v1/list-tariffs', {
-        headers: { Origin: 'https://worldmonitor.app', 'X-WorldMonitor-Key': SESSION_TOKEN },
+      new Request('https://healthradar24.com/api/trade/v1/list-tariffs', {
+        headers: { Origin: 'https://healthradar24.com', 'X-WorldMonitor-Key': SESSION_TOKEN },
       }),
       recorder.ctx,
     );
@@ -480,9 +480,9 @@ describe('gateway telemetry payload — unmatched route reason labels', () => {
 
     const recorder = makeRecordingCtx();
     const res = await handler(
-      new Request('https://worldmonitor.app/api/market/v1/list-market-quotes', {
+      new Request('https://healthradar24.com/api/market/v1/list-market-quotes', {
         method: 'DELETE',
-        headers: { Origin: 'https://worldmonitor.app', 'X-WorldMonitor-Key': SESSION_TOKEN },
+        headers: { Origin: 'https://healthradar24.com', 'X-WorldMonitor-Key': SESSION_TOKEN },
       }),
       recorder.ctx,
     );

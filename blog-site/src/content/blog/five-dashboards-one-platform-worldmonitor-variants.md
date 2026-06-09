@@ -1,7 +1,7 @@
 ---
-title: "Five Dashboards, One Platform: How World Monitor Serves Every Intelligence Need"
-description: "World Monitor offers 5 free intelligence dashboards: geopolitical, tech, finance, commodity, and positive news. Switch between them instantly from one platform."
-metaTitle: "5 Intelligence Dashboards, One Platform | World Monitor"
+title: "Five Dashboards, One Platform: How HealthRadar24 Serves Every Intelligence Need"
+description: "HealthRadar24 offers 5 free intelligence dashboards: geopolitical, tech, finance, commodity, and positive news. Switch between them instantly from one platform."
+metaTitle: "5 Intelligence Dashboards, One Platform | HealthRadar24"
 keywords: "intelligence dashboard variants, tech monitoring dashboard, positive news dashboard, multi-purpose intelligence platform, specialized monitoring tools"
 audience: "General tech audience, product managers, developers, knowledge workers, content creators"
 heroImage: "/blog/images/blog/five-dashboards-one-platform-worldmonitor-variants.jpg"
@@ -10,15 +10,15 @@ pubDate: "2026-02-12"
 
 Most intelligence platforms force you into a single vertical. A financial terminal. A cybersecurity feed. A conflict tracker. If your work spans multiple domains, you're left juggling subscriptions.
 
-World Monitor runs **five specialized dashboards** from a single codebase. Switch between them with one click. Each variant curates panels, layers, and data feeds for its specific audience while sharing the same underlying intelligence engine, map infrastructure, and AI capabilities.
+HealthRadar24 runs **five specialized dashboards** from a single codebase. Switch between them with one click. Each variant curates panels, layers, and data feeds for its specific audience while sharing the same underlying intelligence engine, map infrastructure, and AI capabilities.
 
-## 1. World Monitor: The Geopolitical Command Center
+## 1. HealthRadar24: The Geopolitical Command Center
 
-**URL:** worldmonitor.app
+**URL:** healthradar24.com
 **Panels:** 45
 **Focus:** Conflicts, military, infrastructure, geopolitical risk
 
-This is the flagship. World Monitor is built for OSINT analysts, defense researchers, journalists, and anyone who needs to [understand global security dynamics](/blog/posts/track-global-conflicts-in-real-time/).
+This is the flagship. HealthRadar24 is built for OSINT analysts, defense researchers, journalists, and anyone who needs to [understand global security dynamics](/blog/posts/track-global-conflicts-in-real-time/).
 
 **Key features:**
 
@@ -37,7 +37,7 @@ This is the flagship. World Monitor is built for OSINT analysts, defense researc
 
 ## 2. Tech Monitor: The Silicon Valley Radar
 
-**URL:** tech.worldmonitor.app
+**URL:** tech.healthradar24.com
 **Panels:** 28
 **Focus:** AI/ML, startups, cybersecurity, cloud infrastructure
 
@@ -60,7 +60,7 @@ Tech Monitor maps the global technology landscape: where AI is being built, wher
 
 ## 3. Finance Monitor: Markets with Context
 
-**URL:** finance.worldmonitor.app
+**URL:** finance.healthradar24.com
 **Panels:** 27
 **Focus:** Markets, central banks, forex, Gulf FDI, macro signals
 
@@ -84,7 +84,7 @@ Finance Monitor is for [traders and analysts](/blog/posts/real-time-market-intel
 
 ## 4. Commodity Monitor: Raw Materials Intelligence
 
-**URL:** commodity.worldmonitor.app
+**URL:** commodity.healthradar24.com
 **Panels:** 16
 **Focus:** Mining, metals, energy, supply chain disruption
 
@@ -99,13 +99,13 @@ Commodity Monitor tracks the physical resources that power the global economy: w
 - Pipeline infrastructure mapping
 - Energy production and refinery locations
 - Commodity-focused RSS feeds from specialist sources
-- Integration with World Monitor's conflict and disaster layers
+- Integration with HealthRadar24's conflict and disaster layers
 
 **Who it's for:** Commodity traders, supply chain managers, mining analysts, energy sector professionals, procurement teams, logistics planners.
 
 ## 5. Happy Monitor: The Antidote to Doom Scrolling
 
-**URL:** happy.worldmonitor.app
+**URL:** happy.healthradar24.com
 **Panels:** 10
 **Focus:** Good news, human progress, conservation, renewable energy
 
@@ -168,7 +168,7 @@ Install on any device from the browser. Includes offline map caching (500 tiles)
 
 In the web app, switch variants via the header navigation. Your preferences, language settings, and AI configuration carry across variants.
 
-The variants share a single codebase. Every improvement to the core engine benefits all five dashboards simultaneously. A map performance optimization for World Monitor automatically makes Commodity Monitor faster too.
+The variants share a single codebase. Every improvement to the core engine benefits all five dashboards simultaneously. A map performance optimization for HealthRadar24 automatically makes Commodity Monitor faster too.
 
 ## Why Five Variants Instead of One?
 
@@ -178,7 +178,7 @@ An OSINT analyst tracking the Taiwan Strait doesn't need stablecoin peg data clu
 
 Each variant curates the information that matters for its audience. The panels are pre-selected. The layers are prioritized. The news feeds are filtered. You get a dashboard that feels purpose-built for your work, without the cognitive load of configuring a general-purpose tool.
 
-But when you need to cross domains (the commodity trader wants to check if a conflict is affecting mining operations), switching to World Monitor is one click away.
+But when you need to cross domains (the commodity trader wants to check if a conflict is affecting mining operations), switching to HealthRadar24 is one click away.
 
 ## One Platform, Zero Cost
 
@@ -201,8 +201,8 @@ No. All five variants are completely free with no time limits, feature gates, or
 
 **Pick your variant and start exploring:**
 
-- [worldmonitor.app](https://worldmonitor.app) for geopolitics
-- [tech.worldmonitor.app](https://tech.worldmonitor.app) for technology
-- [finance.worldmonitor.app](https://finance.worldmonitor.app) for markets
-- [commodity.worldmonitor.app](https://commodity.worldmonitor.app) for commodities
-- [happy.worldmonitor.app](https://happy.worldmonitor.app) for good news
+- [healthradar24.com](https://healthradar24.com) for geopolitics
+- [tech.healthradar24.com](https://tech.healthradar24.com) for technology
+- [finance.healthradar24.com](https://finance.healthradar24.com) for markets
+- [commodity.healthradar24.com](https://commodity.healthradar24.com) for commodities
+- [happy.healthradar24.com](https://happy.healthradar24.com) for good news

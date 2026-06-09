@@ -109,11 +109,11 @@ describe('widget-agent relay — security', () => {
   it('SSRF guard — allowlist is checked before any fetch call in tool loop', () => {
     const allowlistCheck = relay.indexOf('isWidgetEndpointAllowed(endpoint)');
     assert.ok(allowlistCheck !== -1, 'isWidgetEndpointAllowed() check missing in tool loop');
-    // The fetch call to api.worldmonitor.app must come AFTER the check
-    const fetchCallIdx = relay.indexOf("'https://api.worldmonitor.app'", allowlistCheck);
+    // The fetch call to api.healthradar24.com must come AFTER the check
+    const fetchCallIdx = relay.indexOf("'https://api.healthradar24.com'", allowlistCheck);
     assert.ok(
       fetchCallIdx > allowlistCheck,
-      'fetch() to api.worldmonitor.app must appear after allowlist check',
+      'fetch() to api.healthradar24.com must appear after allowlist check',
     );
   });
 
@@ -233,7 +233,7 @@ describe('widget-agent relay — security', () => {
     const corsBlock = relay.slice(widgetCorsIdx, widgetCorsIdx + 600);
     // Must NOT define a hardcoded origins array for this specific route
     assert.ok(
-      !corsBlock.includes("['https://worldmonitor.app'"),
+      !corsBlock.includes("['https://healthradar24.com'"),
       'Do NOT hardcode origins for /widget-agent — reuse getCorsOrigin()',
     );
     // Must reference corsOrigin variable (set by getCorsOrigin earlier)
@@ -762,11 +762,11 @@ describe('proxy routing — widgetAgentUrl', () => {
     );
   });
 
-  it('widgetAgentUrl targets proxy.worldmonitor.app (not toRuntimeUrl)', () => {
+  it('widgetAgentUrl targets proxy.healthradar24.com (not toRuntimeUrl)', () => {
     // The URL may be in a constant above the function; search the whole file
     assert.ok(
-      proxy.includes('proxy.worldmonitor.app'),
-      'Must target proxy.worldmonitor.app directly (sidecar destroys SSE via arrayBuffer)',
+      proxy.includes('proxy.healthradar24.com'),
+      'Must target proxy.healthradar24.com directly (sidecar destroys SSE via arrayBuffer)',
     );
     // Verify the function itself does not use toRuntimeUrl
     const fnIdx = proxy.indexOf('function widgetAgentUrl');
@@ -778,14 +778,14 @@ describe('proxy routing — widgetAgentUrl', () => {
     );
   });
 
-  it('vite.config.ts proxies /widget-agent to proxy.worldmonitor.app', () => {
+  it('vite.config.ts proxies /widget-agent to proxy.healthradar24.com', () => {
     assert.ok(
       vite.includes('/widget-agent'),
       'vite.config.ts must have proxy entry for /widget-agent',
     );
     assert.ok(
-      vite.includes('proxy.worldmonitor.app'),
-      'Vite proxy target must be proxy.worldmonitor.app',
+      vite.includes('proxy.healthradar24.com'),
+      'Vite proxy target must be proxy.healthradar24.com',
     );
   });
 
@@ -1269,13 +1269,13 @@ describe('PRO widget — store and sanitizer', () => {
 
   it('widget sandbox allows approved Vercel previews and rejects lookalike origins', () => {
     assert.ok(
-      sandbox.includes("url.hostname === 'worldmonitor.app'")
-        && sandbox.includes("url.hostname.endsWith('.worldmonitor.app')"),
-      'sandbox must parse hostname and allow the worldmonitor.app apex/subdomains only',
+      sandbox.includes("url.hostname === 'healthradar24.com'")
+        && sandbox.includes("url.hostname.endsWith('.healthradar24.com')"),
+      'sandbox must parse hostname and allow the healthradar24.com apex/subdomains only',
     );
     assert.ok(
-      !sandbox.includes("endsWith('worldmonitor.app')") && !sandbox.includes('endsWith("worldmonitor.app")'),
-      'sandbox must not use raw suffix checks that allow evilworldmonitor.app',
+      !sandbox.includes("endsWith('healthradar24.com')") && !sandbox.includes('endsWith("healthradar24.com")'),
+      'sandbox must not use raw suffix checks that allow evilhealthradar24.com',
     );
     // The sandbox must source allowed Vercel team slugs from a single named
     // list — keeps the security invariant (team-slug gating) visible and
@@ -1289,7 +1289,7 @@ describe('PRO widget — store and sanitizer', () => {
       .split(',')
       .map((s) => s.trim().replace(/^['"]|['"]$/g, ''))
       .filter(Boolean);
-    assert.ok(slugs.includes('elie'), 'project-owner team slug must remain in the allowlist');
+    assert.ok(slugs.includes('healthradar24'), 'project-owner team slug must remain in the allowlist');
     for (const slug of slugs) {
       assert.match(slug, /^[a-z0-9-]+$/, `team slug "${slug}" must be url-safe`);
     }
@@ -1298,22 +1298,22 @@ describe('PRO widget — store and sanitizer', () => {
     // when teammate slugs are added later.
     const matchesAllowedTeam = (hostname) =>
       slugs.some((team) =>
-        new RegExp('^worldmonitor-[a-z0-9-]+-' + team + '-[a-z0-9]+\\.vercel\\.app$').test(hostname),
+        new RegExp('^healthradar24-[a-z0-9-]+-' + team + '-[a-z0-9]+\\.vercel\\.app$').test(hostname),
       );
-    assert.equal(matchesAllowedTeam('worldmonitor-feature-elie-abc123.vercel.app'), true);
-    assert.equal(matchesAllowedTeam('worldmonitor-feature-attacker-abc123.vercel.app'), false);
-    assert.equal(matchesAllowedTeam('worldmonitor-feature-elie-abc123.vercel.app.evil.com'), false);
-    assert.equal(matchesAllowedTeam('evilworldmonitor.app'), false);
+    assert.equal(matchesAllowedTeam('healthradar24-feature-healthradar24-abc123.vercel.app'), true);
+    assert.equal(matchesAllowedTeam('healthradar24-feature-attacker-abc123.vercel.app'), false);
+    assert.equal(matchesAllowedTeam('healthradar24-feature-healthradar24-abc123.vercel.app.evil.com'), false);
+    assert.equal(matchesAllowedTeam('evilhealthradar24.com'), false);
     // A teammate slug added to the list must extend coverage WITHOUT
     // matching look-alike teams whose slug merely starts with the same
     // letters.
-    const withTeammate = ['elie', 'kieran'];
+    const withTeammate = ['healthradar24', 'kieran'];
     const matchesWithTeammate = (hostname) =>
       withTeammate.some((team) =>
-        new RegExp('^worldmonitor-[a-z0-9-]+-' + team + '-[a-z0-9]+\\.vercel\\.app$').test(hostname),
+        new RegExp('^healthradar24-[a-z0-9-]+-' + team + '-[a-z0-9]+\\.vercel\\.app$').test(hostname),
       );
-    assert.equal(matchesWithTeammate('worldmonitor-feature-kieran-abc123.vercel.app'), true);
-    assert.equal(matchesWithTeammate('worldmonitor-feature-kieranfake-abc123.vercel.app'), false);
+    assert.equal(matchesWithTeammate('healthradar24-feature-kieran-abc123.vercel.app'), true);
+    assert.equal(matchesWithTeammate('healthradar24-feature-kieranfake-abc123.vercel.app'), false);
   });
 
   it('widget sandbox behavior accepts Vercel previews and blocks spoofed parents', () => {
@@ -1354,9 +1354,9 @@ describe('PRO widget — store and sanitizer', () => {
       return { parent, readyMessages, writes, message };
     }
 
-    const allowed = runSandbox('https://worldmonitor-feature-elie-abc123.vercel.app/dashboard');
+    const allowed = runSandbox('https://healthradar24-feature-healthradar24-abc123.vercel.app/dashboard');
     assert.equal(allowed.readyMessages.length, 1);
-    assert.equal(allowed.readyMessages[0].targetOrigin, 'https://worldmonitor-feature-elie-abc123.vercel.app');
+    assert.equal(allowed.readyMessages[0].targetOrigin, 'https://healthradar24-feature-healthradar24-abc123.vercel.app');
     assert.deepEqual(JSON.parse(JSON.stringify(allowed.readyMessages[0].payload)), {
       type: 'wm-widget-ready',
       id: 'wm-1',
@@ -1364,16 +1364,16 @@ describe('PRO widget — store and sanitizer', () => {
     });
     allowed.message({
       data: { type: 'wm-html', id: 'wm-1', token: 'test-token', html: '<p>ok</p>' },
-      origin: 'https://worldmonitor-feature-elie-abc123.vercel.app',
+      origin: 'https://healthradar24-feature-healthradar24-abc123.vercel.app',
       source: allowed.parent,
     });
     assert.deepEqual(allowed.writes, ['<p>ok</p>']);
 
-    const spoofed = runSandbox('https://worldmonitor-feature-elie-abc123.vercel.app.evil.com/');
+    const spoofed = runSandbox('https://healthradar24-feature-healthradar24-abc123.vercel.app.evil.com/');
     assert.deepEqual(spoofed.readyMessages, []);
     spoofed.message({
       data: { type: 'wm-html', id: 'wm-1', token: 'test-token', html: '<p>bad</p>' },
-      origin: 'https://worldmonitor-feature-elie-abc123.vercel.app.evil.com',
+      origin: 'https://healthradar24-feature-healthradar24-abc123.vercel.app.evil.com',
       source: spoofed.parent,
     });
     assert.deepEqual(spoofed.writes, []);

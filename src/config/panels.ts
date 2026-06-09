@@ -924,7 +924,7 @@ const COMMODITY_MOBILE_MAP_LAYERS: MapLayers = {
 };
 
 // ============================================
-// ENERGY variant — energy.worldmonitor.app
+// ENERGY variant — energy.healthradar24.com
 // Pipelines, storage, chokepoints, fuel shortages, disruption timeline.
 // See docs/internal/global-energy-flow-parity-and-surpass.md (not committed).
 // ============================================

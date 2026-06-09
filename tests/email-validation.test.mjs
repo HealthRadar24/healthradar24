@@ -177,14 +177,14 @@ describe('parseCsvLine (RFC 4180)', () => {
   });
 
   it('parses a Resend data row with angle brackets in from field', () => {
-    const row = 'abc-123,2026-03-10,You\'re on the Pro waitlist,World Monitor <noreply@worldmonitor.app>,test@gmail.com,,,,bounced,2026-03-10,,key-123';
+    const row = 'abc-123,2026-03-10,You\'re on the Pro waitlist,HealthRadar24 <noreply@healthradar24.com>,test@gmail.com,,,,bounced,2026-03-10,,key-123';
     const fields = parseCsvLine(row);
     assert.strictEqual(fields[4], 'test@gmail.com');
     assert.strictEqual(fields[8], 'bounced');
   });
 
   it('handles quoted subject with comma', () => {
-    const row = 'abc,"Subject, with comma","World Monitor <noreply@worldmonitor.app>",test@example.com,,,,bounced';
+    const row = 'abc,"Subject, with comma","HealthRadar24 <noreply@healthradar24.com>",test@example.com,,,,bounced';
     const fields = parseCsvLine(row);
     assert.strictEqual(fields[1], 'Subject, with comma');
     assert.strictEqual(fields[7], 'bounced');

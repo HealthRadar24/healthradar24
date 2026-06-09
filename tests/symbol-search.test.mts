@@ -21,8 +21,8 @@ afterEach(() => {
 
 function makeReq(q?: string, method = 'GET'): Request {
   const url = q === undefined
-    ? 'https://worldmonitor.app/api/symbol-search'
-    : `https://worldmonitor.app/api/symbol-search?q=${encodeURIComponent(q)}`;
+    ? 'https://healthradar24.com/api/symbol-search'
+    : `https://healthradar24.com/api/symbol-search?q=${encodeURIComponent(q)}`;
   return new Request(url, { method, headers: { 'X-WorldMonitor-Key': TEST_KEY } });
 }
 

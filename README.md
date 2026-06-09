@@ -1,37 +1,38 @@
-# World Monitor
+# HealthRadar24
 
 **Real-time global intelligence dashboard** — AI-powered news aggregation, geopolitical monitoring, and infrastructure tracking in a unified situational awareness interface.
 
-[![GitHub stars](https://img.shields.io/github/stars/koala73/worldmonitor?style=social)](https://github.com/koala73/worldmonitor/stargazers)
-[![Discord](https://img.shields.io/badge/Discord-Join-5865F2?style=flat&logo=discord&logoColor=white)](https://discord.gg/re63kWKxaz)
+HealthRadar24 is an independent project based on [World Monitor](https://github.com/koala73/worldmonitor). It is not affiliated with or endorsed by the upstream project. Source code for the deployed service is published in this repository under AGPL-3.0-only.
+
+[![GitHub stars](https://img.shields.io/github/stars/HealthRadar24/healthradar24?style=social)](https://github.com/HealthRadar24/healthradar24/stargazers)
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Last commit](https://img.shields.io/github/last-commit/koala73/worldmonitor)](https://github.com/koala73/worldmonitor/commits/main)
-[![Latest release](https://img.shields.io/github/v/release/koala73/worldmonitor?style=flat)](https://github.com/koala73/worldmonitor/releases/latest)
+[![Last commit](https://img.shields.io/github/last-commit/HealthRadar24/healthradar24)](https://github.com/HealthRadar24/healthradar24/commits/main)
+[![Latest release](https://img.shields.io/github/v/release/HealthRadar24/healthradar24?style=flat)](https://github.com/HealthRadar24/healthradar24/releases/latest)
 
 <p align="center">
-  <a href="https://worldmonitor.app"><img src="https://img.shields.io/badge/Web_App-worldmonitor.app-blue?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Web App"></a>&nbsp;
-  <a href="https://tech.worldmonitor.app"><img src="https://img.shields.io/badge/Tech_Variant-tech.worldmonitor.app-0891b2?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Tech Variant"></a>&nbsp;
-  <a href="https://finance.worldmonitor.app"><img src="https://img.shields.io/badge/Finance_Variant-finance.worldmonitor.app-059669?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Finance Variant"></a>&nbsp;
-  <a href="https://commodity.worldmonitor.app"><img src="https://img.shields.io/badge/Commodity_Variant-commodity.worldmonitor.app-b45309?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Commodity Variant"></a>&nbsp;
-  <a href="https://happy.worldmonitor.app"><img src="https://img.shields.io/badge/Happy_Variant-happy.worldmonitor.app-f59e0b?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Happy Variant"></a>&nbsp;
-  <a href="https://energy.worldmonitor.app"><img src="https://img.shields.io/badge/Energy_Variant-energy.worldmonitor.app-eab308?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Energy Variant"></a>
+  <a href="https://healthradar24.com"><img src="https://img.shields.io/badge/Web_App-healthradar24.com-blue?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Web App"></a>&nbsp;
+  <a href="https://tech.healthradar24.com"><img src="https://img.shields.io/badge/Tech_Variant-tech.healthradar24.com-0891b2?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Tech Variant"></a>&nbsp;
+  <a href="https://finance.healthradar24.com"><img src="https://img.shields.io/badge/Finance_Variant-finance.healthradar24.com-059669?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Finance Variant"></a>&nbsp;
+  <a href="https://commodity.healthradar24.com"><img src="https://img.shields.io/badge/Commodity_Variant-commodity.healthradar24.com-b45309?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Commodity Variant"></a>&nbsp;
+  <a href="https://happy.healthradar24.com"><img src="https://img.shields.io/badge/Happy_Variant-happy.healthradar24.com-f59e0b?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Happy Variant"></a>&nbsp;
+  <a href="https://energy.healthradar24.com"><img src="https://img.shields.io/badge/Energy_Variant-energy.healthradar24.com-eab308?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Energy Variant"></a>
 </p>
 
 <p align="center">
-  <a href="https://worldmonitor.app/api/download?platform=windows-exe"><img src="https://img.shields.io/badge/Download-Windows_(.exe)-0078D4?style=for-the-badge&logo=windows&logoColor=white" alt="Download Windows"></a>&nbsp;
-  <a href="https://worldmonitor.app/api/download?platform=macos-arm64"><img src="https://img.shields.io/badge/Download-macOS_Apple_Silicon-000000?style=for-the-badge&logo=apple&logoColor=white" alt="Download macOS ARM"></a>&nbsp;
-  <a href="https://worldmonitor.app/api/download?platform=macos-x64"><img src="https://img.shields.io/badge/Download-macOS_Intel-555555?style=for-the-badge&logo=apple&logoColor=white" alt="Download macOS Intel"></a>&nbsp;
-  <a href="https://worldmonitor.app/api/download?platform=linux-appimage"><img src="https://img.shields.io/badge/Download-Linux_(.AppImage)-FCC624?style=for-the-badge&logo=linux&logoColor=black" alt="Download Linux"></a>
+  <a href="https://healthradar24.com/api/download?platform=windows-exe"><img src="https://img.shields.io/badge/Download-Windows_(.exe)-0078D4?style=for-the-badge&logo=windows&logoColor=white" alt="Download Windows"></a>&nbsp;
+  <a href="https://healthradar24.com/api/download?platform=macos-arm64"><img src="https://img.shields.io/badge/Download-macOS_Apple_Silicon-000000?style=for-the-badge&logo=apple&logoColor=white" alt="Download macOS ARM"></a>&nbsp;
+  <a href="https://healthradar24.com/api/download?platform=macos-x64"><img src="https://img.shields.io/badge/Download-macOS_Intel-555555?style=for-the-badge&logo=apple&logoColor=white" alt="Download macOS Intel"></a>&nbsp;
+  <a href="https://healthradar24.com/api/download?platform=linux-appimage"><img src="https://img.shields.io/badge/Download-Linux_(.AppImage)-FCC624?style=for-the-badge&logo=linux&logoColor=black" alt="Download Linux"></a>
 </p>
 
 <p align="center">
-  <a href="https://www.worldmonitor.app/docs/documentation"><strong>Documentation</strong></a> &nbsp;·&nbsp;
-  <a href="https://github.com/koala73/worldmonitor/releases/latest"><strong>Releases</strong></a> &nbsp;·&nbsp;
-  <a href="https://www.worldmonitor.app/docs/contributing"><strong>Contributing</strong></a>
+  <a href="https://www.healthradar24.com/docs/documentation"><strong>Documentation</strong></a> &nbsp;·&nbsp;
+  <a href="https://github.com/HealthRadar24/healthradar24/releases/latest"><strong>Releases</strong></a> &nbsp;·&nbsp;
+  <a href="https://www.healthradar24.com/docs/contributing"><strong>Contributing</strong></a>
 </p>
 
-![World Monitor Dashboard](docs/images/worldmonitor-7-mar-2026.jpg)
+![HealthRadar24 Dashboard](docs/images/worldmonitor-7-mar-2026.jpg)
 
 ---
 
@@ -47,7 +48,7 @@
 - **Native desktop app** (Tauri 2) for macOS, Windows, and Linux
 - **24 languages** with native-language feeds and RTL support
 
-For the full feature list, architecture, data sources, and algorithms, see the **[documentation](https://www.worldmonitor.app/docs/documentation)**.
+For the full feature list, architecture, data sources, and algorithms, see the **[documentation](https://www.healthradar24.com/docs/documentation)**.
 
 ---
 
@@ -57,18 +58,18 @@ All site variants and desktop binaries are built from a single codebase and ship
 
 | Surface | Status | Notes |
 |---------|--------|-------|
-| `worldmonitor.app`, `tech.`, `finance.`, `commodity.`, `happy.`, `energy.` | Stable | Public deployments built from this repo, actively maintained |
+| `healthradar24.com`, `tech.`, `finance.`, `commodity.`, `happy.`, `energy.` | Stable | Public deployments built from this repo, actively maintained |
 | Desktop binaries (Windows / macOS Apple Silicon / macOS Intel / Linux AppImage) | Stable | One Tauri binary that switches variants in-app; current CI release targets are `full` and `tech` |
 
-Issues filed against any of the above are triaged from the same backlog — see the [issues board](https://github.com/koala73/worldmonitor/issues) for currently-open work.
+Issues filed against any of the above are triaged from the same backlog — see the [issues board](https://github.com/HealthRadar24/healthradar24/issues) for currently-open work.
 
 ---
 
 ## Quick Start
 
 ```bash
-git clone https://github.com/koala73/worldmonitor.git
-cd worldmonitor
+git clone https://github.com/HealthRadar24/healthradar24.git
+cd healthradar24
 npm install
 npm run dev
 ```
@@ -80,13 +81,13 @@ Feature-specific data sources may require credentials — for example, the fligh
 For variant-specific development:
 
 ```bash
-npm run dev:tech       # tech.worldmonitor.app
-npm run dev:finance    # finance.worldmonitor.app
-npm run dev:commodity  # commodity.worldmonitor.app
-npm run dev:happy      # happy.worldmonitor.app
+npm run dev:tech       # tech.healthradar24.com
+npm run dev:finance    # finance.healthradar24.com
+npm run dev:commodity  # commodity.healthradar24.com
+npm run dev:happy      # happy.healthradar24.com
 ```
 
-See the **[self-hosting guide](https://www.worldmonitor.app/docs/getting-started)** for deployment options (Vercel, Docker, static).
+See the **[self-hosting guide](https://www.healthradar24.com/docs/getting-started)** for deployment options (Vercel, Docker, static).
 
 ---
 
@@ -101,7 +102,7 @@ See the **[self-hosting guide](https://www.worldmonitor.app/docs/getting-started
 | **Deployment** | Vercel Edge Functions (60+), Railway relay, Tauri, PWA |
 | **Caching** | Redis (Upstash), 3-tier cache, CDN, service worker |
 
-Full stack details in the **[architecture docs](https://www.worldmonitor.app/docs/architecture)**.
+Full stack details in the **[architecture docs](https://www.healthradar24.com/docs/architecture)**.
 
 ---
 
@@ -113,7 +114,7 @@ Flight data provided gracefully by [Wingbits](https://wingbits.com?utm_source=wo
 
 ## Data Sources
 
-WorldMonitor aggregates 65+ external providers and APIs across geopolitics, finance, energy, climate, aviation, cyber, military, infrastructure, and news intelligence — surfaced through 500+ curated feeds and tracked by a freshness monitor covering 35 source groups. See the full [data sources catalog](https://www.worldmonitor.app/docs/data-sources) for providers, feed tiers, and collection methods.
+HealthRadar24 aggregates 65+ external providers and APIs across geopolitics, finance, energy, climate, aviation, cyber, military, infrastructure, and news intelligence — surfaced through 500+ curated feeds and tracked by a freshness monitor covering 35 source groups. See the full [data sources catalog](https://www.healthradar24.com/docs/data-sources) for providers, feed tiers, and collection methods.
 
 ---
 
@@ -152,8 +153,8 @@ Copyright (C) 2024-2026 Elie Habib. All rights reserved.
 
 ## Contributors
 
-<a href="https://github.com/koala73/worldmonitor/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=koala73/worldmonitor" />
+<a href="https://github.com/HealthRadar24/healthradar24/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=HealthRadar24/healthradar24" />
 </a>
 
 ## Security Acknowledgments
@@ -167,17 +168,17 @@ See our [Security Policy](./SECURITY.md) for responsible disclosure guidelines.
 ---
 
 <p align="center">
-  <a href="https://worldmonitor.app">worldmonitor.app</a> &nbsp;·&nbsp;
-  <a href="https://www.worldmonitor.app/docs/documentation">docs.worldmonitor.app</a> &nbsp;·&nbsp;
-  <a href="https://finance.worldmonitor.app">finance.worldmonitor.app</a> &nbsp;·&nbsp;
-  <a href="https://commodity.worldmonitor.app">commodity.worldmonitor.app</a>
+  <a href="https://healthradar24.com">healthradar24.com</a> &nbsp;·&nbsp;
+  <a href="https://www.healthradar24.com/docs/documentation">docs.healthradar24.com</a> &nbsp;·&nbsp;
+  <a href="https://finance.healthradar24.com">finance.healthradar24.com</a> &nbsp;·&nbsp;
+  <a href="https://commodity.healthradar24.com">commodity.healthradar24.com</a>
 </p>
 
 ## Star History
 
-<a href="https://api.star-history.com/svg?repos=koala73/worldmonitor&type=Date">
+<a href="https://api.star-history.com/svg?repos=HealthRadar24/healthradar24&type=Date">
  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=koala73/worldmonitor&type=Date&type=Date&theme=dark" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=koala73/worldmonitor&type=Date&type=Date" />
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=HealthRadar24/healthradar24&type=Date&type=Date&theme=dark" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=HealthRadar24/healthradar24&type=Date&type=Date" />
  </picture>
 </a>

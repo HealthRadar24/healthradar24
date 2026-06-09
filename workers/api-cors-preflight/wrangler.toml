@@ -3,15 +3,15 @@
 # CF account_id is read from the CLOUDFLARE_ACCOUNT_ID env var so this file
 # stays publishable; CLOUDFLARE_API_TOKEN supplies auth.
 
-name = "api-cors-preflight"
+name = "healthradar24-api-cors-preflight"
 main = "src/index.js"
 compatibility_date = "2025-05-01"
 
-# Bind to api.worldmonitor.app/*. The route is the load-bearing config:
+# Bind to api.healthradar24.com/*. The route is the load-bearing config:
 # without it the Worker is uploaded but receives no traffic.
 [[routes]]
-pattern = "api.worldmonitor.app/*"
-zone_name = "worldmonitor.app"
+pattern = "api.healthradar24.com/*"
+zone_name = "healthradar24.com"
 
 # Observability: surface Worker errors in CF dashboard logs.
 [observability]

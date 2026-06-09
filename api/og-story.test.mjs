@@ -4,8 +4,8 @@ import handler from './og-story.js';
 
 function renderOgStory(query = '') {
   const req = {
-    url: `https://worldmonitor.app/api/og-story${query ? `?${query}` : ''}`,
-    headers: { host: 'worldmonitor.app' },
+    url: `https://healthradar24.com/api/og-story${query ? `?${query}` : ''}`,
+    headers: { host: 'healthradar24.com' },
   };
 
   let statusCode = 0;

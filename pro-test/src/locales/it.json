@@ -26,7 +26,7 @@
     "asFeaturedIn": "In evidenza su"
   },
   "twoPath": {
-    "proTitle": "World Monitor Pro",
+    "proTitle": "HealthRadar24 Pro",
     "proDesc": "Il tuo analista IA. Una scrivania di intelligence personale. Una piattaforma su cui costruire. Una chiave per 30+ servizi live.",
     "proF1": "Chat WM Analyst — interroga i 30+ servizi in modo conversazionale",
     "proF2": "Digest IA — quotidiano, bi-giornaliero o settimanale — su Slack, Discord, Telegram, Email o webhook",
@@ -39,7 +39,7 @@
     "proF9": "AI Market Implications e Regional Intelligence (Presto: sorveglianza orbitale, livelli mappa premium, storico esteso)",
     "proCta": "Prenota l'accesso anticipato",
     "choosePlan": "Scegli il piano",
-    "entTitle": "World Monitor Enterprise",
+    "entTitle": "HealthRadar24 Enterprise",
     "entDesc": "Per team che hanno bisogno di monitoraggio condiviso, accesso API, opzioni di deployment, app TV e supporto diretto.",
     "entF1": "Tutto Pro, più:",
     "entF2": "Immagini satellitari live e SAR",
@@ -82,10 +82,10 @@
     "channels": "Slack · Discord · Telegram · Email · Webhook · Crittografia AES-256 · Orari di silenzio"
   },
   "livePreview": {
-    "windowTitle": "worldmonitor.app — Dashboard live",
+    "windowTitle": "healthradar24.com — Dashboard live",
     "openFullScreen": "Apri a schermo intero",
     "tryLiveDashboard": "Prova la dashboard live",
-    "iframeTitle": "World Monitor — Dashboard di intelligence live",
+    "iframeTitle": "HealthRadar24 — Dashboard di intelligence live",
     "description": "Globo 3D WebGL · 50+ livelli mappa interattivi · Dati in tempo reale su mercati, macro, geopolitica, energia e infrastrutture"
   },
   "socialProof": {
@@ -113,7 +113,7 @@
     "teamsDesc": "Passa dall'uso individuale a flussi condivisi, accesso API, app TV e deployment gestiti."
   },
   "dataCoverage": {
-    "title": "Cosa traccia World Monitor",
+    "title": "Cosa traccia HealthRadar24",
     "subtitle": "30+ domini di servizio ingeriti simultaneamente. Mercati, macro, geopolitica, energia, infrastrutture — tutto normalizzato e renderizzato su un globo WebGL.",
     "markets": "Mercati finanziari e azionari",
     "marketsDesc": "Analisi azionaria globale, materie prime, cripto, flussi ETF, target degli analisti e dati macro FRED",
@@ -177,7 +177,7 @@
   "apiSection": {
     "apiTier": "LIVELLO API",
     "title": "Intelligence programmatica",
-    "subtitle": "Per sviluppatori, analisti e team che costruiscono sui dati di World Monitor. Separato da Pro — usali entrambi o uno solo.",
+    "subtitle": "Per sviluppatori, analisti e team che costruiscono sui dati di HealthRadar24. Separato da Pro — usali entrambi o uno solo.",
     "restApi": "API REST su tutti i 30+ domini di servizio",
     "authenticated": "Autenticato per chiave, rate-limitato per livello",
     "structured": "JSON strutturato con header di cache e documentazione OpenAPI 3.1",
@@ -196,7 +196,7 @@
     "security": "Sicurezza di livello governativo",
     "securityDesc": "Deployment air-gapped, Docker on-premises, tenant cloud dedicato, percorso SOC 2 Type II, SSO/MFA e audit trail completo.",
     "aiAgents": "Agenti IA e MCP",
-    "aiAgentsDesc": "Agenti di intelligence autonomi con persona investitore. Collega World Monitor come strumento a Claude, GPT o LLM personalizzati via MCP.",
+    "aiAgentsDesc": "Agenti di intelligence autonomi con persona investitore. Collega HealthRadar24 come strumento a Claude, GPT o LLM personalizzati via MCP.",
     "dataLayers": "Livelli dati estesi",
     "dataLayersDesc": "Decine di migliaia di asset infrastrutturali mappati globalmente. Integrazione di immagini satellitari con change detection e SAR.",
     "connectors": "100+ connettori dati",
@@ -225,7 +225,7 @@
     "submitContact": "Invia messaggio",
     "contactSending": "Invio...",
     "contactSent": "Messaggio inviato. Ti risponderemo.",
-    "contactFailed": "Invio fallito. Scrivi a enterprise@worldmonitor.app"
+    "contactFailed": "Invio fallito. Scrivi a enterprise@healthradar24.com"
   },
   "pricingTable": {
     "title": "Confronta i livelli",
@@ -276,7 +276,7 @@
   },
   "faq": {
     "title": "Domande frequenti",
-    "q1": "World Monitor è ancora gratis?",
+    "q1": "HealthRadar24 è ancora gratis?",
     "a1": "Sì. La piattaforma di base resta gratuita. Pro aggiunge equity research, analitica macro e briefing IA. Enterprise aggiunge deployment di team e app TV.",
     "q2": "Perché pagare per Pro?",
     "a2": "Pro è per investitori, analisti e professionisti che vogliono monitoraggio azioni, analisi geopolitica, analitica economica e briefing quotidiani IA — tutto sotto una chiave.",
@@ -285,7 +285,7 @@
     "q4": "Posso iniziare con Pro e fare l'upgrade dopo?",
     "a4": "Sì. Pro va bene per individui seri. Enterprise c'è quando le necessità di team e deployment crescono.",
     "q5": "È solo per il monitoraggio di conflitti?",
-    "a5": "No. World Monitor è principalmente una piattaforma di intelligence globale che copre mercati azionari, macroeconomia, analisi geopolitica, energia, infrastrutture e altro. Il tracciamento dei conflitti è una capacità tra molte — non il focus.",
+    "a5": "No. HealthRadar24 è principalmente una piattaforma di intelligence globale che copre mercati azionari, macroeconomia, analisi geopolitica, energia, infrastrutture e altro. Il tracciamento dei conflitti è una capacità tra molte — non il focus.",
     "q6": "Perché mantenere gratuita la piattaforma di base?",
     "a6": "Perché l'accesso pubblico conta. I piani a pagamento finanziano flussi più profondi per utenti seri e organizzazioni.",
     "q7": "Posso ancora usare le mie chiavi API?",
@@ -305,7 +305,7 @@
   },
   "finalCta": {
     "title": "Inizia con Pro. Scala a Enterprise.",
-    "subtitle": "Continua a usare World Monitor gratis, o fai l'upgrade per equity research, analitica macro e briefing IA. Se la tua organizzazione ha bisogno di accesso team, app TV o supporto API, parliamone.",
+    "subtitle": "Continua a usare HealthRadar24 gratis, o fai l'upgrade per equity research, analitica macro e briefing IA. Se la tua organizzazione ha bisogno di accesso team, app TV o supporto API, parliamone.",
     "getPro": "Prenota l'accesso anticipato",
     "talkToSales": "Parla con le vendite"
   },
@@ -329,16 +329,16 @@
     "linkedin": "LinkedIn",
     "whatsapp": "WhatsApp",
     "telegram": "Telegram",
-    "shareText": "Mi sono appena iscritto alla lista d'attesa di World Monitor Pro — monitoraggio azioni, analisi geopolitica e briefing quotidiani IA in un'unica piattaforma. Unisciti:",
-    "joinWaitlistShare": "Unisciti alla lista d'attesa di World Monitor Pro:",
+    "shareText": "Mi sono appena iscritto alla lista d'attesa di HealthRadar24 Pro — monitoraggio azioni, analisi geopolitica e briefing quotidiani IA in un'unica piattaforma. Unisciti:",
+    "joinWaitlistShare": "Unisciti alla lista d'attesa di HealthRadar24 Pro:",
     "youreIn": "Ci sei!",
     "invitedBanner": "Sei stato invitato — unisciti alla lista d'attesa"
   },
   "soonBadge": "Presto",
   "meta": {
-    "title": "World Monitor Pro — Analista AI, Personal Intelligence Desk, MCP per Claude e GPT",
+    "title": "HealthRadar24 Pro — Analista AI, Personal Intelligence Desk, MCP per Claude e GPT",
     "description": "Il livello geopolitico AI. Chiedilo, sottoscrivilo, costruiscilo. Chat WM Analyst su 30+ servizi live, un digest AI consegnato quotidianamente, due volte al giorno o settimanalmente a Slack, Discord, Telegram, Email o webhook, un builder widget personalizzato (HTML/CSS/JS + AI) e connettori MCP per Claude, GPT e LLM personalizzati.",
-    "ogTitle": "World Monitor Pro — Il Livello Geopolitico AI",
+    "ogTitle": "HealthRadar24 Pro — Il Livello Geopolitico AI",
     "ogDescription": "Chiedilo, sottoscrivilo, costruiscilo. Chat WM Analyst, un digest AI secondo i tuoi tempi (quotidiano, due volte al giorno o settimanale), builder widget personalizzato e MCP per Claude/GPT — su 30+ servizi live con una sola chiave."
   },
   "pricing": {

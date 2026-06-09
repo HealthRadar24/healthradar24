@@ -208,8 +208,8 @@ describe('empty-stack network/timeout errors are NOT suppressed', () => {
 
 describe('dynamic-module-import failures (stale chunk after deploy)', () => {
   const dynamicImportErrors = [
-    'Failed to fetch dynamically imported module: https://worldmonitor.app/assets/panels-abc.js',
-    'Failed to fetch dynamically imported module: https://www.worldmonitor.app/assets/index-DSkSc57y.js',
+    'Failed to fetch dynamically imported module: https://healthradar24.com/assets/panels-abc.js',
+    'Failed to fetch dynamically imported module: https://www.healthradar24.com/assets/index-DSkSc57y.js',
     'Importing a module script failed.',
     'TypeError: Importing a module script failed.',
     'error loading dynamically imported module',
@@ -422,15 +422,15 @@ describe('existing beforeSend filters', () => {
     assert.equal(beforeSend(event), null, 'Allowlisted AJAX host should be suppressed regardless of stack shape');
   });
 
-  it('suppresses Clerk SDK "Failed to fetch (clerk.worldmonitor.app)" even with a clerk first-party frame', () => {
+  it('suppresses Clerk SDK "Failed to fetch (clerk.healthradar24.com)" even with a clerk first-party frame', () => {
     // WORLDMONITOR-SA/SB: the bundled Clerk SDK fetches its Frontend API
-    // (clerk.worldmonitor.app, a CNAME to Clerk's auth infra) for token
+    // (clerk.healthradar24.com, a CNAME to Clerk's auth infra) for token
     // refresh and retries transient failures itself. A leaked
-    // `Failed to fetch (clerk.worldmonitor.app)` is a Clerk-SDK-internal
+    // `Failed to fetch (clerk.healthradar24.com)` is a Clerk-SDK-internal
     // network blip, not our code — same disposition as `/ClerkJS: Network
     // error/`. The clerk-*.js chunk reads as first-party (not in the vendor
     // list), so the host allowlist — not hasFirstParty — must decide.
-    const event = makeEvent('Failed to fetch (clerk.worldmonitor.app)', 'TypeError', [
+    const event = makeEvent('Failed to fetch (clerk.healthradar24.com)', 'TypeError', [
       { filename: '/assets/clerk-DC7Q2aDh.js', lineno: 848, function: 'i' },
       { filename: 'chrome-extension://ebeglcfoffnnadgncmppkkohfcigngkj/js/injected/hook.js', lineno: 1, function: 'Object.apply' },
       { filename: '/assets/panels-CYSIkWVK.js', lineno: 45, function: 'window.fetch' },
@@ -490,7 +490,7 @@ describe('existing beforeSend filters', () => {
   it('does NOT suppress "Failed to fetch (<hostname>)" when no maplibre frame is present', () => {
     // Guards against broad message-only suppression hiding a real first-party fetch
     // regression that happens to wrap host into the message.
-    const event = makeEvent('Failed to fetch (api.worldmonitor.app)', 'TypeError', [
+    const event = makeEvent('Failed to fetch (api.healthradar24.com)', 'TypeError', [
       { filename: '/assets/panels-wF5GXf0N.js', lineno: 100, function: 'MyApiCall' },
     ]);
     assert.ok(beforeSend(event) !== null, 'Non-maplibre Failed-to-fetch must reach Sentry');
@@ -498,7 +498,7 @@ describe('existing beforeSend filters', () => {
 
   it('does NOT suppress MapLibre AJAXError for a non-allowlisted host (mixed stack)', () => {
     // Mirrors WORLDMONITOR-NE/NF real-world stack: maplibre + first-party fetch wrapper.
-    const event = makeEvent('Failed to fetch (pmtiles.worldmonitor.app)', 'TypeError', [
+    const event = makeEvent('Failed to fetch (pmtiles.healthradar24.com)', 'TypeError', [
       { filename: '/assets/maplibre-A8Ca0ysS.js', lineno: 4, function: 'ajaxFetch' },
       { filename: '/assets/panels-wF5GXf0N.js', lineno: 24, function: 'window.fetch' },
     ]);
@@ -511,7 +511,7 @@ describe('existing beforeSend filters', () => {
     // AJAX errors must bypass that generic filter so the host allowlist is what decides,
     // otherwise a self-hosted R2 basemap regression whose stack happens to be vendor-only
     // would be silently dropped.
-    const event = makeEvent('Failed to fetch (pmtiles.worldmonitor.app)', 'TypeError', [
+    const event = makeEvent('Failed to fetch (pmtiles.healthradar24.com)', 'TypeError', [
       { filename: '/assets/maplibre-A8Ca0ysS.js', lineno: 4, function: 'ajaxFetch' },
     ]);
     assert.ok(beforeSend(event) !== null, 'All-maplibre first-party tile fetch failure must still reach Sentry');
@@ -522,7 +522,7 @@ describe('existing beforeSend filters', () => {
     // replacement can fail unrelated to our backend. The generic extension rule
     // (`!hasFirstParty && extension frame`) already drops this; the test locks
     // that property in for the `Failed to fetch (<host>)` message shape.
-    const event = makeEvent('Failed to fetch (abacus.worldmonitor.app)', 'TypeError', [
+    const event = makeEvent('Failed to fetch (abacus.healthradar24.com)', 'TypeError', [
       { filename: 'chrome-extension://hoklmmgfnpapgjgcpechhaamimifchmp/frame_ant/frame_ant.js', lineno: 2, function: 'window.fetch' },
     ]);
     assert.equal(beforeSend(event), null, 'Extension-only fetch failure should be suppressed');
@@ -531,9 +531,9 @@ describe('existing beforeSend filters', () => {
   it('does NOT suppress "Failed to fetch (<host>)" when stack has both first-party and extension frames', () => {
     // Safety property: a first-party panels-*.js frame means our code initiated
     // the fetch — must surface even if an extension also wrapped it, so a real
-    // api.worldmonitor.app outage isn't silenced for users who happen to run
+    // api.healthradar24.com outage isn't silenced for users who happen to run
     // fetch-wrapping extensions.
-    const event = makeEvent('Failed to fetch (api.worldmonitor.app)', 'TypeError', [
+    const event = makeEvent('Failed to fetch (api.healthradar24.com)', 'TypeError', [
       { filename: '/assets/panels-wF5GXf0N.js', lineno: 24, function: 'window.fetch' },
       { filename: 'chrome-extension://hoklmmgfnpapgjgcpechhaamimifchmp/frame_ant/frame_ant.js', lineno: 2, function: 'window.fetch' },
     ]);

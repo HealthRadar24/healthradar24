@@ -40,7 +40,7 @@ before(() => {
   Object.defineProperty(globalThis, 'window', {
     configurable: true,
     value: {
-      location: { href: 'https://worldmonitor.app/', pathname: '/', search: '', hash: '' },
+      location: { href: 'https://healthradar24.com/', pathname: '/', search: '', hash: '' },
       history: { replaceState: () => {} },
     },
   });

@@ -1,5 +1,5 @@
 # =============================================================================
-# World Monitor — Docker / Podman Compose
+# HealthRadar24 — Docker / Podman Compose
 # =============================================================================
 # Self-contained stack: app + Redis + AIS relay.
 #

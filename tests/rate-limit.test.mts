@@ -31,7 +31,7 @@ function restoreEnv() {
 }
 
 function makeRequest(headers: Record<string, string> = {}): Request {
-  return new Request('https://worldmonitor.app/api/test', { headers });
+  return new Request('https://healthradar24.com/api/test', { headers });
 }
 
 async function importFreshRateLimitModule() {
@@ -113,7 +113,7 @@ describe('rate-limit fail-open / fail-closed posture (#3531 M9)', () => {
   it('checkRateLimit returns 503 with the degraded marker when failClosed=true', async () => {
     const res = await checkRateLimit(
       makeRequest({ 'cf-connecting-ip': '203.0.113.7' }),
-      { 'Access-Control-Allow-Origin': 'https://worldmonitor.app' },
+      { 'Access-Control-Allow-Origin': 'https://healthradar24.com' },
       { failClosed: true },
     );
     assert.ok(res, 'expected a Response when fail-closed');
@@ -122,7 +122,7 @@ describe('rate-limit fail-open / fail-closed posture (#3531 M9)', () => {
     assert.equal(res.headers.get('Retry-After'), '5');
     assert.equal(
       res.headers.get('Access-Control-Allow-Origin'),
-      'https://worldmonitor.app',
+      'https://healthradar24.com',
       'CORS headers should be propagated on the degraded response',
     );
     const body = (await res.json()) as { error?: string };
@@ -136,7 +136,7 @@ describe('rate-limit fail-open / fail-closed posture (#3531 M9)', () => {
 
     const res = await mod.checkRateLimit(
       makeRequest({ 'cf-connecting-ip': '203.0.113.7' }),
-      { 'Access-Control-Allow-Origin': 'https://worldmonitor.app' },
+      { 'Access-Control-Allow-Origin': 'https://healthradar24.com' },
       { failClosed: true },
     );
 

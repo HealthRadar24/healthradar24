@@ -26,7 +26,7 @@
     "asFeaturedIn": "Zmíněno v"
   },
   "twoPath": {
-    "proTitle": "World Monitor Pro",
+    "proTitle": "HealthRadar24 Pro",
     "proDesc": "Váš AI analytik. Osobní zpravodajské pracoviště. Platforma, na které můžete stavět. Jeden klíč k 30+ živým službám.",
     "proF1": "Chat WM Analyst — dotazujte se všech 30+ služeb konverzačně",
     "proF2": "AI digest — denně, dvakrát denně nebo týdně — na Slack, Discord, Telegram, E-mail nebo webhook",
@@ -39,7 +39,7 @@
     "proF9": "AI Market Implications a Regional Intelligence (Brzy: orbitální dohled, prémiové vrstvy map, delší historie)",
     "proCta": "Rezervujte si raný přístup",
     "choosePlan": "Vyberte plán",
-    "entTitle": "World Monitor Enterprise",
+    "entTitle": "HealthRadar24 Enterprise",
     "entDesc": "Pro týmy, které potřebují sdílený monitoring, API přístup, možnosti nasazení, TV aplikace a přímou podporu.",
     "entF1": "Vše z Pro, navíc:",
     "entF2": "Satelitní snímky live a SAR",
@@ -82,10 +82,10 @@
     "channels": "Slack · Discord · Telegram · E-mail · Webhook · AES-256 šifrované · Tiché hodiny"
   },
   "livePreview": {
-    "windowTitle": "worldmonitor.app — Živý dashboard",
+    "windowTitle": "healthradar24.com — Živý dashboard",
     "openFullScreen": "Otevřít na celé obrazovce",
     "tryLiveDashboard": "Vyzkoušejte živý dashboard",
-    "iframeTitle": "World Monitor — Živý zpravodajský dashboard",
+    "iframeTitle": "HealthRadar24 — Živý zpravodajský dashboard",
     "description": "3D WebGL glóbus · 50+ interaktivních mapových vrstev · Data v reálném čase o trzích, makroekonomii, geopolitice, energetice a infrastruktuře"
   },
   "socialProof": {
@@ -113,7 +113,7 @@
     "teamsDesc": "Přejděte od individuálního použití ke sdíleným workflow, API přístupu, TV aplikacím a řízeným nasazením."
   },
   "dataCoverage": {
-    "title": "Co World Monitor sleduje",
+    "title": "Co HealthRadar24 sleduje",
     "subtitle": "30+ doménových služeb přijímaných současně. Trhy, makro, geopolitika, energie, infrastruktura — vše normalizováno a renderováno na WebGL zeměkouli.",
     "markets": "Finanční trhy a akcie",
     "marketsDesc": "Globální analýza akcií, komodit, krypta, toky ETF, cíle analytiků a makro data FRED",
@@ -177,7 +177,7 @@
   "apiSection": {
     "apiTier": "API ÚROVEŇ",
     "title": "Programové zpravodajství",
-    "subtitle": "Pro vývojáře, analytiky a týmy stavějící na datech World Monitor. Samostatné od Pro — použijte obě nebo jen jedno.",
+    "subtitle": "Pro vývojáře, analytiky a týmy stavějící na datech HealthRadar24. Samostatné od Pro — použijte obě nebo jen jedno.",
     "restApi": "REST API přes všech 30+ doménových služeb",
     "authenticated": "Ověřeno klíčem, rate-limited dle úrovně",
     "structured": "Strukturované JSON s cache hlavičkami a OpenAPI 3.1 dokumentací",
@@ -196,7 +196,7 @@
     "security": "Zabezpečení vládní úrovně",
     "securityDesc": "Air-gapped nasazení, on-premises Docker, dedikovaný cloud tenant, cesta SOC 2 Type II, SSO/MFA a plný audit trail.",
     "aiAgents": "AI agenti a MCP",
-    "aiAgentsDesc": "Autonomní zpravodajští agenti s investor personami. Připojte World Monitor jako nástroj ke Claude, GPT nebo vlastním LLM přes MCP.",
+    "aiAgentsDesc": "Autonomní zpravodajští agenti s investor personami. Připojte HealthRadar24 jako nástroj ke Claude, GPT nebo vlastním LLM přes MCP.",
     "dataLayers": "Rozšířené datové vrstvy",
     "dataLayersDesc": "Desítky tisíc aktiv infrastruktury zmapovaných globálně. Integrace satelitních snímků s detekcí změn a SAR.",
     "connectors": "100+ datových konektorů",
@@ -225,7 +225,7 @@
     "submitContact": "Odeslat zprávu",
     "contactSending": "Odesílání...",
     "contactSent": "Zpráva odeslána. Budeme v kontaktu.",
-    "contactFailed": "Odeslání selhalo. Napište na enterprise@worldmonitor.app"
+    "contactFailed": "Odeslání selhalo. Napište na enterprise@healthradar24.com"
   },
   "pricingTable": {
     "title": "Porovnat úrovně",
@@ -276,7 +276,7 @@
   },
   "faq": {
     "title": "Často kladené otázky",
-    "q1": "Je World Monitor stále zdarma?",
+    "q1": "Je HealthRadar24 stále zdarma?",
     "a1": "Ano. Jádro platformy zůstává zdarma. Pro přidává equity research, makro analytiku a AI briefingy. Enterprise přidává týmová nasazení a TV aplikace.",
     "q2": "Proč platit za Pro?",
     "a2": "Pro je pro investory, analytiky a profesionály, kteří chtějí monitoring akcií, geopolitickou analýzu, ekonomickou analytiku a denní AI briefingy — vše pod jedním klíčem.",
@@ -285,7 +285,7 @@
     "q4": "Mohu začít s Pro a upgradovat později?",
     "a4": "Ano. Pro funguje pro vážné jednotlivce. Enterprise je tu, když rostou týmové a nasazovací potřeby.",
     "q5": "Je to jen pro monitoring konfliktů?",
-    "a5": "Ne. World Monitor je především globální zpravodajská platforma pokrývající akciové trhy, makroekonomii, geopolitickou analýzu, energii, infrastrukturu a další. Sledování konfliktů je jedna z mnoha schopností — ne hlavní zaměření.",
+    "a5": "Ne. HealthRadar24 je především globální zpravodajská platforma pokrývající akciové trhy, makroekonomii, geopolitickou analýzu, energii, infrastrukturu a další. Sledování konfliktů je jedna z mnoha schopností — ne hlavní zaměření.",
     "q6": "Proč udržovat jádro platformy zdarma?",
     "a6": "Protože veřejný přístup je důležitý. Placené plány financují hlubší workflow pro vážné uživatele a organizace.",
     "q7": "Mohu stále používat své vlastní API klíče?",
@@ -305,7 +305,7 @@
   },
   "finalCta": {
     "title": "Začněte s Pro. Škálujte na Enterprise.",
-    "subtitle": "Používejte World Monitor zdarma, nebo upgradujte pro equity research, makro analytiku a AI briefingy. Pokud vaše organizace potřebuje týmový přístup, TV aplikace nebo API podporu, pojďme si promluvit.",
+    "subtitle": "Používejte HealthRadar24 zdarma, nebo upgradujte pro equity research, makro analytiku a AI briefingy. Pokud vaše organizace potřebuje týmový přístup, TV aplikace nebo API podporu, pojďme si promluvit.",
     "getPro": "Rezervujte si raný přístup",
     "talkToSales": "Kontaktovat prodej"
   },
@@ -329,16 +329,16 @@
     "linkedin": "LinkedIn",
     "whatsapp": "WhatsApp",
     "telegram": "Telegram",
-    "shareText": "Právě jsem se připojil k čekací listině World Monitor Pro — monitoring akcií, geopolitická analýza a denní AI briefingy v jedné platformě. Připojte se:",
-    "joinWaitlistShare": "Připojte se k čekací listině World Monitor Pro:",
+    "shareText": "Právě jsem se připojil k čekací listině HealthRadar24 Pro — monitoring akcií, geopolitická analýza a denní AI briefingy v jedné platformě. Připojte se:",
+    "joinWaitlistShare": "Připojte se k čekací listině HealthRadar24 Pro:",
     "youreIn": "Jste uvnitř!",
     "invitedBanner": "Byli jste pozváni — připojte se k čekací listině"
   },
   "soonBadge": "Brzy",
   "meta": {
-    "title": "World Monitor Pro — AI analytik, osobní inteligentní plocha, MCP pro Claude a GPT",
+    "title": "HealthRadar24 Pro — AI analytik, osobní inteligentní plocha, MCP pro Claude a GPT",
     "description": "Geopolitická vrstva AI. Ptejte se na ni, přihlaste se k ní, vytvářejte na ní. Chat WM Analyst přes 30+ živých služeb, denní, dvakrát denní nebo týdenní AI přehled doručovaný do Slack, Discord, Telegram, Email nebo webhooku, vlastní tvůrce widgetů (HTML/CSS/JS + AI) a MCP konektory pro Claude, GPT a vlastní LLM.",
-    "ogTitle": "World Monitor Pro — Geopolitická vrstva AI",
+    "ogTitle": "HealthRadar24 Pro — Geopolitická vrstva AI",
     "ogDescription": "Ptejte se na ni, přihlaste se k ní, vytvářejte na ní. Chat WM Analyst, AI přehled podle vašeho harmonogramu (denně, dvakrát denně nebo týdně), vlastní tvůrce widgetů a MCP pro Claude/GPT — přes 30+ živých služeb pod jedním klíčem."
   },
   "pricing": {

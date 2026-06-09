@@ -18,7 +18,7 @@ interface Props {
 }
 
 const { title, description, metaTitle, keywords, pubDate, modifiedDate, author, authorUrl, authorBio, audience, heroImage, slug, rawBody } = Astro.props;
-const ogImage = heroImage || (slug ? `https://www.worldmonitor.app/blog/images/blog/${slug}.jpg` : undefined);
+const ogImage = heroImage || (slug ? `https://www.healthradar24.com/blog/images/blog/${slug}.jpg` : undefined);
 const formattedDate = pubDate.toLocaleDateString('en-US', {
   year: 'numeric',
   month: 'short',
@@ -28,7 +28,7 @@ const isoDate = pubDate.toISOString();
 const isoModifiedDate = modifiedDate ? modifiedDate.toISOString() : isoDate;
 const DEFAULT_AUTHOR = 'Elie Habib';
 const DEFAULT_AUTHOR_URL = 'https://x.com/eliehabib';
-const DEFAULT_AUTHOR_BIO = 'Founder of World Monitor. Previously co-founder &amp; CEO of Anghami (NASDAQ: ANGH). Building open-source global intelligence infrastructure.';
+const DEFAULT_AUTHOR_BIO = 'Founder of HealthRadar24. Previously co-founder &amp; CEO of Anghami (NASDAQ: ANGH). Building open-source global intelligence infrastructure.';
 const DEFAULT_AUTHOR_GITHUB = 'koala73';
 const authorName = author || DEFAULT_AUTHOR;
 const resolvedAuthorUrl = authorUrl || (authorName === DEFAULT_AUTHOR ? DEFAULT_AUTHOR_URL : undefined);
@@ -47,7 +47,7 @@ const breadcrumbLd = {
       "@type": "ListItem",
       "position": 1,
       "name": "Blog",
-      "item": "https://www.worldmonitor.app/blog/"
+      "item": "https://www.healthradar24.com/blog/"
     },
     {
       "@type": "ListItem",
@@ -71,18 +71,18 @@ const jsonLd = {
   },
   "publisher": {
     "@type": "Organization",
-    "name": "World Monitor",
-    "url": "https://worldmonitor.app",
+    "name": "HealthRadar24",
+    "url": "https://healthradar24.com",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://www.worldmonitor.app/favico/apple-touch-icon.png"
+      "url": "https://www.healthradar24.com/favico/apple-touch-icon.png"
     }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
     "@id": Astro.url.href
   },
-  "image": ogImage || "https://www.worldmonitor.app/favico/og-image.png",
+  "image": ogImage || "https://www.healthradar24.com/favico/og-image.png",
   "url": Astro.url.href,
   ...(keywords ? { "keywords": keywords } : {})
 };
@@ -143,7 +143,7 @@ const faqLd = extractFaqLd(rawBody);
     <div class="cta-banner">
       <h3>See the World in Real Time</h3>
       <p>Markets, geopolitics, conflicts, infrastructure. One dashboard. No login required.</p>
-      <a href="https://worldmonitor.app" class="btn" target="_blank" rel="noopener noreferrer">Open Dashboard</a>
+      <a href="https://healthradar24.com" class="btn" target="_blank" rel="noopener noreferrer">Open Dashboard</a>
     </div>
     <div class="author-bio">
       <img src={avatarSrc} alt={authorName} width="48" height="48" class="author-avatar" loading="lazy" onerror="this.src='/favico/apple-touch-icon.png'" />

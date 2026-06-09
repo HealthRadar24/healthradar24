@@ -1,5 +1,5 @@
 {
-  "name": "world-monitor",
+  "name": "healthradar24",
   "private": true,
   "version": "2.8.0",
   "license": "AGPL-3.0-only",
@@ -16,6 +16,7 @@
     "lint:unicode": "node scripts/check-unicode-safety.mjs",
     "lint:unicode:staged": "node scripts/check-unicode-safety.mjs --staged",
     "security:local-env-dumps": "node scripts/check-local-secret-dumps.mjs",
+    "security:brand-isolation": "node scripts/check-brand-isolation.mjs",
     "worktree:bootstrap": "node scripts/bootstrap-worktree.mjs",
     "worktree:bootstrap:test-only": "node scripts/bootstrap-worktree.mjs --ignore-scripts",
     "worktree:env": "node scripts/bootstrap-worktree.mjs --skip-install",

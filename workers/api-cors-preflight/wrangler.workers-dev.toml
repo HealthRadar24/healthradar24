@@ -1,0 +1,5 @@
+name = "healthradar24-api-cors-preflight"
+main = "src/index.js"
+compatibility_date = "2026-06-09"
+workers_dev = true
+preview_urls = true

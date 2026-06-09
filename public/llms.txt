@@ -1,29 +1,29 @@
-# World Monitor
+# HealthRadar24
 
 > Real-time global intelligence dashboard — AI-powered news aggregation, geopolitical monitoring, and infrastructure tracking in a unified situational awareness interface.
 
-World Monitor is an open-source (AGPL-3.0) intelligence platform that aggregates 500+ news feeds, 56 map layer types, and multiple AI models into a single dashboard. Used by 2M+ people across 190+ countries, as featured in WIRED. It runs as a web app, installable PWA, and native desktop application (Tauri) for macOS, Windows, and Linux.
+HealthRadar24 is an open-source (AGPL-3.0) intelligence platform that aggregates 500+ news feeds, 56 map layer types, and multiple AI models into a single dashboard. Used by 2M+ people across 190+ countries, as featured in WIRED. It runs as a web app, installable PWA, and native desktop application (Tauri) for macOS, Windows, and Linux.
 
-A single codebase produces six specialized variants — geopolitical (World Monitor), technology (Tech Monitor), finance (Finance Monitor), commodities (Commodity Monitor), positive news (Happy Monitor), and energy (Energy Monitor) — each with distinct feeds, panels, map layers, and branding. The multi-variant architecture uses build-time selection via the VITE_VARIANT environment variable, with runtime switching available via the header bar.
+A single codebase produces six specialized variants — geopolitical (HealthRadar24), technology (Tech Monitor), finance (Finance Monitor), commodities (Commodity Monitor), positive news (Happy Monitor), and energy (Energy Monitor) — each with distinct feeds, panels, map layers, and branding. The multi-variant architecture uses build-time selection via the VITE_VARIANT environment variable, with runtime switching available via the header bar.
 
 The project is built with TypeScript, Vite, MapLibre GL JS, deck.gl, D3.js, and Tauri. Browser-side clustering, local ML, and offline analysis run in the client; server-authoritative APIs publish CII/CRI scores, briefs, forecasts, MCP tools, and cached operational data with documented methodology and provenance.
 
 ## Live Instances
 
-- [World Monitor](https://worldmonitor.app): Geopolitics, military, conflicts, infrastructure
-- [Tech Monitor](https://tech.worldmonitor.app): Startups, AI/ML, cloud, cybersecurity
-- [Finance Monitor](https://finance.worldmonitor.app): Global markets, trading, central banks, Gulf FDI
-- [Commodity Monitor](https://commodity.worldmonitor.app): Mining, metals, energy, supply chains, commodity markets
-- [Happy Monitor](https://happy.worldmonitor.app): Positive news, breakthroughs, conservation, renewable energy
-- [Energy Monitor](https://energy.worldmonitor.app): Energy security, oil and gas, chokepoints, disruption timelines
-- [World Monitor Pro](https://worldmonitor.app/pro): AI-powered equity research, geopolitical analysis, macro intelligence
-- [Blog](https://www.worldmonitor.app/blog/): Analysis, OSINT guides, geopolitics, and market intelligence articles
+- [HealthRadar24](https://healthradar24.com): Geopolitics, military, conflicts, infrastructure
+- [Tech Monitor](https://tech.healthradar24.com): Startups, AI/ML, cloud, cybersecurity
+- [Finance Monitor](https://finance.healthradar24.com): Global markets, trading, central banks, Gulf FDI
+- [Commodity Monitor](https://commodity.healthradar24.com): Mining, metals, energy, supply chains, commodity markets
+- [Happy Monitor](https://happy.healthradar24.com): Positive news, breakthroughs, conservation, renewable energy
+- [Energy Monitor](https://energy.healthradar24.com): Energy security, oil and gas, chokepoints, disruption timelines
+- [HealthRadar24 Pro](https://healthradar24.com/pro): AI-powered equity research, geopolitical analysis, macro intelligence
+- [Blog](https://www.healthradar24.com/blog/): Analysis, OSINT guides, geopolitics, and market intelligence articles
 
 ## Documentation
 
-- [README](https://github.com/koala73/worldmonitor/blob/main/README.md): Full project documentation with architecture details
-- [Full Documentation](https://github.com/koala73/worldmonitor/blob/main/docs/DOCUMENTATION.md): Detailed feature documentation, data layers, and panel reference
-- [Extended LLM Documentation](https://worldmonitor.app/llms-full.txt): Comprehensive version of this file with all data layers, components, and data sources
+- [README](https://github.com/HealthRadar24/healthradar24/blob/main/README.md): Full project documentation with architecture details
+- [Full Documentation](https://github.com/HealthRadar24/healthradar24/blob/main/docs/DOCUMENTATION.md): Detailed feature documentation, data layers, and panel reference
+- [Extended LLM Documentation](https://healthradar24.com/llms-full.txt): Comprehensive version of this file with all data layers, components, and data sources
 
 ## Key Features
 
@@ -45,10 +45,10 @@ The project is built with TypeScript, Vite, MapLibre GL JS, deck.gl, D3.js, and 
 
 ## Desktop App
 
-- [Windows Installer](https://worldmonitor.app/api/download?platform=windows-exe): Windows .exe installer
-- [macOS Apple Silicon](https://worldmonitor.app/api/download?platform=macos-arm64): macOS ARM64 build
-- [macOS Intel](https://worldmonitor.app/api/download?platform=macos-x64): macOS x64 build
-- [Linux AppImage](https://worldmonitor.app/api/download?platform=linux-appimage): Linux .AppImage
+- [Windows Installer](https://healthradar24.com/api/download?platform=windows-exe): Windows .exe installer
+- [macOS Apple Silicon](https://healthradar24.com/api/download?platform=macos-arm64): macOS ARM64 build
+- [macOS Intel](https://healthradar24.com/api/download?platform=macos-x64): macOS x64 build
+- [Linux AppImage](https://healthradar24.com/api/download?platform=linux-appimage): Linux .AppImage
 
 ## Tech Stack
 
@@ -62,26 +62,26 @@ The project is built with TypeScript, Vite, MapLibre GL JS, deck.gl, D3.js, and 
 
 ## Blog Posts
 
-- [What Is World Monitor?](https://www.worldmonitor.app/blog/posts/what-is-worldmonitor-real-time-global-intelligence/): Overview of the platform, features, and use cases
-- [Dashboard Variants Guide](https://www.worldmonitor.app/blog/posts/five-dashboards-one-platform-worldmonitor-variants/): Guide to the multi-variant dashboard family
-- [Track Global Conflicts in Real Time](https://www.worldmonitor.app/blog/posts/track-global-conflicts-in-real-time/): Conflict monitoring using ACLED, UCDP, and Telegram OSINT
-- [OSINT for Everyone](https://www.worldmonitor.app/blog/posts/osint-for-everyone-open-source-intelligence-democratized/): How open-source intelligence is democratized
-- [Natural Disaster Monitoring](https://www.worldmonitor.app/blog/posts/natural-disaster-monitoring-earthquakes-fires-volcanoes/): USGS earthquakes, NASA FIRMS fires, volcanic activity
-- [Real-Time Market Intelligence](https://www.worldmonitor.app/blog/posts/real-time-market-intelligence-for-traders-and-analysts/): Financial markets, Fear & Greed, ETF flows
-- [Cyber Threat Intelligence](https://www.worldmonitor.app/blog/posts/cyber-threat-intelligence-for-security-teams/): Feodo Tracker, URLhaus, botnet C2 monitoring
-- [Global Supply Chain Monitoring](https://www.worldmonitor.app/blog/posts/monitor-global-supply-chains-and-commodity-disruptions/): Ports, chokepoints, commodity disruptions
-- [Satellite Imagery and Orbital Surveillance](https://www.worldmonitor.app/blog/posts/satellite-imagery-orbital-surveillance/): SAR, EO, and OSINT satellite data
-- [Live Webcams from Geopolitical Hotspots](https://www.worldmonitor.app/blog/posts/live-webcams-from-geopolitical-hotspots/): Real-time visual feeds from conflict zones
-- [Prediction Markets and AI Forecasting](https://www.worldmonitor.app/blog/posts/prediction-markets-ai-forecasting-geopolitics/): Polymarket integration and geopolitical forecasting
-- [World Monitor Localization](https://www.worldmonitor.app/blog/posts/worldmonitor-in-21-languages-global-intelligence-for-everyone/): Multilingual global intelligence platform
-- [Command Palette Search](https://www.worldmonitor.app/blog/posts/command-palette-search-everything-instantly/): Cmd+K fuzzy search across all data layers
-- [AI-Powered Intelligence Without the Cloud](https://www.worldmonitor.app/blog/posts/ai-powered-intelligence-without-the-cloud/): Local LLMs, Ollama, offline-first AI analysis
-- [Build on World Monitor](https://www.worldmonitor.app/blog/posts/build-on-worldmonitor-developer-api-open-source/): Developer API, proto definitions, open-source contribution
-- [World Monitor vs Traditional Intelligence Tools](https://www.worldmonitor.app/blog/posts/worldmonitor-vs-traditional-intelligence-tools/): Comparison with Bloomberg, Palantir, Dataminr, Recorded Future
-- [Tracking Global Trade Routes](https://www.worldmonitor.app/blog/posts/tracking-global-trade-routes-chokepoints-freight-costs/): Maritime chokepoints, freight costs, trade flow analysis
+- [What Is HealthRadar24?](https://www.healthradar24.com/blog/posts/what-is-worldmonitor-real-time-global-intelligence/): Overview of the platform, features, and use cases
+- [Dashboard Variants Guide](https://www.healthradar24.com/blog/posts/five-dashboards-one-platform-worldmonitor-variants/): Guide to the multi-variant dashboard family
+- [Track Global Conflicts in Real Time](https://www.healthradar24.com/blog/posts/track-global-conflicts-in-real-time/): Conflict monitoring using ACLED, UCDP, and Telegram OSINT
+- [OSINT for Everyone](https://www.healthradar24.com/blog/posts/osint-for-everyone-open-source-intelligence-democratized/): How open-source intelligence is democratized
+- [Natural Disaster Monitoring](https://www.healthradar24.com/blog/posts/natural-disaster-monitoring-earthquakes-fires-volcanoes/): USGS earthquakes, NASA FIRMS fires, volcanic activity
+- [Real-Time Market Intelligence](https://www.healthradar24.com/blog/posts/real-time-market-intelligence-for-traders-and-analysts/): Financial markets, Fear & Greed, ETF flows
+- [Cyber Threat Intelligence](https://www.healthradar24.com/blog/posts/cyber-threat-intelligence-for-security-teams/): Feodo Tracker, URLhaus, botnet C2 monitoring
+- [Global Supply Chain Monitoring](https://www.healthradar24.com/blog/posts/monitor-global-supply-chains-and-commodity-disruptions/): Ports, chokepoints, commodity disruptions
+- [Satellite Imagery and Orbital Surveillance](https://www.healthradar24.com/blog/posts/satellite-imagery-orbital-surveillance/): SAR, EO, and OSINT satellite data
+- [Live Webcams from Geopolitical Hotspots](https://www.healthradar24.com/blog/posts/live-webcams-from-geopolitical-hotspots/): Real-time visual feeds from conflict zones
+- [Prediction Markets and AI Forecasting](https://www.healthradar24.com/blog/posts/prediction-markets-ai-forecasting-geopolitics/): Polymarket integration and geopolitical forecasting
+- [HealthRadar24 Localization](https://www.healthradar24.com/blog/posts/worldmonitor-in-21-languages-global-intelligence-for-everyone/): Multilingual global intelligence platform
+- [Command Palette Search](https://www.healthradar24.com/blog/posts/command-palette-search-everything-instantly/): Cmd+K fuzzy search across all data layers
+- [AI-Powered Intelligence Without the Cloud](https://www.healthradar24.com/blog/posts/ai-powered-intelligence-without-the-cloud/): Local LLMs, Ollama, offline-first AI analysis
+- [Build on HealthRadar24](https://www.healthradar24.com/blog/posts/build-on-worldmonitor-developer-api-open-source/): Developer API, proto definitions, open-source contribution
+- [HealthRadar24 vs Traditional Intelligence Tools](https://www.healthradar24.com/blog/posts/worldmonitor-vs-traditional-intelligence-tools/): Comparison with Bloomberg, Palantir, Dataminr, Recorded Future
+- [Tracking Global Trade Routes](https://www.healthradar24.com/blog/posts/tracking-global-trade-routes-chokepoints-freight-costs/): Maritime chokepoints, freight costs, trade flow analysis
 
 ## Optional
 
-- [Source Code](https://github.com/koala73/worldmonitor): GitHub repository (AGPL-3.0)
-- [Releases](https://github.com/koala73/worldmonitor/releases): All desktop releases for macOS, Windows, and Linux
-- [Issues](https://github.com/koala73/worldmonitor/issues): Bug reports and feature requests
+- [Source Code](https://github.com/HealthRadar24/healthradar24): GitHub repository (AGPL-3.0)
+- [Releases](https://github.com/HealthRadar24/healthradar24/releases): All desktop releases for macOS, Windows, and Linux
+- [Issues](https://github.com/HealthRadar24/healthradar24/issues): Bug reports and feature requests

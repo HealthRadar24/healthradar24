@@ -1,40 +1,40 @@
 {
   "linkset": [
     {
-      "anchor": "https://api.worldmonitor.app/",
+      "anchor": "https://api.healthradar24.com/",
       "service-desc": [
         {
-          "href": "https://www.worldmonitor.app/openapi.yaml",
+          "href": "https://www.healthradar24.com/openapi.yaml",
           "type": "application/vnd.oai.openapi"
         }
       ],
       "service-doc": [
         {
-          "href": "https://www.worldmonitor.app/docs/documentation",
+          "href": "https://www.healthradar24.com/docs/documentation",
           "type": "text/html"
         }
       ],
       "status": [
         {
-          "href": "https://api.worldmonitor.app/api/health",
+          "href": "https://api.healthradar24.com/api/health",
           "type": "application/json"
         }
       ]
     },
     {
-      "anchor": "https://worldmonitor.app/mcp",
+      "anchor": "https://healthradar24.com/mcp",
       "service-desc": [
         {
-          "href": "https://worldmonitor.app/.well-known/mcp/server-card.json",
+          "href": "https://healthradar24.com/.well-known/mcp/server-card.json",
           "type": "application/json"
         }
       ]
     },
     {
-      "anchor": "https://worldmonitor.app/",
+      "anchor": "https://healthradar24.com/",
       "agent-skills-index": [
         {
-          "href": "https://worldmonitor.app/.well-known/agent-skills/index.json",
+          "href": "https://healthradar24.com/.well-known/agent-skills/index.json",
           "type": "application/json"
         }
       ]

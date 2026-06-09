@@ -24,7 +24,7 @@ describe('api/health ?history=1', () => {
     delete process.env.UPSTASH_REDIS_REST_TOKEN;
 
     const { default: handler } = await import('../api/health.js');
-    const req = new Request('https://api.worldmonitor.app/api/health?history=1');
+    const req = new Request('https://api.healthradar24.com/api/health?history=1');
     const res = await handler(req);
 
     assert.equal(res.status, 200);
@@ -49,7 +49,7 @@ describe('api/health ?history=1', () => {
     delete process.env.UPSTASH_REDIS_REST_TOKEN;
 
     const { default: handler } = await import('../api/health.js?second-import');
-    const req = new Request('https://api.worldmonitor.app/api/health?compact=1');
+    const req = new Request('https://api.healthradar24.com/api/health?compact=1');
     const res = await handler(req);
 
     // With Upstash unconfigured the non-history path short-circuits to
@@ -74,7 +74,7 @@ describe('api/health ?history=1', () => {
 
     const { default: handler } = await import('../api/health.js?third-import');
     for (const v of ['0', 'true', 'yes', '01']) {
-      const req = new Request(`https://api.worldmonitor.app/api/health?history=${v}`);
+      const req = new Request(`https://api.healthradar24.com/api/health?history=${v}`);
       const res = await handler(req);
       const body = await res.json();
       assert.ok(

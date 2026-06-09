@@ -1,6 +1,6 @@
-# 🌍 Self-Hosting World Monitor
+# 🌍 Self-Hosting HealthRadar24
 
-Run the full World Monitor stack locally with Docker/Podman.
+Run the full HealthRadar24 stack locally with Docker/Podman.
 
 ## 📋 Prerequisites
 
@@ -12,7 +12,7 @@ Run the full World Monitor stack locally with Docker/Podman.
 
 ```bash
 # 1. Clone and enter the repo
-git clone https://github.com/koala73/worldmonitor.git
+git clone https://github.com/HealthRadar24/healthradar24.git
 cd worldmonitor
 npm install
 

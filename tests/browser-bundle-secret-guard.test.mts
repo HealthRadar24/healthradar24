@@ -33,7 +33,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
 // Server-side secrets that MUST NOT cross into the browser bundle. Each
-// of these grants access to worldmonitor.app infrastructure. They are
+// of these grants access to healthradar24.com infrastructure. They are
 // distinct from per-user provider credentials (GROQ_API_KEY,
 // OPENROUTER_API_KEY, etc.) which users legitimately enter via the
 // desktop settings UI.

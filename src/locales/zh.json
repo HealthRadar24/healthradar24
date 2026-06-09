@@ -532,7 +532,7 @@
         "needsKeys": "配置API密钥以解锁功能",
         "some": "部分功能需要API密钥"
       },
-      "skipSetup": "跳过设置 — 一个World Monitor许可证即可解锁全部功能。加入候补名单抢先体验。",
+      "skipSetup": "跳过设置 — 一个HealthRadar24许可证即可解锁全部功能。加入候补名单抢先体验。",
       "summary": {
         "desktop": "桌面模式",
         "web": "网页模式（只读，服务器管理凭证）",
@@ -586,7 +586,7 @@
         "dividerOr": "或",
         "register": {
           "title": "预留您的名额",
-          "description": "World Monitor许可证即将上线。立即注册成为首批用户 — 早期会员享有优先访问和创始会员价格。",
+          "description": "HealthRadar24许可证即将上线。立即注册成为首批用户 — 早期会员享有优先访问和创始会员价格。",
           "submitBtn": "加入候补名单"
         }
       },
@@ -597,7 +597,7 @@
         "status": "状态",
         "duration": "耗时"
       },
-      "shellTitle": "World Monitor 设置",
+      "shellTitle": "HealthRadar24 设置",
       "shellSearchPlaceholder": "搜索设置...",
       "shellCancel": "取消",
       "shellSaveClose": "保存并关闭",
@@ -2946,10 +2946,10 @@
     "copyCoordinates": "复制坐标"
   },
   "shell": {
-    "documentTitle": "World Monitor — 实时全球情报仪表板",
+    "documentTitle": "HealthRadar24 — 实时全球情报仪表板",
     "metaDescription": "实时全球情报平台。刊登于 WIRED。全球 190 个国家 200 万+ 用户使用。冲突、市场、军事、OSINT 信息一览无遗。",
     "offlineTitle": "您已离线",
-    "offlineMessage": "World Monitor 需要互联网连接来获取实时情报数据。",
+    "offlineMessage": "HealthRadar24 需要互联网连接来获取实时情报数据。",
     "offlineRetry": "重试"
   },
   "widgets": {
@@ -3020,7 +3020,7 @@
   },
   "premium": {
     "pro": "PRO",
-    "lockedDesc": "需要 World Monitor 许可证密钥",
+    "lockedDesc": "需要 HealthRadar24 许可证密钥",
     "signInToUnlock": "登录以解锁高级功能",
     "signIn": "登录以解锁",
     "upgradeDesc": "升级到 Pro 以获得完整的高级分析访问权限",

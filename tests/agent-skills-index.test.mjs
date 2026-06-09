@@ -79,7 +79,7 @@ describe('agent readiness: agent-skills index', () => {
       assert.ok(skill.description && skill.description.length > 0, `${skill.name} missing description`);
       assert.match(
         skill.url,
-        /^https:\/\/worldmonitor\.app\/\.well-known\/agent-skills\/[^/]+\/SKILL\.md$/,
+        /^https:\/\/healthradar24\.com\/\.well-known\/agent-skills\/[^/]+\/SKILL\.md$/,
         `${skill.name} url must be the canonical absolute URL`,
       );
       const local = join(SKILLS_DIR, skill.name, 'SKILL.md');

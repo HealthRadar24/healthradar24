@@ -78,8 +78,8 @@ export function getProviderCredentials(
       headers: {
         'Authorization': `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
-        'HTTP-Referer': 'https://worldmonitor.app',
-        'X-Title': 'World Monitor',
+        'HTTP-Referer': 'https://healthradar24.com',
+        'X-Title': 'HealthRadar24',
       },
     };
   }

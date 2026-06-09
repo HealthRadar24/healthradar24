@@ -414,7 +414,7 @@ function upstashSetNx(key, value, ttlSeconds) {
 // ─────────────────────────────────────────────────────────────
 // Boot-seed freshness guard
 //
-// ais-relay is a long-running HTTP service on proxy.worldmonitor.app that
+// ais-relay is a long-running HTTP service on proxy.healthradar24.com that
 // Railway recycles frequently (deploys, crashes, OOM). Every seed loop fires an
 // IMMEDIATE seed on boot and then schedules a setInterval at its real cadence —
 // but the process is usually recycled long before that interval elapses, so the
@@ -3575,7 +3575,7 @@ const CLASSIFY_LLM_PROVIDERS = [
     envKey: 'OPENROUTER_API_KEY',
     apiUrl: 'https://openrouter.ai/api/v1/chat/completions',
     model: 'google/gemini-2.5-flash',
-    headers: (key) => ({ Authorization: `Bearer ${key}`, 'Content-Type': 'application/json', 'HTTP-Referer': 'https://worldmonitor.app', 'X-Title': 'World Monitor', 'User-Agent': CHROME_UA }),
+    headers: (key) => ({ Authorization: `Bearer ${key}`, 'Content-Type': 'application/json', 'HTTP-Referer': 'https://healthradar24.com', 'X-Title': 'HealthRadar24', 'User-Agent': CHROME_UA }),
     timeout: 30000,
   },
 ];
@@ -3646,7 +3646,7 @@ async function classifyFetchLlm(titles) {
 let classifyInFlight = false;
 
 async function seedClassifyForVariant(variant, seenTitles) {
-  const digestUrl = `https://api.worldmonitor.app/api/news/v1/list-feed-digest?variant=${variant}&lang=en`;
+  const digestUrl = `https://api.healthradar24.com/api/news/v1/list-feed-digest?variant=${variant}&lang=en`;
   let digest;
   try {
     const resp = await new Promise((resolve, reject) => {
@@ -3877,7 +3877,7 @@ async function startClassifySeedLoop() {
 // so service statuses are always cached (TTL is 30 min).
 // ─────────────────────────────────────────────────────────────
 const SERVICE_STATUSES_SEED_INTERVAL_MS = 15 * 60 * 1000; // 15 min (TTL/2)
-const SERVICE_STATUSES_RPC_URL = 'https://api.worldmonitor.app/api/infrastructure/v1/list-service-statuses';
+const SERVICE_STATUSES_RPC_URL = 'https://api.healthradar24.com/api/infrastructure/v1/list-service-statuses';
 
 async function seedServiceStatuses() {
   try {
@@ -4445,9 +4445,9 @@ function startTheaterPostureSeedLoop() {
 }
 
 // ─────────────────────────────────────────────────────────────
-// Warm-ping shared auth — relay → api.worldmonitor.app
+// Warm-ping shared auth — relay → api.healthradar24.com
 //
-// All warm-pings call api.worldmonitor.app/api/* edge functions. These are
+// All warm-pings call api.healthradar24.com/api/* edge functions. These are
 // non-premium but NOT anonymous: in normal traffic they require a browser
 // session token or an API key. Origin-trust used to satisfy them, but the
 // gateway dropped all Origin/Referer trust in the #3541 hardening — Origin
@@ -4480,7 +4480,7 @@ if (!RELAY_API_KEY) {
 function warmPingHeaders(extra = {}) {
   const h = {
     'User-Agent': CHROME_UA,
-    Origin: 'https://worldmonitor.app',
+    Origin: 'https://healthradar24.com',
     ...extra,
   };
   if (RELAY_API_KEY) h['X-WorldMonitor-Key'] = RELAY_API_KEY;
@@ -4495,7 +4495,7 @@ function warmPingHeaders(extra = {}) {
 // keeps CDN caching from hiding the handler from the warm-ping loop.
 // ─────────────────────────────────────────────────────────────
 const CII_WARM_PING_INTERVAL_MS = 8 * 60 * 1000; // 8 min (live cache TTL is 10 min)
-const CII_RPC_URL = 'https://api.worldmonitor.app/api/intelligence/v1/get-risk-scores';
+const CII_RPC_URL = 'https://api.healthradar24.com/api/intelligence/v1/get-risk-scores';
 
 function ciiWarmPingUrl() {
   return `${CII_RPC_URL}?_wm_warm_ping=${Date.now()}`;
@@ -4534,7 +4534,7 @@ function startCiiWarmPingLoop() {
 // Interval matches health.js maxStaleMin (60 min) with a 2× margin.
 // ─────────────────────────────────────────────────────────────
 const CHOKEPOINT_WARM_PING_INTERVAL_MS = 30 * 60 * 1000; // 30 min
-const CHOKEPOINT_RPC_URL = 'https://api.worldmonitor.app/api/supply-chain/v1/get-chokepoint-status';
+const CHOKEPOINT_RPC_URL = 'https://api.healthradar24.com/api/supply-chain/v1/get-chokepoint-status';
 
 async function seedChokepointWarmPing() {
   try {
@@ -4572,7 +4572,7 @@ function startChokepointWarmPingLoop() {
 // seed-meta on every live fetch; we just need to call it regularly.
 // ─────────────────────────────────────────────────────────────
 const CABLE_HEALTH_WARM_PING_INTERVAL_MS = 30 * 60 * 1000; // 30 min
-const CABLE_HEALTH_RPC_URL = 'https://api.worldmonitor.app/api/infrastructure/v1/get-cable-health';
+const CABLE_HEALTH_RPC_URL = 'https://api.healthradar24.com/api/infrastructure/v1/get-cable-health';
 
 async function seedCableHealthWarmPing() {
   try {
@@ -6099,7 +6099,7 @@ async function writeSocialVelocityHealthyMeta(recordCount) {
 async function fetchRedditHot(subreddit, failures = []) {
   const { ok, status, posts, source } = await fetchRedditHotListing(subreddit, {
     limit: 25,
-    legacyUserAgent: 'WorldMonitor/1.0 (contact: info@worldmonitor.app)',
+    legacyUserAgent: 'WorldMonitor/1.0 (contact: info@healthradar24.com)',
   });
   if (!ok) {
     const failure = `r/${subreddit} HTTP ${status} (${source})`;
@@ -6668,10 +6668,10 @@ const DODO_PRODUCT_IDS = [
 ];
 
 const DODO_TIER_CONFIG = {
-  free: { name: 'Free', description: 'Get started with the essentials', features: ['Core dashboard panels', 'Global news feed', 'Earthquake & weather alerts', 'Basic map view'], cta: 'Get Started', href: 'https://worldmonitor.app', highlighted: false },
+  free: { name: 'Free', description: 'Get started with the essentials', features: ['Core dashboard panels', 'Global news feed', 'Earthquake & weather alerts', 'Basic map view'], cta: 'Get Started', href: 'https://healthradar24.com', highlighted: false },
   pro: { name: 'Pro', description: 'Full intelligence dashboard', features: ['Everything in Free', 'AI stock analysis & backtesting', 'Daily market briefs', 'Military & geopolitical tracking', 'Custom widget builder', 'MCP data connectors', 'Priority data refresh'], highlighted: true },
   api_starter: { name: 'API', description: 'Programmatic access to intelligence data', features: ['REST API access', 'Real-time data streams', '1,000 requests/day', 'Webhook notifications', 'Custom data exports'], highlighted: false },
-  enterprise: { name: 'Enterprise', description: 'Custom solutions for organizations', features: ['Everything in Pro + API', 'Unlimited API requests', 'Dedicated support', 'Custom integrations', 'SLA guarantee', 'On-premise option'], cta: 'Contact Sales', href: 'mailto:enterprise@worldmonitor.app', highlighted: false },
+  enterprise: { name: 'Enterprise', description: 'Custom solutions for organizations', features: ['Everything in Pro + API', 'Unlimited API requests', 'Dedicated support', 'Custom integrations', 'SLA guarantee', 'On-premise option'], cta: 'Contact Sales', href: 'mailto:enterprise@healthradar24.com', highlighted: false },
 };
 
 const DODO_PRODUCT_META = {
@@ -8809,7 +8809,7 @@ function handleWorldBankRequest(req, res) {
   const request = https.get(wbUrl, {
     headers: {
       'Accept': 'application/json',
-      'User-Agent': 'Mozilla/5.0 (compatible; WorldMonitor/1.0; +https://worldmonitor.app)',
+      'User-Agent': 'Mozilla/5.0 (compatible; WorldMonitor/1.0; +https://healthradar24.com)',
     },
     timeout: 15000,
   }, (response) => {
@@ -9540,9 +9540,9 @@ function handleNotamProxyRequest(req, res) {
 
 // CORS origin allowlist — only our domains can use this relay
 const ALLOWED_ORIGINS = [
-  'https://worldmonitor.app',
-  'https://tech.worldmonitor.app',
-  'https://finance.worldmonitor.app',
+  'https://healthradar24.com',
+  'https://tech.healthradar24.com',
+  'https://finance.healthradar24.com',
   'http://localhost:5173',   // Vite dev
   'http://localhost:5174',   // Vite dev alt port
   'http://localhost:4173',   // Vite preview
@@ -9553,10 +9553,10 @@ const ALLOWED_ORIGINS = [
 function getCorsOrigin(req) {
   const origin = req.headers.origin || '';
   if (ALLOWED_ORIGINS.includes(origin)) return origin;
-  // Wildcard: any *.worldmonitor.app subdomain (for variant subdomains)
+  // Wildcard: any *.healthradar24.com subdomain (for variant subdomains)
   try {
     const url = new URL(origin);
-    if (url.hostname.endsWith('.worldmonitor.app') && url.protocol === 'https:') return origin;
+    if (url.hostname.endsWith('.healthradar24.com') && url.protocol === 'https:') return origin;
   } catch { /* invalid origin — fall through */ }
   // Optional: allow Vercel preview deployments when explicitly enabled.
   if (ALLOW_VERCEL_PREVIEW_ORIGINS && origin.endsWith('.vercel.app')) return origin;
@@ -11172,7 +11172,7 @@ async function handleWidgetAgentRequest(req, res) {
           }
 
           try {
-            const url = new URL(endpoint, 'https://api.worldmonitor.app');
+            const url = new URL(endpoint, 'https://api.healthradar24.com');
             for (const [k, v] of Object.entries(params)) {
               url.searchParams.set(k, String(v));
             }

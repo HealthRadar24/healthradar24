@@ -835,7 +835,7 @@ export const internalGetCustomerPortalUrl = internalAction({
  * calls claimSubscription(anonId) to reassign all payment records from the
  * anonymous ID to the real user ID.
  *
- * @see https://github.com/koala73/worldmonitor/issues/2078
+ * @see https://github.com/HealthRadar24/healthradar24/issues/2078
  */
 export const claimSubscription = mutation({
   args: { anonId: v.string() },

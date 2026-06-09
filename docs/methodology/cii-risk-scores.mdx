@@ -47,7 +47,7 @@ The current version is **v8**.
 > clarified without changing scoring coefficients, CII formula version, or
 > `risk:scores:sebuf:v8` cache keys. The UCDP seeder now prefers the newest GED
 > release that returns events instead of stopping at the first responding
-> version ([#4200](https://github.com/koala73/worldmonitor/issues/4200)), and
+> version ([#4200](https://github.com/HealthRadar24/healthradar24/issues/4200)), and
 > the CII refresh path warns when ACLED returns zero events for both comparison
 > windows so operators can distinguish a quiet feed from an auth/upstream gap.
 
@@ -116,7 +116,7 @@ The current version is **v8**.
 > **Implementation note (2026-05-27).** `baselineRisk` and `eventMultiplier`
 > now come from one shared coefficient table used by both the server and
 > frontend. This resolves the 7-country drift tracked in
-> [#3789](https://github.com/koala73/worldmonitor/issues/3789) by keeping the
+> [#3789](https://github.com/HealthRadar24/healthradar24/issues/3789) by keeping the
 > previously published server/API values for AF, EG, IQ, JP, KR, LB and QA.
 > Frontend client-side CII rendering now uses those same values. Server/API
 > values were unchanged by this refactor — the v3 bump above is from the

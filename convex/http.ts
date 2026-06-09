@@ -5,8 +5,8 @@ import { webhookHandler } from "./payments/webhookHandlers";
 import { resendWebhookHandler } from "./resendWebhookHandler";
 
 const TRUSTED = [
-  "https://worldmonitor.app",
-  "*.worldmonitor.app",
+  "https://healthradar24.com",
+  "*.healthradar24.com",
   "http://localhost:3000",
 ];
 

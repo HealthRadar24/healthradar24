@@ -1,13 +1,13 @@
 # api-cors-preflight
 
-Cloudflare Worker bound to `api.worldmonitor.app/*`. Owns CORS at the edge:
+Cloudflare Worker bound to `api.healthradar24.com/*`. Owns CORS at the edge:
 short-circuits OPTIONS preflights (without forwarding to Vercel) and stamps
 matching CORS headers onto every non-OPTIONS response on the way back to the
 browser.
 
 ## Why this exists separately from `api/_cors.js`
 
-Three CORS surfaces sit in front of every browser request to `api.worldmonitor.app`:
+Three CORS surfaces sit in front of every browser request to `api.healthradar24.com`:
 
 1. **Cloudflare Worker (this directory)** — sees the request first; the
    preflight response the browser actually checks comes from here.
@@ -38,7 +38,7 @@ automatically when `workers/api-cors-preflight/**` changes. Requires repo
 secrets:
 
 - `CLOUDFLARE_API_TOKEN` — token with `Workers Scripts:Edit` + `Workers
-  Routes:Edit` for the `worldmonitor.app` zone.
+  Routes:Edit` for the `healthradar24.com` zone.
 - `CLOUDFLARE_ACCOUNT_ID` — the CF account that owns the Worker.
 
 ### From your laptop (fallback)

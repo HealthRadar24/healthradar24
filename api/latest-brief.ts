@@ -200,7 +200,7 @@ export default async function handler(
       {
         error: 'pro_required',
         message: 'The Brief is available on the Pro plan.',
-        upgradeUrl: 'https://worldmonitor.app/pro',
+        upgradeUrl: 'https://healthradar24.com/pro',
       },
       403,
       cors,

@@ -40,7 +40,7 @@ const MALFORMED_CAROUSEL_PATH = '/api/brief/carousel/admin/dashboard';
 function call(pathOrUrl: string, ua: string): Response | void {
   const url = pathOrUrl.startsWith('http')
     ? pathOrUrl
-    : `https://www.worldmonitor.app${pathOrUrl}`;
+    : `https://www.healthradar24.com${pathOrUrl}`;
   const req = new Request(url, {
     headers: ua ? { 'user-agent': ua } : {},
   });

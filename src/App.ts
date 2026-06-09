@@ -1047,7 +1047,7 @@ export class App {
     // Pro-loader fan-out runs on EITHER Clerk auth changes OR Convex
     // entitlement changes — Pro can come from either signal (Clerk
     // user.role === 'pro' OR Convex tier >= 1 via Dodo). User-reported
-    // on commodity.worldmonitor.app: Trade Policy panel stuck at "Loading…"
+    // on commodity.healthradar24.com: Trade Policy panel stuck at "Loading…"
     // for a Pro Monthly subscriber because the original listener only
     // watched subscribeAuthState (Clerk-only); Convex Free→Pro transitions
     // never re-fired loadTradePolicy. Same root cause as PR #3409 layer-unlock.

@@ -1,5 +1,5 @@
 # =============================================================================
-# World Monitor — Docker Image
+# HealthRadar24 — Docker Image
 # =============================================================================
 # Multi-stage build:
 #   builder       — installs deps, compiles TS handlers, builds Vite frontend

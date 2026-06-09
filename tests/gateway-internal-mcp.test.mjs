@@ -151,7 +151,7 @@ afterEach(() => {
 // ---------------------------------------------------------------------------
 async function buildSignedRequest({
   method = 'POST',
-  url = 'https://api.worldmonitor.app/api/news/v1/summarize-article',
+  url = 'https://api.healthradar24.com/api/news/v1/summarize-article',
   body = JSON.stringify({ provider: 'auto', mode: 'brief' }),
   userId = PRO_USER_ID,
   secret = HMAC_SECRET,
@@ -200,7 +200,7 @@ describe('gateway internal-MCP HMAC verify — happy paths', () => {
   it('isCallerPremium returns true for a verified-marker request from tier-1 mcpAccess user', async () => {
     // Synthesize the post-gateway request shape: trusted markers set,
     // no inbound HMAC headers (gateway already consumed them).
-    const req = new Request('https://api.worldmonitor.app/api/news/v1/summarize-article', {
+    const req = new Request('https://api.healthradar24.com/api/news/v1/summarize-article', {
       method: 'POST',
       headers: {
         [INTERNAL_MCP_VERIFIED_HEADER]: VERIFIED_NONCE,
@@ -212,7 +212,7 @@ describe('gateway internal-MCP HMAC verify — happy paths', () => {
   });
 
   it('isCallerPremium returns FALSE when a request claims to be verified but the userId is tier 0 (defensive re-fetch)', async () => {
-    const req = new Request('https://api.worldmonitor.app/api/news/v1/summarize-article', {
+    const req = new Request('https://api.healthradar24.com/api/news/v1/summarize-article', {
       method: 'POST',
       headers: {
         [INTERNAL_MCP_VERIFIED_HEADER]: VERIFIED_NONCE,
@@ -224,7 +224,7 @@ describe('gateway internal-MCP HMAC verify — happy paths', () => {
   });
 
   it('isCallerPremium returns FALSE when verified-marker carries tier-1 user without mcpAccess (defensive re-fetch)', async () => {
-    const req = new Request('https://api.worldmonitor.app/api/news/v1/summarize-article', {
+    const req = new Request('https://api.healthradar24.com/api/news/v1/summarize-article', {
       method: 'POST',
       headers: {
         [INTERNAL_MCP_VERIFIED_HEADER]: VERIFIED_NONCE,
@@ -238,8 +238,8 @@ describe('gateway internal-MCP HMAC verify — happy paths', () => {
   it('reordered query params still verify (canonicalisation sorts keys)', async () => {
     const handler = makeGateway();
     // Sign a URL with `?a=1&b=2`, send with `?b=2&a=1`.
-    const url1 = 'https://api.worldmonitor.app/api/news/v1/list-feed-digest?a=1&b=2';
-    const url2 = 'https://api.worldmonitor.app/api/news/v1/list-feed-digest?b=2&a=1';
+    const url1 = 'https://api.healthradar24.com/api/news/v1/list-feed-digest?a=1&b=2';
+    const url2 = 'https://api.healthradar24.com/api/news/v1/list-feed-digest?b=2&a=1';
     const signed = await signInternalMcpRequest({ method: 'GET', url: url1, body: null, userId: PRO_USER_ID, secret: HMAC_SECRET });
     const req = new Request(url2, {
       method: 'GET',
@@ -254,7 +254,7 @@ describe('gateway internal-MCP HMAC verify — happy paths', () => {
 
   it('GET (no body) hashes empty string consistently between sign and verify', async () => {
     const handler = makeGateway();
-    const url = 'https://api.worldmonitor.app/api/news/v1/list-feed-digest';
+    const url = 'https://api.healthradar24.com/api/news/v1/list-feed-digest';
     const signed = await signInternalMcpRequest({ method: 'GET', url, body: null, userId: PRO_USER_ID, secret: HMAC_SECRET });
     const req = new Request(url, {
       method: 'GET',
@@ -274,7 +274,7 @@ describe('gateway internal-MCP HMAC verify — happy paths', () => {
 describe('gateway internal-MCP HMAC verify — error paths', () => {
   it('missing X-WM-MCP-User-Id but X-WM-MCP-Internal present → 401 invalid_internal_mcp_signature', async () => {
     const handler = makeGateway();
-    const url = 'https://api.worldmonitor.app/api/news/v1/summarize-article';
+    const url = 'https://api.healthradar24.com/api/news/v1/summarize-article';
     const body = JSON.stringify({ x: 1 });
     const signed = await signInternalMcpRequest({ method: 'POST', url, body, userId: PRO_USER_ID, secret: HMAC_SECRET });
     const req = new Request(url, {
@@ -312,8 +312,8 @@ describe('gateway internal-MCP HMAC verify — error paths', () => {
 
   it('replay against a different path → 401 (path bound in payload)', async () => {
     const handler = makeGateway();
-    const url1 = 'https://api.worldmonitor.app/api/news/v1/list-feed-digest';
-    const url2 = 'https://api.worldmonitor.app/api/intelligence/v1/deduct-situation';
+    const url1 = 'https://api.healthradar24.com/api/news/v1/list-feed-digest';
+    const url2 = 'https://api.healthradar24.com/api/intelligence/v1/deduct-situation';
     const body = JSON.stringify({ x: 1 });
     const signed = await signInternalMcpRequest({ method: 'POST', url: url1, body, userId: PRO_USER_ID, secret: HMAC_SECRET });
     const req = new Request(url2, {
@@ -331,7 +331,7 @@ describe('gateway internal-MCP HMAC verify — error paths', () => {
 
   it('replay against a different method → 401', async () => {
     const handler = makeGateway();
-    const url = 'https://api.worldmonitor.app/api/news/v1/list-feed-digest';
+    const url = 'https://api.healthradar24.com/api/news/v1/list-feed-digest';
     const signed = await signInternalMcpRequest({ method: 'GET', url, body: null, userId: PRO_USER_ID, secret: HMAC_SECRET });
     // Send as POST with body.
     const req = new Request(url, {
@@ -349,7 +349,7 @@ describe('gateway internal-MCP HMAC verify — error paths', () => {
 
   it('replay with mutated body → 401', async () => {
     const handler = makeGateway();
-    const url = 'https://api.worldmonitor.app/api/news/v1/summarize-article';
+    const url = 'https://api.healthradar24.com/api/news/v1/summarize-article';
     const original = JSON.stringify({ country_code: 'US' });
     const tampered = JSON.stringify({ country_code: 'RU' });
     const signed = await signInternalMcpRequest({ method: 'POST', url, body: original, userId: PRO_USER_ID, secret: HMAC_SECRET });
@@ -402,7 +402,7 @@ describe('gateway internal-MCP HMAC verify — error paths', () => {
 
   it('malformed signature header (no dot) → 401', async () => {
     const handler = makeGateway();
-    const url = 'https://api.worldmonitor.app/api/news/v1/summarize-article';
+    const url = 'https://api.healthradar24.com/api/news/v1/summarize-article';
     const req = new Request(url, {
       method: 'POST',
       headers: {
@@ -418,7 +418,7 @@ describe('gateway internal-MCP HMAC verify — error paths', () => {
 
   it('malformed signature header (multiple dots) → 401', async () => {
     const handler = makeGateway();
-    const url = 'https://api.worldmonitor.app/api/news/v1/summarize-article';
+    const url = 'https://api.healthradar24.com/api/news/v1/summarize-article';
     const req = new Request(url, {
       method: 'POST',
       headers: {
@@ -434,7 +434,7 @@ describe('gateway internal-MCP HMAC verify — error paths', () => {
 
   it('malformed signature header (non-numeric ts) → 401', async () => {
     const handler = makeGateway();
-    const url = 'https://api.worldmonitor.app/api/news/v1/summarize-article';
+    const url = 'https://api.healthradar24.com/api/news/v1/summarize-article';
     const req = new Request(url, {
       method: 'POST',
       headers: {
@@ -451,7 +451,7 @@ describe('gateway internal-MCP HMAC verify — error paths', () => {
   it('MCP_INTERNAL_HMAC_SECRET unset → 500 CONFIGURATION on the HMAC-attempt path', async () => {
     delete process.env.MCP_INTERNAL_HMAC_SECRET;
     const handler = makeGateway();
-    const req = new Request('https://api.worldmonitor.app/api/news/v1/summarize-article', {
+    const req = new Request('https://api.healthradar24.com/api/news/v1/summarize-article', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -471,7 +471,7 @@ describe('gateway internal-MCP HMAC verify — error paths', () => {
     const handler = makeGateway();
     // wm_-key flow: send a valid WORLDMONITOR_VALID_KEYS key on a non-tier-gated route.
     // Use list-feed-digest which is public-ish but in routes table.
-    const req = new Request('https://api.worldmonitor.app/api/news/v1/list-feed-digest', {
+    const req = new Request('https://api.healthradar24.com/api/news/v1/list-feed-digest', {
       method: 'GET',
       headers: { 'X-WorldMonitor-Key': 'wm_test_key_123' },
     });
@@ -493,7 +493,7 @@ describe('gateway internal-MCP — header injection defense', () => {
     const handler = makeGateway();
     // External attacker sends a guessed marker value (constant '1', the
     // pre-nonce design) with a hopeful spoof of x-user-id.
-    const req = new Request('https://api.worldmonitor.app/api/news/v1/list-feed-digest', {
+    const req = new Request('https://api.healthradar24.com/api/news/v1/list-feed-digest', {
       method: 'GET',
       headers: {
         'X-WorldMonitor-Key': 'wm_test_key_123',
@@ -523,7 +523,7 @@ describe('gateway internal-MCP — header injection defense', () => {
 
   it('attacker who somehow guesses the per-process nonce ALSO gets stripped at gateway entry', async () => {
     const handler = makeGateway();
-    const req = new Request('https://api.worldmonitor.app/api/news/v1/list-feed-digest', {
+    const req = new Request('https://api.healthradar24.com/api/news/v1/list-feed-digest', {
       method: 'GET',
       headers: {
         'X-WorldMonitor-Key': 'wm_test_key_123',
@@ -551,7 +551,7 @@ describe('gateway internal-MCP — header injection defense', () => {
     // Models the case where someone bypasses the gateway in tests / dev. The
     // header check alone admits this — the defensive re-fetch must still
     // confirm against Convex, and only PRO_USER_ID's entitlement passes.
-    const req = new Request('https://api.worldmonitor.app/api/news/v1/summarize-article', {
+    const req = new Request('https://api.healthradar24.com/api/news/v1/summarize-article', {
       method: 'POST',
       headers: {
         [INTERNAL_MCP_VERIFIED_HEADER]: VERIFIED_NONCE,
@@ -568,7 +568,7 @@ describe('gateway internal-MCP — header injection defense', () => {
     // spoofed marker). An attacker sending the constant '1' (the pre-
     // nonce design value) cannot get past the timing-safe nonce compare
     // in `isCallerPremium`, so premium semantics are NOT granted.
-    const req = new Request('https://api.worldmonitor.app/api/widget-agent', {
+    const req = new Request('https://api.healthradar24.com/api/widget-agent', {
       method: 'POST',
       headers: {
         [INTERNAL_MCP_VERIFIED_HEADER]: '1',
@@ -581,7 +581,7 @@ describe('gateway internal-MCP — header injection defense', () => {
 
   it('present-but-invalid HMAC + valid wm_ key: invalid path fails closed (does not chain to legacy)', async () => {
     const handler = makeGateway();
-    const url = 'https://api.worldmonitor.app/api/news/v1/list-feed-digest';
+    const url = 'https://api.healthradar24.com/api/news/v1/list-feed-digest';
     // Sign with the WRONG secret, then attach a valid wm_ key to try to chain.
     const signed = await signInternalMcpRequest({ method: 'GET', url, body: null, userId: PRO_USER_ID, secret: 'wrong-secret-not-the-real-one' });
     const req = new Request(url, {
@@ -605,7 +605,7 @@ describe('gateway internal-MCP — header injection defense', () => {
 describe('gateway internal-MCP — legacy unaffected', () => {
   it('no internal-MCP headers at all → legacy validateApiKey path runs (request reaches handler when key is valid)', async () => {
     const handler = makeGateway();
-    const req = new Request('https://api.worldmonitor.app/api/news/v1/list-feed-digest', {
+    const req = new Request('https://api.healthradar24.com/api/news/v1/list-feed-digest', {
       method: 'GET',
       headers: { 'X-WorldMonitor-Key': 'wm_test_key_123' },
     });
@@ -684,7 +684,7 @@ describe('gateway internal-MCP — F7: HMAC headers stripped before handler sees
 describe('gateway internal-MCP — F8: body size cap', () => {
   it('Content-Length > 256 KB → 413 payload_too_large (HMAC-verify path)', async () => {
     const handler = makeGateway();
-    const url = 'https://api.worldmonitor.app/api/news/v1/summarize-article';
+    const url = 'https://api.healthradar24.com/api/news/v1/summarize-article';
     // Sign a small body so the signature is shaped correctly; the gate
     // should fire on Content-Length BEFORE verify even runs.
     const body = JSON.stringify({ x: 1 });
@@ -716,7 +716,7 @@ describe('gateway internal-MCP — F8: body size cap', () => {
     const handler = makeGateway();
     // No HMAC sig — but trust markers present trigger the strip-then-construct
     // block, which also has the body-size guard.
-    const url = 'https://api.worldmonitor.app/api/news/v1/summarize-article';
+    const url = 'https://api.healthradar24.com/api/news/v1/summarize-article';
     const req = new Request(url, {
       method: 'POST',
       headers: {

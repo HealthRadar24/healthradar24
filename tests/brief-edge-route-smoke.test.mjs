@@ -44,9 +44,9 @@ describe('api/brief handler behaviour (no secrets / no Redis)', () => {
 
   it('returns 204 on OPTIONS preflight', async () => {
     const { default: handler } = await import('../api/brief/[userId]/[issueDate].ts');
-    const req = new Request('https://worldmonitor.app/api/brief/user_x/2026-04-17-0800', {
+    const req = new Request('https://healthradar24.com/api/brief/user_x/2026-04-17-0800', {
       method: 'OPTIONS',
-      headers: { origin: 'https://worldmonitor.app' },
+      headers: { origin: 'https://healthradar24.com' },
     });
     const res = await handler(req);
     assert.equal(res.status, 204);
@@ -55,9 +55,9 @@ describe('api/brief handler behaviour (no secrets / no Redis)', () => {
   it('returns 405 on disallowed methods', async () => {
     process.env.BRIEF_URL_SIGNING_SECRET ??= 'test-secret-used-only-for-method-gate';
     const { default: handler } = await import('../api/brief/[userId]/[issueDate].ts');
-    const req = new Request('https://worldmonitor.app/api/brief/user_x/2026-04-17-0800', {
+    const req = new Request('https://healthradar24.com/api/brief/user_x/2026-04-17-0800', {
       method: 'POST',
-      headers: { origin: 'https://worldmonitor.app' },
+      headers: { origin: 'https://healthradar24.com' },
     });
     const res = await handler(req);
     assert.equal(res.status, 405);
@@ -68,10 +68,10 @@ describe('api/brief handler behaviour (no secrets / no Redis)', () => {
     const { default: handler } = await import('../api/brief/[userId]/[issueDate].ts');
     // HEAD with a bad token → 403 path; body should still be empty.
     const req = new Request(
-      'https://worldmonitor.app/api/brief/user_x/2026-04-17-0800?t=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+      'https://healthradar24.com/api/brief/user_x/2026-04-17-0800?t=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
       {
         method: 'HEAD',
-        headers: { origin: 'https://worldmonitor.app' },
+        headers: { origin: 'https://healthradar24.com' },
       },
     );
     const res = await handler(req);
@@ -200,8 +200,8 @@ describe('infrastructure-error vs miss (both routes must not collapse)', () => {
       const issueDate = '2026-04-17-0800';
       const token = await signBriefToken(userId, issueDate, process.env.BRIEF_URL_SIGNING_SECRET);
       const req = new Request(
-        `https://worldmonitor.app/api/brief/${userId}/${issueDate}?t=${token}`,
-        { method: 'GET', headers: { origin: 'https://worldmonitor.app' } },
+        `https://healthradar24.com/api/brief/${userId}/${issueDate}?t=${token}`,
+        { method: 'GET', headers: { origin: 'https://healthradar24.com' } },
       );
       const res = await handler(req);
       assert.equal(res.status, 503, 'Upstash outage must surface as 503, not 404');

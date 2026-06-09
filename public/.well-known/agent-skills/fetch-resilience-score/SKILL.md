@@ -16,12 +16,12 @@ Use this skill when the user asks how "resilient" a country is, or wants the num
 X-WorldMonitor-Key: wm_0123456789abcdef0123456789abcdef01234567
 ```
 
-The key must be attached to a Pro subscription. Unauthenticated or free-tier requests return `401` / `403`. Issue a key at https://www.worldmonitor.app/pro.
+The key must be attached to a Pro subscription. Unauthenticated or free-tier requests return `401` / `403`. Issue a key at https://www.healthradar24.com/pro.
 
 ## Endpoint
 
 ```
-GET https://api.worldmonitor.app/api/resilience/v1/get-resilience-score
+GET https://api.healthradar24.com/api/resilience/v1/get-resilience-score
 ```
 
 ## Parameters
@@ -77,7 +77,7 @@ Key fields for agents:
 
 ```bash
 curl -s -H "X-WorldMonitor-Key: $WM_API_KEY" \
-  'https://api.worldmonitor.app/api/resilience/v1/get-resilience-score?countryCode=DE' \
+  'https://api.healthradar24.com/api/resilience/v1/get-resilience-score?countryCode=DE' \
   | jq '{country: .countryCode, score: .overallScore, level, trend, change30d}'
 ```
 
@@ -96,6 +96,6 @@ curl -s -H "X-WorldMonitor-Key: $WM_API_KEY" \
 
 ## References
 
-- OpenAPI: [ResilienceService.openapi.yaml](https://www.worldmonitor.app/openapi.yaml) — operation `GetResilienceScore`.
-- Auth matrix: https://www.worldmonitor.app/docs/usage-auth
-- Methodology: https://www.worldmonitor.app/docs/documentation
+- OpenAPI: [ResilienceService.openapi.yaml](https://www.healthradar24.com/openapi.yaml) — operation `GetResilienceScore`.
+- Auth matrix: https://www.healthradar24.com/docs/usage-auth
+- Methodology: https://www.healthradar24.com/docs/documentation

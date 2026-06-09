@@ -1,5 +1,5 @@
 /**
- * Regression tests for koala73/worldmonitor#3800.
+ * Regression tests for HealthRadar24/healthradar24#3800.
  *
  * Root cause: src/services/cached-risk-scores.ts fabricated `lastUpdated` /
  * `computedAt` as `new Date().toISOString()` in four places, making cached or
