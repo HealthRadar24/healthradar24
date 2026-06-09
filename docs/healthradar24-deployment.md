@@ -15,7 +15,12 @@ Attach these domains to the single Vercel project:
 - `energy.healthradar24.com`
 - `api.healthradar24.com`
 
-Cloudflare owns DNS for `healthradar24.com`. Route `api.healthradar24.com/*` through the Worker in `workers/api-cors-preflight` after the Vercel domain is verified.
+GoDaddy currently owns DNS for `healthradar24.com` through the
+`ns63.domaincontrol.com` and `ns64.domaincontrol.com` nameservers. Point the
+root and variant hosts at Vercel there. Route `api.healthradar24.com/*` through
+the Worker in `workers/api-cors-preflight` only after moving the zone to
+Cloudflare; until then, deploy the Worker on workers.dev with
+`wrangler.workers-dev.toml` or send the API hostname directly to Vercel.
 
 ## Isolated Resources
 
@@ -44,7 +49,10 @@ Use `.env.example` as the variable inventory. Store production values only in pr
 5. Deploy the health-critical and high-frequency seed bundles from `scripts/railway-services.json`.
 6. Wait for two scheduled runs and verify seed freshness through `/api/health`.
 7. Deploy the remaining registered services, then standalone crons from `docs/railway-seed-consolidation-runbook.md`.
-8. Deploy the Cloudflare CORS Worker and run its live preflight smoke test.
+8. Deploy the Cloudflare CORS Worker and run its live preflight smoke test. If
+   the zone remains on GoDaddy, deploy with
+   `npx wrangler deploy --config workers/api-cors-preflight/wrangler.workers-dev.toml`
+   and keep `api.healthradar24.com` pointed directly at Vercel.
 9. Enable optional provider integrations only when valid credentials are available.
 
 ## Release Gates
