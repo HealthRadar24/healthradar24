@@ -120,7 +120,6 @@
     "exceljs": "^4.4.0",
     "h3-js": "^4.4.0",
     "markdownlint-cli2": "^0.21.0",
-    "railway": "^3.1.1",
     "tsx": "^4.21.0",
     "typescript": "^5.7.2",
     "vite": "^6.0.7",
