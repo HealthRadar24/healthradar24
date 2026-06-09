@@ -3,15 +3,15 @@ import { defineRailway, github, preserve, project, service } from "railway/iac";
 function seedBundle(name: string, cronSchedule: string) {
   return service(name, {
     source: github("HealthRadar24/healthradar24", { branch: "main" }),
+    root: "scripts",
     build: {
-      builder: "DOCKERFILE",
-      dockerfilePath: "Dockerfile.seed-bundles",
-      watchPatterns: ["Dockerfile.seed-bundles", "scripts/**", "shared/**"],
+      builder: "NIXPACKS",
+      watchPatterns: ["scripts/**", "shared/**"],
     },
     deploy: {
       cronSchedule,
       restartPolicyType: "NEVER",
-      startCommand: `node scripts/${name}.mjs`,
+      startCommand: `node ${name}.mjs`,
     },
     env: {
       NODE_OPTIONS: "--dns-result-order=ipv4first",
