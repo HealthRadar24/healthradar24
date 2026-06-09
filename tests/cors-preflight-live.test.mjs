@@ -1,7 +1,7 @@
 // Live CORS preflight smoke test against production.
 //
 // Gated behind LIVE_SMOKE=1 so it does NOT run in the default PR test gate —
-// fetching live api.worldmonitor.app from CI would false-positive during
+// fetching live api.healthradar24.com from CI would false-positive during
 // deploys, network blips, or Cloudflare incidents.
 //
 // Run manually before/after a Worker deploy:
@@ -14,7 +14,7 @@
 //   - `Access-Control-Allow-Credentials: true` missing from OPTIONS preflight
 //     (the 2026-05-27 outage — see worldmonitor-architecture-gotchas/reference/
 //      cloudflare-worker-overrides-vercel-cors-for-preflight.md).
-//   - Origin echo broken (preflight echoes `https://worldmonitor.app` for an
+//   - Origin echo broken (preflight echoes `https://healthradar24.com` for an
 //     allowed origin → browsers reject as mismatched).
 //   - Worker bypassed entirely (Vercel fallback served instead — would still
 //     pass on healthy days but blow up if/when the Worker is re-enabled).
@@ -26,14 +26,14 @@ import { strict as assert } from 'node:assert';
 import test from 'node:test';
 
 const BROWSER_UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
-const ORIGIN = 'https://www.worldmonitor.app';
+const ORIGIN = 'https://www.healthradar24.com';
 
 // Endpoints we hit. /api/health is canonical (always available, no auth).
 // Add a representative second one to catch route-specific Worker rules if
 // anyone ever adds them.
 const ENDPOINTS = [
-  'https://api.worldmonitor.app/api/health',
-  'https://api.worldmonitor.app/api/bootstrap?tier=fast',
+  'https://api.healthradar24.com/api/health',
+  'https://api.healthradar24.com/api/bootstrap?tier=fast',
 ];
 
 const SHOULD_RUN = process.env.LIVE_SMOKE === '1';
@@ -45,11 +45,11 @@ if (!SHOULD_RUN) {
 // Public-CORS paths that the Worker MUST pass through to Vercel unchanged.
 // External MCP clients (https://claude.ai, https://claude.com) hit these and
 // must receive the Vercel function's own CORS policy (typically ACAO: * for
-// OAuth/MCP), not the Worker's worldmonitor.app-only echo.
+// OAuth/MCP), not the Worker's healthradar24.com-only echo.
 const PUBLIC_CORS_PROBES = [
-  { url: 'https://api.worldmonitor.app/api/mcp', origin: 'https://claude.ai' },
-  { url: 'https://api.worldmonitor.app/api/oauth/register', origin: 'https://claude.com' },
-  { url: 'https://api.worldmonitor.app/api/oauth-protected-resource', origin: 'https://claude.ai' },
+  { url: 'https://api.healthradar24.com/api/mcp', origin: 'https://claude.ai' },
+  { url: 'https://api.healthradar24.com/api/oauth/register', origin: 'https://claude.com' },
+  { url: 'https://api.healthradar24.com/api/oauth-protected-resource', origin: 'https://claude.ai' },
 ];
 
 for (const { url, origin } of PUBLIC_CORS_PROBES) {
@@ -64,7 +64,7 @@ for (const { url, origin } of PUBLIC_CORS_PROBES) {
       },
     });
     await resp.arrayBuffer();
-    // Acceptance: the response must NOT echo the canonical worldmonitor.app
+    // Acceptance: the response must NOT echo the canonical healthradar24.com
     // fallback (which would mean the Worker short-circuited and the external
     // client gets blocked). Either ACAO: * OR ACAO echoes the request origin
     // is fine — both are valid public-CORS dispositions.
@@ -99,7 +99,7 @@ for (const url of ENDPOINTS) {
     assert.equal(
       resp.headers.get('access-control-allow-origin'),
       ORIGIN,
-      'ACAO must echo the request origin (NOT https://worldmonitor.app fallback, NOT *)',
+      'ACAO must echo the request origin (NOT https://healthradar24.com fallback, NOT *)',
     );
     assert.equal(
       resp.headers.get('access-control-allow-credentials'),

@@ -14,17 +14,17 @@
   //   {project-slug}-{branch-slug}-{team-slug}-{hash}.vercel.app
   // The team-slug segment is the URL-safe Vercel team identifier and is the
   // load-bearing security invariant: an attacker who registers a Vercel
-  // project named `worldmonitor-...` under their OWN team account would get
+  // project named `healthradar24-...` under their OWN team account would get
   // a different team-slug, so gating on this list rejects look-alike previews.
   // Add a teammate's Vercel team slug here when they need to mount PRO
   // widgets in preview deployments; never widen this to a wildcard.
-  var ALLOWED_VERCEL_TEAM_SLUGS = ['elie'];
+  var ALLOWED_VERCEL_TEAM_SLUGS = ['healthradar24'];
 
   function isAllowedVercelPreview(hostname) {
     for (var i = 0; i < ALLOWED_VERCEL_TEAM_SLUGS.length; i++) {
       var team = ALLOWED_VERCEL_TEAM_SLUGS[i];
       if (!/^[a-z0-9-]+$/.test(team)) continue;
-      var re = new RegExp('^worldmonitor-[a-z0-9-]+-' + team + '-[a-z0-9]+\\.vercel\\.app$');
+      var re = new RegExp('^healthradar24-[a-z0-9-]+-' + team + '-[a-z0-9]+\\.vercel\\.app$');
       if (re.test(hostname)) return true;
     }
     return false;
@@ -40,7 +40,7 @@
       if (url.protocol !== 'https:') {
         return false;
       }
-      if (url.hostname === 'worldmonitor.app' || url.hostname.endsWith('.worldmonitor.app')) {
+      if (url.hostname === 'healthradar24.com' || url.hostname.endsWith('.healthradar24.com')) {
         return true;
       }
       return isAllowedVercelPreview(url.hostname);

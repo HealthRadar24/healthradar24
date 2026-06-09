@@ -128,7 +128,7 @@ export class UnifiedSettings {
           // generic Dodo portal that won't recognise them.
           if (result.outcome === 'no-customer') {
             showToast(
-              'Subscription is managed outside Dodo. Email support@worldmonitor.app for help.',
+              'Subscription is managed outside Dodo. Email support@healthradar24.com for help.',
             );
           }
         });
@@ -656,7 +656,7 @@ export class UnifiedSettings {
       void openBillingPortal(reservedWin).then((result) => {
         if (result.outcome === 'no-customer') {
           showToast(
-            'Subscription is managed outside Dodo. Email support@worldmonitor.app for help.',
+            'Subscription is managed outside Dodo. Email support@healthradar24.com for help.',
           );
         }
       });
@@ -664,11 +664,11 @@ export class UnifiedSettings {
     }
     this.close();
     if (this.config.isDesktopApp) {
-      window.open('https://worldmonitor.app/pro', '_blank');
+      window.open('https://healthradar24.com/pro', '_blank');
       return;
     }
     import('@/services/checkout').then(m => import('@/config/products').then(p => m.startCheckout(p.DEFAULT_UPGRADE_PRODUCT))).catch(() => {
-      window.open('https://worldmonitor.app/pro', '_blank');
+      window.open('https://healthradar24.com/pro', '_blank');
     });
   }
 
@@ -964,7 +964,7 @@ export class UnifiedSettings {
         } else {
           this.close();
           import('@/services/checkout').then(m => import('@/config/products').then(p => m.startCheckout(p.DODO_PRODUCTS.API_STARTER_MONTHLY))).catch(() => {
-            window.open('https://worldmonitor.app/pro', '_blank');
+            window.open('https://healthradar24.com/pro', '_blank');
           });
         }
       });
@@ -1319,7 +1319,7 @@ export class UnifiedSettings {
     const revoked = this.mcpClients.filter(c => c.revokedAt);
 
     if (active.length === 0 && revoked.length === 0) {
-      const mcpUrl = 'https://api.worldmonitor.app/mcp';
+      const mcpUrl = 'https://api.healthradar24.com/mcp';
       setTrustedHtml(container, trustedHtml(`
         <div class="mcp-clients-empty">
           <div class="mcp-clients-empty-title">No connected MCP clients yet</div>

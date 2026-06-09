@@ -71,7 +71,7 @@ describe('project license docs', () => {
     );
     assert.match(
       license,
-      /does not grant rights to use the World Monitor name, logo, visual identity, or official project branding/i,
+      /does not grant rights to use the HealthRadar24 name, logo, visual identity, or official project branding/i,
       'license docs must separate trademark rights from AGPL code rights',
     );
   });

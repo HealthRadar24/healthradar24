@@ -1149,7 +1149,7 @@ export function createDomainGateway(
           : (envOverride && envOverride in TIER_HEADERS ? envOverride : null) ?? RPC_CACHE_TIER[pathname] ?? 'medium';
         resolvedCacheTier = tier;
         mergedHeaders.set('Cache-Control', TIER_HEADERS[tier]);
-        // Only allow Vercel CDN caching for trusted origins (worldmonitor.app, Vercel previews,
+        // Only allow Vercel CDN caching for trusted origins (healthradar24.com, Vercel previews,
         // Tauri). No-origin server-side requests (external scrapers) must always reach the edge
         // function so the auth check in validateApiKey() can run. Without this guard, a cached
         // 200 from a trusted-origin browser request could be served to a no-origin scraper,

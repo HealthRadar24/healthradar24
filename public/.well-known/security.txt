@@ -1,6 +1,6 @@
-Contact: mailto:elie@worldmonitor.app
+Contact: mailto:elie@healthradar24.com
 Contact: https://github.com/eliehabib/worldmonitor/security/advisories
 Policy: https://github.com/eliehabib/worldmonitor/security/advisories
 Preferred-Languages: en
-Canonical: https://worldmonitor.app/.well-known/security.txt
+Canonical: https://healthradar24.com/.well-known/security.txt
 Expires: 2027-03-02T00:00:00.000Z

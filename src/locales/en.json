@@ -1,9 +1,9 @@
 {
   "shell": {
-    "documentTitle": "World Monitor — Real-Time Global Intelligence Dashboard",
+    "documentTitle": "HealthRadar24 — Real-Time Global Intelligence Dashboard",
     "metaDescription": "Real-time global intelligence platform. Featured in WIRED. Used by 2M+ people across 190 countries. Conflicts, markets, military, OSINT in one view.",
     "offlineTitle": "You're Offline",
-    "offlineMessage": "World Monitor requires an internet connection for real-time intelligence data.",
+    "offlineMessage": "HealthRadar24 requires an internet connection for real-time intelligence data.",
     "offlineRetry": "Retry"
   },
   "widgets": {
@@ -604,7 +604,7 @@
         "some": "Some features need API keys"
       },
       "reserveEarlyAccess": "Reserve Your Early Access",
-      "skipSetup": "Skip the setup — a single World Monitor license unlocks everything. Join the waitlist for early access.",
+      "skipSetup": "Skip the setup — a single HealthRadar24 license unlocks everything. Join the waitlist for early access.",
       "summary": {
         "desktop": "Desktop mode",
         "web": "Web mode (read-only, server-managed credentials)",
@@ -635,7 +635,7 @@
       }
     },
     "settingsWindow": {
-      "shellTitle": "World Monitor Settings",
+      "shellTitle": "HealthRadar24 Settings",
       "shellSearchPlaceholder": "Search settings...",
       "shellCancel": "Cancel",
       "shellSaveClose": "Save & Close",
@@ -663,7 +663,7 @@
         "dividerOr": "OR",
         "register": {
           "title": "Reserve Your Spot",
-          "description": "We're preparing to launch World Monitor licenses. Sign up now and be first in line — early members get priority access and founding-member pricing.",
+          "description": "We're preparing to launch HealthRadar24 licenses. Sign up now and be first in line — early members get priority access and founding-member pricing.",
           "submitBtn": "Join Waitlist"
         }
       },
@@ -3046,7 +3046,7 @@
   },
   "premium": {
     "pro": "PRO",
-    "lockedDesc": "Requires a World Monitor license key",
+    "lockedDesc": "Requires a HealthRadar24 license key",
     "signInToUnlock": "Sign in to unlock premium features",
     "signIn": "Sign In to Unlock",
     "upgradeDesc": "Upgrade to Pro for full access to premium analytics",

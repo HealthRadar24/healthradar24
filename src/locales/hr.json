@@ -618,7 +618,7 @@
       },
       "openSettings": "Otvori Postavke",
       "reserveEarlyAccess": "Rezerviši Rani Pristup",
-      "skipSetup": "Preskoči postavljanje — jedna World Monitor licenca otključava sve. Pridruži se listi čekanja za rani pristup.",
+      "skipSetup": "Preskoči postavljanje — jedna HealthRadar24 licenca otključava sve. Pridruži se listi čekanja za rani pristup.",
       "summary": {
         "desktop": "Desktop režim",
         "web": "Web režim (samo čitanje, kredencijali upravljani serverom)",
@@ -3229,7 +3229,7 @@
   },
   "premium": {
     "pro": "PRO",
-    "lockedDesc": "Zahtijeva ključ World Monitor licence",
+    "lockedDesc": "Zahtijeva ključ HealthRadar24 licence",
     "joinWaitlist": "Pridruži se Listi Čekanja",
     "signInToUnlock": "Prijavite se da biste otključali premium značajke",
     "signIn": "Prijavite se za Otključavanje",

@@ -1,4 +1,4 @@
-# World Monitor - protect API routes from crawlers
+# HealthRadar24 - protect API routes from crawlers
 
 # AI content-usage preferences (contentsignals.org draft RFC).
 # Origin-wide directive, NOT scoped under User-agent per the spec.
@@ -11,5 +11,5 @@ Allow: /api/og-story
 Disallow: /api/
 Disallow: /tests/
 
-Sitemap: https://www.worldmonitor.app/sitemap.xml
-Sitemap: https://www.worldmonitor.app/blog/sitemap-index.xml
+Sitemap: https://www.healthradar24.com/sitemap.xml
+Sitemap: https://www.healthradar24.com/blog/sitemap-index.xml

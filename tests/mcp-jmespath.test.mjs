@@ -6,7 +6,7 @@ const originalFetch = globalThis.fetch;
 const originalEnv = { ...process.env };
 
 const VALID_KEY = 'wm_test_key_123';
-const BASE_URL = 'https://worldmonitor.app/mcp';
+const BASE_URL = 'https://healthradar24.com/mcp';
 
 function makeReq(body = null, headers = {}) {
   return new Request(BASE_URL, {

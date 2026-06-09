@@ -14,7 +14,7 @@
  *   4. Render the consent card (real metadata so users can spot phishing).
  *   5. On Authorize click: POST /api/internal/mcp-grant-mint {nonce}
  *      with Bearer JWT, navigate to the returned `redirect` URL (always
- *      `https://api.worldmonitor.app/oauth/authorize-pro?...` — the
+ *      `https://api.healthradar24.com/oauth/authorize-pro?...` — the
  *      apex page never controls the host).
  */
 
@@ -183,7 +183,7 @@ async function onAuthorizeClick(nonce: string): Promise<void> {
     return;
   }
 
-  // Defense-in-depth: the apex page MUST navigate only to api.worldmonitor.app.
+  // Defense-in-depth: the apex page MUST navigate only to api.healthradar24.com.
   // The server-returned URL is hard-coded to that host, but check anyway so a
   // future server bug (or an XSS that swaps the response) cannot bounce to
   // an attacker-controlled host.
@@ -194,7 +194,7 @@ async function onAuthorizeClick(nonce: string): Promise<void> {
     showErrorView('The authorization service returned an invalid redirect.');
     return;
   }
-  if (target.origin !== 'https://api.worldmonitor.app') {
+  if (target.origin !== 'https://api.healthradar24.com') {
     showErrorView('The authorization service returned an unexpected redirect host.');
     return;
   }

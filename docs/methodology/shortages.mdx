@@ -1,6 +1,6 @@
 ---
 title: "Fuel Shortage Alert Methodology"
-description: "How World Monitor classifies and publishes fuel shortage alerts (jet, petrol, diesel, heating oil) using an automated evidence-threshold pipeline."
+description: "How HealthRadar24 classifies and publishes fuel shortage alerts (jet, petrol, diesel, heating oil) using an automated evidence-threshold pipeline."
 ---
 
 ## What we track
@@ -78,7 +78,7 @@ an `override`-trigger entry to the revision log.
 
 **Status (v1 launch):** the override persistence layer is not yet
 implemented. Reader-flagged corrections are handled manually today via
-[GitHub issues](https://github.com/koala73/worldmonitor/issues); they
+[GitHub issues](https://github.com/HealthRadar24/healthradar24/issues); they
 flow through the automated override path once that layer ships
 alongside the classifier. See [`/corrections`](/corrections) for the
 planned shape of override entries.
@@ -95,4 +95,4 @@ See [`/corrections`](/corrections) for the planned revision-log shape
 (every tier change will ship with its trigger — `classifier` / `source`
 / `decay` / `override` — and the sources used). The classifier that
 writes entries ships post-launch; corrections are handled manually
-today via [GitHub issues](https://github.com/koala73/worldmonitor/issues).
+today via [GitHub issues](https://github.com/HealthRadar24/healthradar24/issues).

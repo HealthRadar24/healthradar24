@@ -5,7 +5,7 @@ const originalEnv = { ...process.env };
 
 function makeCtx(headers = {}) {
   return {
-    request: new Request('https://worldmonitor.app/api/leads/v1/register-interest', {
+    request: new Request('https://healthradar24.com/api/leads/v1/register-interest', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', ...headers },
     }),

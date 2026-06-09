@@ -771,7 +771,7 @@ describe('renderBriefMagazine — source link (v2)', () => {
 });
 
 describe('renderBriefMagazine — Share button (non-public views)', () => {
-  const SHARE_URL = 'https://worldmonitor.app/api/brief/public/abcDEF012345';
+  const SHARE_URL = 'https://healthradar24.com/api/brief/public/abcDEF012345';
 
   it('renders a Share button with data-share-url and issue date', () => {
     const env = envelope();
@@ -833,7 +833,7 @@ describe('renderBriefMagazine — publicMode', () => {
     const env = envelope();
     const html = renderBriefMagazine(env, {
       publicMode: true,
-      shareUrl: 'https://worldmonitor.app/api/brief/public/abcDEF012345',
+      shareUrl: 'https://healthradar24.com/api/brief/public/abcDEF012345',
     });
     assert.ok(!html.includes('class="wm-share"'), 'share button absent on public');
     assert.ok(
@@ -869,14 +869,14 @@ describe('renderBriefMagazine — publicMode', () => {
     const env = envelope();
     const html = renderBriefMagazine(env, { publicMode: true });
     assert.ok(html.includes('class="wm-public-strip"'), 'subscribe strip element emitted');
-    assert.ok(html.includes('worldmonitor.app/pro'), 'strip links to /pro');
+    assert.ok(html.includes('healthradar24.com/pro'), 'strip links to /pro');
     assert.ok(html.includes('Subscribe'), 'strip CTA text present');
   });
 
   it('attaches ?ref= to public CTAs when refCode is provided', () => {
     const env = envelope();
     const html = renderBriefMagazine(env, { publicMode: true, refCode: 'ABC123' });
-    assert.ok(html.includes('worldmonitor.app/pro?ref=ABC123'), 'refCode appended to /pro URL');
+    assert.ok(html.includes('healthradar24.com/pro?ref=ABC123'), 'refCode appended to /pro URL');
   });
 
   it('HTML-escapes a hostile refCode before interpolation', () => {

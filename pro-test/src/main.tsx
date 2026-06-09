@@ -9,12 +9,12 @@ const sentryDsn = import.meta.env.VITE_SENTRY_DSN?.trim();
 
 Sentry.init({
   dsn: sentryDsn || undefined,
-  environment: (location.hostname === 'worldmonitor.app' || location.hostname.endsWith('.worldmonitor.app')) ? 'production'
+  environment: (location.hostname === 'healthradar24.com' || location.hostname.endsWith('.healthradar24.com')) ? 'production'
     : location.hostname.includes('vercel.app') ? 'preview'
     : 'development',
   enabled: Boolean(sentryDsn) && !location.hostname.startsWith('localhost'),
   allowUrls: [
-    /https?:\/\/(www\.|tech\.|finance\.|commodity\.|happy\.)?worldmonitor\.app/,
+    /https?:\/\/(www\.|tech\.|finance\.|commodity\.|happy\.)?healthradar24\.com/,
     /https?:\/\/.*\.vercel\.app/,
   ],
   tracesSampleRate: 0.1,

@@ -5,15 +5,15 @@
       "name": "fetch-country-brief",
       "type": "task",
       "description": "Retrieve the current AI-generated strategic intelligence brief for a country, keyed by ISO 3166-1 alpha-2 code.",
-      "url": "https://worldmonitor.app/.well-known/agent-skills/fetch-country-brief/SKILL.md",
-      "sha256": "dced77c4da34395028b70e857f7f3fafb29f9f4a8df4858498d341f4c7b37b8b"
+      "url": "https://healthradar24.com/.well-known/agent-skills/fetch-country-brief/SKILL.md",
+      "sha256": "2ef881937ea7f33088425fb9cf5615040c3820f6ae6ef93d9075d6ea1be4d22e"
     },
     {
       "name": "fetch-resilience-score",
       "type": "task",
       "description": "Retrieve the composite country resilience score (0-100) and its domain/pillar breakdown for a single country.",
-      "url": "https://worldmonitor.app/.well-known/agent-skills/fetch-resilience-score/SKILL.md",
-      "sha256": "2c0cec4b2e94d7990d78327492b992f479699feec898455c9a77331433cccb68"
+      "url": "https://healthradar24.com/.well-known/agent-skills/fetch-resilience-score/SKILL.md",
+      "sha256": "8c0f8c5cbb66eed2c1205dbbedda74d46e580d943bbc25a344573be39ba991a8"
     }
   ]
 }

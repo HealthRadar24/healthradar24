@@ -22,7 +22,7 @@ const { default: handler } = await import('../api/health.js');
 test('REDIS_DOWN returns HTTP 503 with status REDIS_DOWN', async () => {
   // Real Request (no Origin header) — the handler reads req.headers.get('origin')
   // via isDisallowedOrigin/getCorsHeaders, so a plain object would crash.
-  const req = new Request('https://api.worldmonitor.app/api/health');
+  const req = new Request('https://api.healthradar24.com/api/health');
   const res = await handler(req);
   assert.equal(res.status, 503);
   const body = await res.json();
@@ -30,17 +30,17 @@ test('REDIS_DOWN returns HTTP 503 with status REDIS_DOWN', async () => {
   assert.ok('checkedAt' in body, 'snapshot must carry checkedAt');
   // No Origin → getCorsHeaders falls back to the canonical app origin (the
   // origin-gated handler does not emit ACAO:* for unknown/absent origins).
-  assert.equal(res.headers.get('Access-Control-Allow-Origin'), 'https://worldmonitor.app');
+  assert.equal(res.headers.get('Access-Control-Allow-Origin'), 'https://healthradar24.com');
 });
 
 test('OPTIONS preflight returns 204 (never 503)', async () => {
-  const req = new Request('https://api.worldmonitor.app/api/health', { method: 'OPTIONS' });
+  const req = new Request('https://api.healthradar24.com/api/health', { method: 'OPTIONS' });
   const res = await handler(req);
   assert.equal(res.status, 204);
 });
 
 test('disallowed Origin is rejected with 403 before any Redis work', async () => {
-  const req = new Request('https://api.worldmonitor.app/api/health', {
+  const req = new Request('https://api.healthradar24.com/api/health', {
     headers: { origin: 'https://evil.example.com' },
   });
   const res = await handler(req);

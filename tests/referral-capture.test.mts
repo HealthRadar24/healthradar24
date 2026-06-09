@@ -31,7 +31,7 @@ function setUrl(href: string): void {
 
 before(() => {
   _localStorage = new MemoryStorage();
-  _loc = { href: 'https://worldmonitor.app/', pathname: '/', search: '', hash: '' };
+  _loc = { href: 'https://healthradar24.com/', pathname: '/', search: '', hash: '' };
   Object.defineProperty(globalThis, 'localStorage', { configurable: true, value: _localStorage });
   Object.defineProperty(globalThis, 'window', {
     configurable: true,
@@ -55,7 +55,7 @@ after(() => {
 
 beforeEach(() => {
   _localStorage.clear();
-  setUrl('https://worldmonitor.app/');
+  setUrl('https://healthradar24.com/');
 });
 
 const {
@@ -69,10 +69,10 @@ const {
 
 describe('captureReferralFromUrl', () => {
   it('captures ?ref= into localStorage and strips from URL', () => {
-    setUrl('https://worldmonitor.app/?ref=abc123');
+    setUrl('https://healthradar24.com/?ref=abc123');
     const captured = captureReferralFromUrl();
     assert.equal(captured, 'abc123');
-    assert.equal(_loc.href, 'https://worldmonitor.app/');
+    assert.equal(_loc.href, 'https://healthradar24.com/');
     const raw = _localStorage.getItem(REFERRAL_CAPTURE_KEY);
     assert.ok(raw);
     const parsed = JSON.parse(raw as string);
@@ -81,14 +81,14 @@ describe('captureReferralFromUrl', () => {
   });
 
   it('captures ?wm_referral= (dashboard-forward param name)', () => {
-    setUrl('https://worldmonitor.app/?wm_referral=xyz789');
+    setUrl('https://healthradar24.com/?wm_referral=xyz789');
     const captured = captureReferralFromUrl();
     assert.equal(captured, 'xyz789');
-    assert.equal(_loc.href, 'https://worldmonitor.app/');
+    assert.equal(_loc.href, 'https://healthradar24.com/');
   });
 
   it('prefers wm_referral over ref when both are present', () => {
-    setUrl('https://worldmonitor.app/?ref=old&wm_referral=new');
+    setUrl('https://healthradar24.com/?ref=old&wm_referral=new');
     const captured = captureReferralFromUrl();
     assert.equal(captured, 'new');
     // Both should still be stripped from URL.
@@ -97,20 +97,20 @@ describe('captureReferralFromUrl', () => {
   });
 
   it('returns null when no referral param is present', () => {
-    setUrl('https://worldmonitor.app/?other=value');
+    setUrl('https://healthradar24.com/?other=value');
     assert.equal(captureReferralFromUrl(), null);
-    assert.equal(_loc.href, 'https://worldmonitor.app/?other=value');
+    assert.equal(_loc.href, 'https://healthradar24.com/?other=value');
     assert.equal(_localStorage.getItem(REFERRAL_CAPTURE_KEY), null);
   });
 
   it('preserves non-referral query params when stripping', () => {
-    setUrl('https://worldmonitor.app/?ref=abc&topic=brief');
+    setUrl('https://healthradar24.com/?ref=abc&topic=brief');
     captureReferralFromUrl();
-    assert.equal(_loc.href, 'https://worldmonitor.app/?topic=brief');
+    assert.equal(_loc.href, 'https://healthradar24.com/?topic=brief');
   });
 
   it('rejects invalid codes (whitespace, special chars) without crashing', () => {
-    setUrl('https://worldmonitor.app/?ref=' + encodeURIComponent('<script>alert(1)</script>'));
+    setUrl('https://healthradar24.com/?ref=' + encodeURIComponent('<script>alert(1)</script>'));
     const captured = captureReferralFromUrl();
     assert.equal(captured, null);
     assert.equal(_localStorage.getItem(REFERRAL_CAPTURE_KEY), null);
@@ -120,12 +120,12 @@ describe('captureReferralFromUrl', () => {
 
   it('rejects excessively long codes', () => {
     const huge = 'a'.repeat(100);
-    setUrl(`https://worldmonitor.app/?ref=${huge}`);
+    setUrl(`https://healthradar24.com/?ref=${huge}`);
     assert.equal(captureReferralFromUrl(), null);
   });
 
   it('accepts underscore and hyphen in codes', () => {
-    setUrl('https://worldmonitor.app/?ref=some_code-v2');
+    setUrl('https://healthradar24.com/?ref=some_code-v2');
     assert.equal(captureReferralFromUrl(), 'some_code-v2');
   });
 });
@@ -181,28 +181,28 @@ describe('clearReferralOnAttribution', () => {
 describe('appendRefToUrl', () => {
   it('appends wm_referral to a bare URL', () => {
     assert.equal(
-      appendRefToUrl('https://worldmonitor.app', 'abc'),
-      'https://worldmonitor.app/?wm_referral=abc',
+      appendRefToUrl('https://healthradar24.com', 'abc'),
+      'https://healthradar24.com/?wm_referral=abc',
     );
   });
 
   it('preserves existing query params', () => {
     assert.equal(
-      appendRefToUrl('https://worldmonitor.app/?topic=brief', 'abc'),
-      'https://worldmonitor.app/?topic=brief&wm_referral=abc',
+      appendRefToUrl('https://healthradar24.com/?topic=brief', 'abc'),
+      'https://healthradar24.com/?topic=brief&wm_referral=abc',
     );
   });
 
   it('returns input unchanged when refCode is falsy', () => {
-    assert.equal(appendRefToUrl('https://worldmonitor.app', undefined), 'https://worldmonitor.app');
-    assert.equal(appendRefToUrl('https://worldmonitor.app', null), 'https://worldmonitor.app');
-    assert.equal(appendRefToUrl('https://worldmonitor.app', ''), 'https://worldmonitor.app');
+    assert.equal(appendRefToUrl('https://healthradar24.com', undefined), 'https://healthradar24.com');
+    assert.equal(appendRefToUrl('https://healthradar24.com', null), 'https://healthradar24.com');
+    assert.equal(appendRefToUrl('https://healthradar24.com', ''), 'https://healthradar24.com');
   });
 
   it('returns input unchanged for invalid codes', () => {
     assert.equal(
-      appendRefToUrl('https://worldmonitor.app', 'bad code with spaces'),
-      'https://worldmonitor.app',
+      appendRefToUrl('https://healthradar24.com', 'bad code with spaces'),
+      'https://healthradar24.com',
     );
   });
 
@@ -215,11 +215,11 @@ describe('appendRefToUrl', () => {
 describe('round-trip: capture → load → clear', () => {
   it('captures from /pro?ref=, loads on dashboard, clears after attribution', () => {
     // 1. /pro with ref
-    setUrl('https://worldmonitor.app/pro?ref=sharerA');
+    setUrl('https://healthradar24.com/pro?ref=sharerA');
     captureReferralFromUrl();
 
     // 2. Navigate to dashboard (URL now clean) and read back
-    setUrl('https://worldmonitor.app/');
+    setUrl('https://healthradar24.com/');
     assert.equal(loadActiveReferral(), 'sharerA');
 
     // 3. After successful paid attribution
@@ -228,11 +228,11 @@ describe('round-trip: capture → load → clear', () => {
   });
 
   it('second capture in same session replaces prior code (new share link wins)', () => {
-    setUrl('https://worldmonitor.app/?ref=first');
+    setUrl('https://healthradar24.com/?ref=first');
     captureReferralFromUrl();
     assert.equal(loadActiveReferral(), 'first');
 
-    setUrl('https://worldmonitor.app/?ref=second');
+    setUrl('https://healthradar24.com/?ref=second');
     captureReferralFromUrl();
     assert.equal(loadActiveReferral(), 'second');
   });

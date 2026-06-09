@@ -10,7 +10,7 @@ const originalFetch = globalThis.fetch;
 const originalEnv = { ...process.env };
 
 function makeCtx(headers = {}) {
-  const req = new Request('https://worldmonitor.app/api/leads/v1/submit-contact', {
+  const req = new Request('https://healthradar24.com/api/leads/v1/submit-contact', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...headers },
   });

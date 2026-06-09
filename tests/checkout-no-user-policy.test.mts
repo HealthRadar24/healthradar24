@@ -57,7 +57,7 @@ before(() => {
   Object.defineProperty(globalThis, 'window', {
     configurable: true,
     value: {
-      location: { href: 'https://worldmonitor.app/', pathname: '/', search: '', hash: '' },
+      location: { href: 'https://healthradar24.com/', pathname: '/', search: '', hash: '' },
       history: { replaceState: () => {} },
     },
   });
@@ -82,7 +82,7 @@ describe('decideNoUserPathOutcome', () => {
     assert.equal(outcome.kind, 'redirect-pro');
     assert.equal(outcome.persist, false);
     if (outcome.kind === 'redirect-pro') {
-      assert.equal(outcome.redirectUrl, 'https://worldmonitor.app/pro');
+      assert.equal(outcome.redirectUrl, 'https://healthradar24.com/pro');
     }
   });
 
@@ -134,11 +134,11 @@ describe('cross-page redirect leak regression', () => {
   it('redirect-pro outcome carries the canonical /pro URL (not relative)', () => {
     // Regression guard: an absolute URL is required because the
     // dashboard origin and /pro origin are the same in prod
-    // (worldmonitor.app) but the helper is also used from sub-origin
+    // (healthradar24.com) but the helper is also used from sub-origin
     // contexts; relative would resolve unexpectedly.
     const outcome = decideNoUserPathOutcome(true);
     if (outcome.kind === 'redirect-pro') {
-      assert.match(outcome.redirectUrl, /^https:\/\/worldmonitor\.app\/pro$/);
+      assert.match(outcome.redirectUrl, /^https:\/\/healthradar24\.com\/pro$/);
     } else {
       assert.fail('expected redirect-pro outcome');
     }

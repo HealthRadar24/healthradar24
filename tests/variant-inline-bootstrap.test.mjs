@@ -18,7 +18,7 @@ describe('variant inline bootstrap', () => {
     for (const variant of ['happy', 'tech', 'finance', 'commodity', 'energy']) {
       assert.ok(
         indexHtml.includes(`h.startsWith('${variant}.'))v='${variant}'`),
-        `index.html inline bootstrap must set data-variant for ${variant}.worldmonitor.app`,
+        `index.html inline bootstrap must set data-variant for ${variant}.healthradar24.com`,
       );
     }
   });

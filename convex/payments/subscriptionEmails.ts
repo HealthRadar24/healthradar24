@@ -10,8 +10,8 @@ import { internalAction } from "../_generated/server";
 import { PRODUCT_CATALOG } from "../config/productCatalog";
 
 const RESEND_URL = "https://api.resend.com/emails";
-const FROM = "World Monitor <noreply@worldmonitor.app>";
-const ADMIN_EMAIL = "elie@worldmonitor.app";
+const FROM = "HealthRadar24 <noreply@healthradar24.com>";
+const ADMIN_EMAIL = "elie@healthradar24.com";
 
 const PLAN_DISPLAY: Record<string, string> = {
   free: "Free",
@@ -164,7 +164,7 @@ function userWelcomeHtml(planName: string, planKey: string): string {
     ? `Welcome to ${planName} — your intel, delivered.`
     : `Welcome to ${planName}!`;
   const ctaLabel = isPro ? "Open My Brief" : "Open Dashboard";
-  const ctaHref = isPro ? "https://worldmonitor.app/brief" : "https://worldmonitor.app";
+  const ctaHref = isPro ? "https://healthradar24.com/brief" : "https://healthradar24.com";
   const supportLine = isPro
     ? `<p style="font-size: 11px; color: #666; text-align: center; margin: 0 0 20px;">Questions? Reply to this email or ping <a href="mailto:${ADMIN_EMAIL}" style="color: #4ade80;">${ADMIN_EMAIL}</a>.</p>`
     : "";
@@ -175,10 +175,10 @@ function userWelcomeHtml(planName: string, planKey: string): string {
     <table cellpadding="0" cellspacing="0" border="0" style="margin: 0 auto 32px;">
       <tr>
         <td style="width: 40px; height: 40px; vertical-align: middle;">
-          <img src="https://www.worldmonitor.app/favico/android-chrome-192x192.png" width="40" height="40" alt="WorldMonitor" style="border-radius: 50%; display: block;" />
+          <img src="https://www.healthradar24.com/favico/android-chrome-192x192.png" width="40" height="40" alt="WorldMonitor" style="border-radius: 50%; display: block;" />
         </td>
         <td style="padding-left: 12px;">
-          <div style="font-size: 16px; font-weight: 800; color: #fff; letter-spacing: -0.5px;">WORLD MONITOR</div>
+          <div style="font-size: 16px; font-weight: 800; color: #fff; letter-spacing: -0.5px;">HEALTHRADAR24</div>
         </td>
       </tr>
     </table>
@@ -201,11 +201,11 @@ function userWelcomeHtml(planName: string, planKey: string): string {
   <div style="border-top: 1px solid #1a1a1a; padding: 24px 32px; text-align: center;">
     <div style="margin-bottom: 16px;">
       <a href="https://x.com/eliehabib" style="color: #666; text-decoration: none; font-size: 12px; margin: 0 12px;">X / Twitter</a>
-      <a href="https://github.com/koala73/worldmonitor" style="color: #666; text-decoration: none; font-size: 12px; margin: 0 12px;">GitHub</a>
+      <a href="https://github.com/HealthRadar24/healthradar24" style="color: #666; text-decoration: none; font-size: 12px; margin: 0 12px;">GitHub</a>
     </div>
     <p style="font-size: 11px; color: #444; margin: 0; line-height: 1.6;">
-      World Monitor \u2014 Real-time intelligence for a connected world.<br />
-      <a href="https://worldmonitor.app" style="color: #4ade80; text-decoration: none;">worldmonitor.app</a>
+      HealthRadar24 \u2014 Real-time intelligence for a connected world.<br />
+      <a href="https://healthradar24.com" style="color: #4ade80; text-decoration: none;">healthradar24.com</a>
     </p>
   </div>
 </div>`;
@@ -317,7 +317,7 @@ export const sendSubscriptionEmails = internalAction({
     await sendEmail(
       apiKey,
       args.userEmail,
-      `Welcome to World Monitor ${planName}`,
+      `Welcome to HealthRadar24 ${planName}`,
       userWelcomeHtml(planName, args.planKey),
       ADMIN_EMAIL,
     );

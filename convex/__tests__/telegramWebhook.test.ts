@@ -5,7 +5,7 @@ import schema from "../schema";
 const modules = import.meta.glob("../**/*.ts");
 
 // ---------------------------------------------------------------------------
-// Regression tests for koala73/worldmonitor#3767
+// Regression tests for HealthRadar24/healthradar24#3767
 //
 // The /api/telegram-pair-callback webhook MUST fail closed: requests are
 // rejected unless they carry the `X-Telegram-Bot-Api-Secret-Token` header

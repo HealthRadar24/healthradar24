@@ -4,12 +4,12 @@
     "version": "1.10.0",
     "description": "WorldMonitor's live global-intelligence stack as an MCP server: real-time markets, conflict events, aviation, maritime, energy, climate, health, displacement, supply chain, and AI-generated regional briefs.",
     "vendor": "WorldMonitor",
-    "homepage": "https://www.worldmonitor.app"
+    "homepage": "https://www.healthradar24.com"
   },
   "protocolVersion": "2025-06-18",
   "transport": {
     "type": "streamableHttp",
-    "endpoint": "https://worldmonitor.app/mcp"
+    "endpoint": "https://healthradar24.com/mcp"
   },
   "capabilities": {
     "tools": true,
@@ -32,8 +32,8 @@
   },
   "authentication": {
     "type": "oauth2",
-    "authorization_servers": ["https://api.worldmonitor.app"],
-    "resource": "https://worldmonitor.app",
+    "authorization_servers": ["https://api.healthradar24.com"],
+    "resource": "https://healthradar24.com",
     "scopes": ["mcp"],
     "alternative_methods": [
       {
@@ -44,10 +44,10 @@
     ]
   },
   "documentation": {
-    "overview": "https://www.worldmonitor.app/docs/mcp-server",
-    "toolReference": "https://www.worldmonitor.app/docs/mcp-tools-reference",
-    "apiReference": "https://www.worldmonitor.app/docs/api-reference",
-    "support": "https://www.worldmonitor.app/docs/getting-started"
+    "overview": "https://www.healthradar24.com/docs/mcp-server",
+    "toolReference": "https://www.healthradar24.com/docs/mcp-tools-reference",
+    "apiReference": "https://www.healthradar24.com/docs/api-reference",
+    "support": "https://www.healthradar24.com/docs/getting-started"
   },
   "rateLimits": {
     "perMinute": 60,

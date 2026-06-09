@@ -107,13 +107,13 @@ const RESEND_API_KEY = process.env.RESEND_API_KEY ?? '';
 // off the `alerts@` mailbox so recipients don't see a scary "alert" from-name
 // in their inbox. normalizeResendSender coerces a bare email address into a
 // "Name <addr>" wrapper at runtime (with a loud warning), so a Railway env
-// like `RESEND_FROM_BRIEF=brief@worldmonitor.app` can't re-introduce the bug
+// like `RESEND_FROM_BRIEF=brief@healthradar24.com` can't re-introduce the bug
 // that `.env.example` documents.
 const RESEND_FROM =
   normalizeResendSender(
     process.env.RESEND_FROM_BRIEF ?? process.env.RESEND_FROM_EMAIL,
     'WorldMonitor Brief',
-  ) ?? 'WorldMonitor Brief <brief@worldmonitor.app>';
+  ) ?? 'WorldMonitor Brief <brief@healthradar24.com>';
 
 if (process.env.DIGEST_CRON_ENABLED === '0') {
   console.log('[digest] DIGEST_CRON_ENABLED=0 — skipping run');
@@ -156,7 +156,7 @@ function getDigestScoreMin() {
 
 const BRIEF_URL_SIGNING_SECRET = process.env.BRIEF_URL_SIGNING_SECRET ?? '';
 const WORLDMONITOR_PUBLIC_BASE_URL =
-  process.env.WORLDMONITOR_PUBLIC_BASE_URL ?? 'https://worldmonitor.app';
+  process.env.WORLDMONITOR_PUBLIC_BASE_URL ?? 'https://healthradar24.com';
 const BRIEF_TTL_SECONDS = 7 * 24 * 60 * 60; // 7 days
 // Brief story window: derived per-rule from the rule's lastSentAt via
 // digestWindowStartMs, identical to the send-loop window. The previous
@@ -938,7 +938,7 @@ function formatDigest(stories, nowMs) {
     lines.push('');
   }
 
-  lines.push('View full dashboard \u2192 worldmonitor.app');
+  lines.push('View full dashboard \u2192 healthradar24.com');
   return lines.join('\n');
 }
 
@@ -1016,10 +1016,10 @@ function formatDigestHtml(stories, nowMs) {
             <table cellpadding="0" cellspacing="0" border="0">
               <tr>
                 <td style="width: 36px; height: 36px; vertical-align: middle;">
-                  <img src="https://www.worldmonitor.app/favico/android-chrome-192x192.png" width="36" height="36" alt="WorldMonitor" style="border-radius: 50%; display: block;" />
+                  <img src="https://www.healthradar24.com/favico/android-chrome-192x192.png" width="36" height="36" alt="WorldMonitor" style="border-radius: 50%; display: block;" />
                 </td>
                 <td style="padding-left: 10px;">
-                  <div style="font-size: 15px; font-weight: 800; color: #fff; letter-spacing: -0.3px;">WORLD MONITOR</div>
+                  <div style="font-size: 15px; font-weight: 800; color: #fff; letter-spacing: -0.3px;">HEALTHRADAR24</div>
                 </td>
               </tr>
             </table>
@@ -1051,17 +1051,16 @@ function formatDigestHtml(stories, nowMs) {
       </table>
       ${sectionsHtml}
       <div style="text-align: center; padding: 12px 0 36px;">
-        <a href="https://worldmonitor.app" style="display: inline-block; background: #4ade80; color: #0a0a0a; padding: 12px 32px; text-decoration: none; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; border-radius: 3px;">Open Dashboard</a>
+        <a href="https://healthradar24.com" style="display: inline-block; background: #4ade80; color: #0a0a0a; padding: 12px 32px; text-decoration: none; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; border-radius: 3px;">Open Dashboard</a>
       </div>
     </div>
     <div style="background: #0a0a0a; border-top: 1px solid #1a1a1a; padding: 20px 36px; text-align: center;">
       <div style="margin-bottom: 12px;">
-        <a href="https://x.com/worldmonitorapp" style="color: #555; text-decoration: none; font-size: 11px; margin: 0 10px;">X / Twitter</a>
-        <a href="https://github.com/koala73/worldmonitor" style="color: #555; text-decoration: none; font-size: 11px; margin: 0 10px;">GitHub</a>
-        <a href="https://discord.gg/re63kWKxaz" style="color: #555; text-decoration: none; font-size: 11px; margin: 0 10px;">Discord</a>
+        <a href="https://github.com/HealthRadar24/healthradar24" style="color: #555; text-decoration: none; font-size: 11px; margin: 0 10px;">GitHub</a>
+        <a href="https://github.com/koala73/worldmonitor" style="color: #555; text-decoration: none; font-size: 11px; margin: 0 10px;">Upstream</a>
       </div>
       <p style="font-size: 10px; color: #444; margin: 0; line-height: 1.5;">
-        <a href="https://worldmonitor.app" style="color: #4ade80; text-decoration: none;">worldmonitor.app</a>
+        <a href="https://healthradar24.com" style="color: #4ade80; text-decoration: none;">healthradar24.com</a>
       </p>
     </div>
   </div>

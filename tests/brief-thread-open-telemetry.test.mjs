@@ -225,7 +225,7 @@ describe('brief-render — U11 source-link stamping', () => {
       'tracker pins source: magazine',
     );
     assert.ok(
-      html.includes('https://abacus.worldmonitor.app/script.js'),
+      html.includes('https://abacus.healthradar24.com/script.js'),
       'umami loader script tag is emitted in the head',
     );
   });

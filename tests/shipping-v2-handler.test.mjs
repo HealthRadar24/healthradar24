@@ -21,7 +21,7 @@ const originalFetch = globalThis.fetch;
 const originalEnv = { ...process.env };
 
 function makeCtx(headers = {}) {
-  const req = new Request('https://worldmonitor.app/api/v2/shipping/route-intelligence', {
+  const req = new Request('https://healthradar24.com/api/v2/shipping/route-intelligence', {
     method: 'GET',
     headers,
   });

@@ -16,45 +16,45 @@ test('returns null for empty, null, undefined, or whitespace-only input', () => 
 
 test('passes a properly wrapped sender through unchanged', () => {
   assert.equal(
-    normalizeResendSender('WorldMonitor <alerts@worldmonitor.app>', 'Default', silent),
-    'WorldMonitor <alerts@worldmonitor.app>',
+    normalizeResendSender('WorldMonitor <alerts@healthradar24.com>', 'Default', silent),
+    'WorldMonitor <alerts@healthradar24.com>',
   );
   assert.equal(
-    normalizeResendSender('WorldMonitor Brief <brief@worldmonitor.app>', 'Default', silent),
-    'WorldMonitor Brief <brief@worldmonitor.app>',
+    normalizeResendSender('WorldMonitor Brief <brief@healthradar24.com>', 'Default', silent),
+    'WorldMonitor Brief <brief@healthradar24.com>',
   );
 });
 
 test('trims surrounding whitespace before returning a wrapped sender', () => {
   assert.equal(
-    normalizeResendSender('  WorldMonitor Brief <brief@worldmonitor.app>  ', 'Default', silent),
-    'WorldMonitor Brief <brief@worldmonitor.app>',
+    normalizeResendSender('  WorldMonitor Brief <brief@healthradar24.com>  ', 'Default', silent),
+    'WorldMonitor Brief <brief@healthradar24.com>',
   );
 });
 
 test('wraps a bare email address with the supplied default display name', () => {
   assert.equal(
-    normalizeResendSender('brief@worldmonitor.app', 'WorldMonitor Brief', silent),
-    'WorldMonitor Brief <brief@worldmonitor.app>',
+    normalizeResendSender('brief@healthradar24.com', 'WorldMonitor Brief', silent),
+    'WorldMonitor Brief <brief@healthradar24.com>',
   );
   assert.equal(
-    normalizeResendSender('alerts@worldmonitor.app', 'WorldMonitor Alerts', silent),
-    'WorldMonitor Alerts <alerts@worldmonitor.app>',
+    normalizeResendSender('alerts@healthradar24.com', 'WorldMonitor Alerts', silent),
+    'WorldMonitor Alerts <alerts@healthradar24.com>',
   );
 });
 
 test('emits exactly one warning when coercing a bare address', () => {
   const warnings = [];
-  normalizeResendSender('brief@worldmonitor.app', 'WorldMonitor Brief', (m) => warnings.push(m));
+  normalizeResendSender('brief@healthradar24.com', 'WorldMonitor Brief', (m) => warnings.push(m));
   assert.equal(warnings.length, 1);
   assert.match(warnings[0], /lacks display name/);
-  assert.match(warnings[0], /WorldMonitor Brief <brief@worldmonitor\.app>/);
+  assert.match(warnings[0], /WorldMonitor Brief <brief@healthradar24\.com>/);
 });
 
 test('does not warn when the value already has a display-name wrapper', () => {
   const warnings = [];
   normalizeResendSender(
-    'WorldMonitor Brief <brief@worldmonitor.app>',
+    'WorldMonitor Brief <brief@healthradar24.com>',
     'Default',
     (m) => warnings.push(m),
   );

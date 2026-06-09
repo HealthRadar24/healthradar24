@@ -1,23 +1,22 @@
 {
   "$schema": "https://mintlify.com/schema.json",
   "theme": "mint",
-  "name": "World Monitor",
+  "name": "HealthRadar24",
   "description": "AI-powered real-time global intelligence dashboard",
   "logo": {
     "dark": "/logo.png",
     "light": "/logo.png",
-    "href": "https://www.worldmonitor.app"
+    "href": "https://www.healthradar24.com"
   },
   "favicon": "/favicon.png",
   "seo": {
     "metatags": {
-      "og:image": "https://www.worldmonitor.app/favico/og-image.png",
-      "og:site_name": "World Monitor Documentation",
+      "og:image": "https://www.healthradar24.com/favico/og-image.png",
+      "og:site_name": "HealthRadar24 Documentation",
       "og:type": "website",
       "og:locale": "en_US",
       "twitter:card": "summary_large_image",
-      "twitter:site": "@worldmonitorai",
-      "twitter:image": "https://www.worldmonitor.app/favico/og-image.png"
+      "twitter:image": "https://www.healthradar24.com/favico/og-image.png"
     }
   },
   "colors": {
@@ -29,25 +28,25 @@
     "links": [
       {
         "label": "Blog",
-        "href": "https://www.worldmonitor.app/blog"
+        "href": "https://www.healthradar24.com/blog"
       },
       {
         "label": "Dashboard",
-        "href": "https://www.worldmonitor.app"
+        "href": "https://www.healthradar24.com"
       },
       {
         "label": "Pro",
-        "href": "https://www.worldmonitor.app/pro"
+        "href": "https://www.healthradar24.com/pro"
       },
       {
         "label": "GitHub",
-        "href": "https://github.com/koala73/worldmonitor"
+        "href": "https://github.com/HealthRadar24/healthradar24"
       }
     ],
     "primary": {
       "type": "button",
       "label": "Get Early Access",
-      "href": "https://www.worldmonitor.app/pro#waitlist"
+      "href": "https://www.healthradar24.com/pro#waitlist"
     }
   },
   "navigation": {
@@ -407,46 +406,36 @@
   },
   "footer": {
     "socials": {
-      "github": "https://github.com/koala73/worldmonitor",
-      "discord": "https://discord.gg/re63kWKxaz",
-      "x": "https://x.com/worldmonitorai"
+      "github": "https://github.com/HealthRadar24/healthradar24"
     },
     "links": [
       {
-        "header": "World Monitor",
+        "header": "HealthRadar24",
         "items": [
           {
             "label": "Dashboard",
-            "href": "https://www.worldmonitor.app"
+            "href": "https://www.healthradar24.com"
           },
           {
             "label": "Pro",
-            "href": "https://www.worldmonitor.app/pro"
+            "href": "https://www.healthradar24.com/pro"
           },
           {
             "label": "Blog",
-            "href": "https://www.worldmonitor.app/blog"
+            "href": "https://www.healthradar24.com/blog"
           }
         ]
       },
       {
-        "header": "Community",
+        "header": "Project",
         "items": [
           {
             "label": "GitHub",
+            "href": "https://github.com/HealthRadar24/healthradar24"
+          },
+          {
+            "label": "Upstream World Monitor",
             "href": "https://github.com/koala73/worldmonitor"
-          },
-          {
-            "label": "Discord",
-            "href": "https://discord.gg/re63kWKxaz"
-          },
-          {
-            "label": "X",
-            "href": "https://x.com/worldmonitorai"
-          },
-          {
-            "label": "Status",
-            "href": "https://status.worldmonitor.app/"
           }
         ]
       }

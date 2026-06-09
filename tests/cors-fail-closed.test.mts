@@ -24,11 +24,11 @@ function stripComments(source: string): string {
 
 describe('cors helper', () => {
   it('returns headers for a well-formed request', () => {
-    const req = new Request('https://worldmonitor.app/x', {
-      headers: { Origin: 'https://worldmonitor.app' },
+    const req = new Request('https://healthradar24.com/x', {
+      headers: { Origin: 'https://healthradar24.com' },
     });
     const headers = getCorsHeaders(req);
-    assert.equal(headers['Access-Control-Allow-Origin'], 'https://worldmonitor.app');
+    assert.equal(headers['Access-Control-Allow-Origin'], 'https://healthradar24.com');
   });
 
   it('propagates exceptions (caller must wrap in fail-closed try/catch)', () => {

@@ -376,7 +376,7 @@ describe('security header guardrails', () => {
     const csp = getHeaderValue('Content-Security-Policy');
     const scriptSrc = csp.match(/script-src\s+([^;]+)/)?.[1] ?? '';
     assert.ok(
-      scriptSrc.includes('clerk.accounts.dev') || scriptSrc.includes('clerk.worldmonitor.app'),
+      scriptSrc.includes('clerk.accounts.dev') || scriptSrc.includes('clerk.healthradar24.com'),
       'CSP script-src must include Clerk origin for auth UI to load'
     );
   });
@@ -385,7 +385,7 @@ describe('security header guardrails', () => {
     const csp = getHeaderValue('Content-Security-Policy');
     const frameSrc = csp.match(/frame-src\s+([^;]+)/)?.[1] ?? '';
     assert.ok(
-      frameSrc.includes('clerk.accounts.dev') || frameSrc.includes('clerk.worldmonitor.app'),
+      frameSrc.includes('clerk.accounts.dev') || frameSrc.includes('clerk.healthradar24.com'),
       'CSP frame-src must include Clerk origin for sign-in modal'
     );
   });
@@ -399,7 +399,7 @@ describe('security header guardrails', () => {
     assert.ok(nginxCsp, 'nginx-security-headers.conf must have a Content-Security-Policy header');
     const frameSrc = nginxCsp.match(/frame-src\s+([^;]+)/)?.[1] ?? '';
     assert.ok(
-      frameSrc.includes('clerk.accounts.dev') || frameSrc.includes('clerk.worldmonitor.app'),
+      frameSrc.includes('clerk.accounts.dev') || frameSrc.includes('clerk.healthradar24.com'),
       'docker/nginx CSP frame-src must include Clerk origin for the self-hosted sign-in modal'
     );
   });
@@ -552,14 +552,14 @@ describe('agent readiness: api-catalog + openapi build', () => {
   const pkg = JSON.parse(readFileSync(resolve(__dirname, '../package.json'), 'utf-8'));
 
   it('api anchor is first and points at the api host root', () => {
-    assert.equal(apiCatalog.linkset[0].anchor, 'https://api.worldmonitor.app/');
+    assert.equal(apiCatalog.linkset[0].anchor, 'https://api.healthradar24.com/');
   });
 
   it('status href points at /api/health (SPA lives at /health — would 200 HTML and look healthy)', () => {
     const statusHref = apiCatalog.linkset[0].status[0].href;
     assert.ok(
-      statusHref.startsWith('https://api.worldmonitor.app'),
-      `status href must be on api.worldmonitor.app, got: ${statusHref}`
+      statusHref.startsWith('https://api.healthradar24.com'),
+      `status href must be on api.healthradar24.com, got: ${statusHref}`
     );
     assert.ok(
       statusHref.endsWith('/api/health'),
@@ -577,8 +577,8 @@ describe('agent readiness: api-catalog + openapi build', () => {
   });
 
   it('has a second anchor for the MCP server-card', () => {
-    const mcpEntry = apiCatalog.linkset.find((entry) => entry.anchor === 'https://worldmonitor.app/mcp');
-    assert.ok(mcpEntry, 'linkset must contain an anchor for https://worldmonitor.app/mcp');
+    const mcpEntry = apiCatalog.linkset.find((entry) => entry.anchor === 'https://healthradar24.com/mcp');
+    assert.ok(mcpEntry, 'linkset must contain an anchor for https://healthradar24.com/mcp');
     const mcpServiceDesc = mcpEntry['service-desc']?.[0];
     assert.ok(mcpServiceDesc, 'mcp anchor must have a service-desc entry');
     assert.ok(
@@ -650,7 +650,7 @@ describe('agent readiness: MCP/OAuth origin alignment', () => {
     const handler = mod.default;
     assert.equal(typeof handler, 'function', 'handler must be the default export');
 
-    const hosts = ['worldmonitor.app', 'www.worldmonitor.app', 'api.worldmonitor.app'];
+    const hosts = ['healthradar24.com', 'www.healthradar24.com', 'api.healthradar24.com'];
     for (const host of hosts) {
       const req = new Request(`https://${host}/.well-known/oauth-protected-resource`, {
         headers: { host },
@@ -674,7 +674,7 @@ describe('agent readiness: MCP/OAuth origin alignment', () => {
     const u = new URL(mcpCard.authentication.resource);
     assert.equal(u.protocol, 'https:');
     assert.ok(
-      ['worldmonitor.app', 'www.worldmonitor.app', 'api.worldmonitor.app'].includes(u.host),
+      ['healthradar24.com', 'www.healthradar24.com', 'api.healthradar24.com'].includes(u.host),
       `unexpected host: ${u.host}`
     );
   });
@@ -691,9 +691,9 @@ describe('agent readiness: MCP/OAuth origin alignment', () => {
       + readFileSync(resolve(__dirname, '../api/mcp/auth.ts'), 'utf-8');
     // Must NOT contain a hardcoded apex or api URL for resource_metadata —
     // that regressed once (PR #3351 review: apex pointer emitted from
-    // api.worldmonitor.app/mcp 401s) and the grep-only test didn't catch it.
+    // api.healthradar24.com/mcp 401s) and the grep-only test didn't catch it.
     assert.ok(
-      !/resource_metadata="https:\/\/(?:api\.)?worldmonitor\.app\/\.well-known\//.test(source),
+      !/resource_metadata="https:\/\/(?:api\.)?healthradar24\.com\/\.well-known\//.test(source),
       'api/mcp.ts must not hardcode resource_metadata URL — derive from request host'
     );
     // Must contain a template-literal construction that uses a host variable.

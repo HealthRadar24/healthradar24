@@ -94,7 +94,7 @@ describe('api/mcp.ts — PRO MCP Server', () => {
   // --- Protocol ---
 
   it('OPTIONS returns 204 with CORS headers', async () => {
-    const req = new Request(BASE_URL, { method: 'OPTIONS', headers: { origin: 'https://worldmonitor.app' } });
+    const req = new Request(BASE_URL, { method: 'OPTIONS', headers: { origin: 'https://healthradar24.com' } });
     const res = await handler(req);
     assert.equal(res.status, 204);
     assert.ok(res.headers.get('access-control-allow-methods'));
@@ -2550,13 +2550,13 @@ describe('api/mcp.ts — U7 Pro-path', () => {
     // Sign for digest endpoint.
     const signed = await signInternalMcpRequest({
       method: 'GET',
-      url: 'https://worldmonitor.app/api/news/v1/list-feed-digest?lang=en&variant=full',
+      url: 'https://healthradar24.com/api/news/v1/list-feed-digest?lang=en&variant=full',
       body: null,
       userId: PRO_USER_ID,
       secret: HMAC_SECRET,
     });
     // Re-construct the payload that would be expected for the SAME ts on a different path.
-    const replayUrl = new URL('https://worldmonitor.app/api/intelligence/v1/deduct-situation');
+    const replayUrl = new URL('https://healthradar24.com/api/intelligence/v1/deduct-situation');
     const replayPayload = buildHmacPayload({
       ts: signed.ts,
       method: 'POST',

@@ -63,7 +63,7 @@ const CHECKOUT_REFERRAL_PARAM = 'checkoutReferral';
 const CHECKOUT_DISCOUNT_PARAM = 'checkoutDiscount';
 const PENDING_CHECKOUT_KEY = 'wm-pending-checkout';
 const POST_CHECKOUT_FLAG_KEY = 'wm-post-checkout';
-const APP_CHECKOUT_BASE_URL = 'https://worldmonitor.app/';
+const APP_CHECKOUT_BASE_URL = 'https://healthradar24.com/';
 
 /**
  * Session flag set just before the post-overlay reload. Lets panel-layout
@@ -919,7 +919,7 @@ function renderCheckoutErrorSurface(
   fallbackToPricingPage: boolean,
 ): void {
   if (fallbackToPricingPage) {
-    window.location.assign('https://worldmonitor.app/pro');
+    window.location.assign('https://healthradar24.com/pro');
     return;
   }
   showCheckoutErrorToast(error.userMessage);

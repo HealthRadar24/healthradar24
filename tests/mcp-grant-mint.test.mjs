@@ -4,7 +4,7 @@
  *   - api/_mcp-grant-hmac.ts        sign / verify (load-bearing format
  *                                    for U5: <b64u(payloadJson)>.<b64u(sig)>)
  *   - api/internal/mcp-grant-mint   issues the redirect to
- *                                    api.worldmonitor.app/oauth/authorize-pro
+ *                                    api.healthradar24.com/oauth/authorize-pro
  *   - api/internal/mcp-grant-context returns real client metadata
  *
  * Both endpoints share validation; tests assert they fail in identical
@@ -106,7 +106,7 @@ function makeContextDeps(overrides = {}) {
 }
 
 function makePostReq(body) {
-  return new Request('https://worldmonitor.app/api/internal/mcp-grant-mint', {
+  return new Request('https://healthradar24.com/api/internal/mcp-grant-mint', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: 'Bearer fake-jwt' },
     body: JSON.stringify(body),
@@ -115,8 +115,8 @@ function makePostReq(body) {
 
 function makeGetReq(nonce) {
   const url = nonce !== undefined
-    ? `https://worldmonitor.app/api/internal/mcp-grant-context?nonce=${encodeURIComponent(nonce)}`
-    : `https://worldmonitor.app/api/internal/mcp-grant-context`;
+    ? `https://healthradar24.com/api/internal/mcp-grant-context?nonce=${encodeURIComponent(nonce)}`
+    : `https://healthradar24.com/api/internal/mcp-grant-context`;
   return new Request(url, {
     method: 'GET',
     headers: { Authorization: 'Bearer fake-jwt' },
@@ -214,7 +214,7 @@ describe('mintGrantHandler', () => {
     Object.assign(process.env, originalEnv);
   });
 
-  it('happy path: returns redirect to https://api.worldmonitor.app/oauth/authorize-pro with valid grant', async () => {
+  it('happy path: returns redirect to https://api.healthradar24.com/oauth/authorize-pro with valid grant', async () => {
     // F2: grant write now goes through SET NX. Assert on setNxExCalls
     // instead of setExCalls.
     const { deps, setNxExCalls } = makeMintDeps();
@@ -226,7 +226,7 @@ describe('mintGrantHandler', () => {
 
     // URL parses cleanly (catches any encoding bug) and points at the FIXED host.
     const u = new URL(body.redirect);
-    assert.equal(u.origin, 'https://api.worldmonitor.app');
+    assert.equal(u.origin, 'https://api.healthradar24.com');
     assert.equal(u.pathname, '/oauth/authorize-pro');
     assert.equal(u.searchParams.get('nonce'), 'nonce_xyz');
     const grant = u.searchParams.get('grant');
@@ -257,7 +257,7 @@ describe('mintGrantHandler', () => {
 
   it('returns 405 on non-POST', async () => {
     const { deps } = makeMintDeps();
-    const req = new Request('https://worldmonitor.app/api/internal/mcp-grant-mint', { method: 'GET' });
+    const req = new Request('https://healthradar24.com/api/internal/mcp-grant-mint', { method: 'GET' });
     const res = await mintGrantHandler(req, deps);
     assert.equal(res.status, 405);
     assert.equal(res.headers.get('Allow'), 'POST');
@@ -276,7 +276,7 @@ describe('mintGrantHandler', () => {
 
   it('returns 400 INVALID_REQUEST on non-JSON body', async () => {
     const { deps } = makeMintDeps();
-    const req = new Request('https://worldmonitor.app/api/internal/mcp-grant-mint', {
+    const req = new Request('https://healthradar24.com/api/internal/mcp-grant-mint', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: 'Bearer fake-jwt' },
       body: 'not json {',
@@ -563,7 +563,7 @@ describe('grantContextHandler', () => {
 
   it('returns 405 on non-GET', async () => {
     const { deps } = makeContextDeps();
-    const req = new Request('https://worldmonitor.app/api/internal/mcp-grant-context?nonce=x', {
+    const req = new Request('https://healthradar24.com/api/internal/mcp-grant-context?nonce=x', {
       method: 'POST',
       headers: { Authorization: 'Bearer fake-jwt' },
     });

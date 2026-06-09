@@ -601,7 +601,7 @@
         "some": "Néhány funkció API-kulcsokat igényel"
       },
       "reserveEarlyAccess": "Foglalj korai hozzáférést",
-      "skipSetup": "Hagyj ki a beállítást — egy World Monitor licenc mindent feloldja. Csatlakozz a várólistához a korai hozzáféréshez.",
+      "skipSetup": "Hagyj ki a beállítást — egy HealthRadar24 licenc mindent feloldja. Csatlakozz a várólistához a korai hozzáféréshez.",
       "summary": {
         "desktop": "Asztali mód",
         "web": "Web mód (csak olvasható, szerveren kezelt hitelesítés)",
@@ -632,7 +632,7 @@
       }
     },
     "settingsWindow": {
-      "shellTitle": "World Monitor beállítások",
+      "shellTitle": "HealthRadar24 beállítások",
       "shellSearchPlaceholder": "Beállítások keresése...",
       "shellCancel": "Mégse",
       "shellSaveClose": "Mentés és bezárás",
@@ -660,7 +660,7 @@
         "dividerOr": "VAGY",
         "register": {
           "title": "Foglaljon helyet",
-          "description": "Felkészülünk a World Monitor licencek indítására. Regisztráljon most, és legyen az első sorban — a korai tagok prioritás hozzáférést és alapító tagok árazását kapnak.",
+          "description": "Felkészülünk a HealthRadar24 licencek indítására. Regisztráljon most, és legyen az első sorban — a korai tagok prioritás hozzáférést és alapító tagok árazását kapnak.",
           "submitBtn": "Csatlakozás a várólistához"
         }
       },
@@ -3016,7 +3016,7 @@
   },
   "premium": {
     "pro": "PRO",
-    "lockedDesc": "World Monitor licenckulcs szükséges",
+    "lockedDesc": "HealthRadar24 licenckulcs szükséges",
     "signInToUnlock": "Jelentkezzen be a prémium funkciók feloldásához",
     "signIn": "Jelentkezzen be a feloldáshoz",
     "upgradeDesc": "Frissítsen Pro verzióra a teljes hozzáféréshez a prémium elemzésekhez",

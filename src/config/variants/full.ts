@@ -1,4 +1,4 @@
-// Full geopolitical variant - worldmonitor.app
+// Full geopolitical variant - healthradar24.com
 import type { PanelConfig, MapLayers } from '@/types';
 import type { VariantConfig } from './base';
 

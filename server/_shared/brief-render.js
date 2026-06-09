@@ -723,8 +723,8 @@ function renderStoryPage({ story, rank, palette, pageIndex, totalPages, issueDat
  */
 function renderBackCover({ tz, pageIndex, totalPages, publicMode, refCode }) {
   const ctaHref = publicMode
-    ? `https://worldmonitor.app/pro${refCode ? `?ref=${encodeURIComponent(refCode)}` : ''}`
-    : 'https://worldmonitor.app';
+    ? `https://healthradar24.com/pro${refCode ? `?ref=${encodeURIComponent(refCode)}` : ''}`
+    : 'https://healthradar24.com';
   const kicker = publicMode
     ? 'You\u2019re reading a shared brief'
     : 'Thank you for reading';
@@ -733,9 +733,9 @@ function renderBackCover({ tz, pageIndex, totalPages, publicMode, refCode }) {
     : 'End of<br/>Transmission.';
   const metaLeft = publicMode
     ? `<a href="${escapeHtml(ctaHref)}" class="mono back-cta" target="_blank" rel="noopener">Subscribe \u2192</a>`
-    : '<span class="mono">worldmonitor.app</span>';
+    : '<span class="mono">healthradar24.com</span>';
   const metaRight = publicMode
-    ? '<span class="mono">worldmonitor.app</span>'
+    ? '<span class="mono">healthradar24.com</span>'
     : `<span class="mono">Next brief \u00b7 08:00 ${escapeHtml(tz)}</span>`;
   return (
     '<section class="page cover back">' +
@@ -1223,13 +1223,13 @@ const SHARE_SCRIPT = `<script>
 </script>`;
 
 // Umami analytics loader, mirroring the production snippet in
-// index.html. Hosted magazine pages are served from worldmonitor.app
+// index.html. Hosted magazine pages are served from healthradar24.com
 // (the auth'd route) and the public-share hash mirror — both within
 // `data-domains`. The `async` script never blocks rendering; if it's
 // blocked by an extension, BRIEF_THREAD_OPEN_SCRIPT silently no-ops.
 // Same data-website-id as the dashboard so events land in the same
 // project — segmentation is via event properties, not website ids.
-const UMAMI_LOADER = '<script async src="https://abacus.worldmonitor.app/script.js" data-website-id="e8800335-c853-46a8-8497-c993ed2f58bc" data-domains="worldmonitor.app,tech.worldmonitor.app,finance.worldmonitor.app,commodity.worldmonitor.app,happy.worldmonitor.app"></script>';
+const UMAMI_LOADER = '<script async src="https://abacus.healthradar24.com/script.js" data-website-id="e8800335-c853-46a8-8497-c993ed2f58bc" data-domains="healthradar24.com,tech.healthradar24.com,finance.healthradar24.com,commodity.healthradar24.com,happy.healthradar24.com"></script>';
 
 /**
  * U11 telemetry: emit a `brief-thread-open` event whenever a story
@@ -1615,7 +1615,7 @@ export function renderBriefMagazine(envelope, options = {}) {
   // In public view: the per-hash mirror is noindexed via the HTTP
   // header AND a meta tag, and we prepend a subscribe strip pointing
   // at /pro (with optional referral attribution).
-  const publicStripHref = `https://worldmonitor.app/pro${refCode ? `?ref=${encodeURIComponent(refCode)}` : ''}`;
+  const publicStripHref = `https://healthradar24.com/pro${refCode ? `?ref=${encodeURIComponent(refCode)}` : ''}`;
   const publicStripHtml = publicMode
     ? '<div class="wm-public-strip">'
       + '<span>WorldMonitor Brief \u00b7 shared issue</span>'

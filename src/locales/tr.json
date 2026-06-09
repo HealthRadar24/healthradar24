@@ -532,7 +532,7 @@
         "needsKeys": "Ozellikleri etkinlestirmek icin API anahtarlarini yapilandiriniz",
         "some": "Bazi ozellikler API anahtari gerektiriyor"
       },
-      "skipSetup": "Kurulumu atlayın — tek bir World Monitor lisansı her şeyi açar. Erken erişim için bekleme listesine katılın.",
+      "skipSetup": "Kurulumu atlayın — tek bir HealthRadar24 lisansı her şeyi açar. Erken erişim için bekleme listesine katılın.",
       "summary": {
         "desktop": "Masaustu modu",
         "web": "Web modu (salt okunur, sunucu tarafli kimlik bilgileri)",
@@ -586,7 +586,7 @@
         "dividerOr": "VEYA",
         "register": {
           "title": "Yerinizi Ayırtın",
-          "description": "World Monitor lisanslarını başlatmaya hazırlanıyoruz. Şimdi kaydolun ve ilk sıraya girin — erken üyeler öncelikli erişim ve kurucu üye fiyatlandırması alır.",
+          "description": "HealthRadar24 lisanslarını başlatmaya hazırlanıyoruz. Şimdi kaydolun ve ilk sıraya girin — erken üyeler öncelikli erişim ve kurucu üye fiyatlandırması alır.",
           "submitBtn": "Bekleme Listesine Katıl"
         }
       },
@@ -597,7 +597,7 @@
         "status": "Durum",
         "duration": "Sure"
       },
-      "shellTitle": "World Monitor Ayarları",
+      "shellTitle": "HealthRadar24 Ayarları",
       "shellSearchPlaceholder": "Ayarları ara...",
       "shellCancel": "İptal",
       "shellSaveClose": "Kaydet ve Kapat",
@@ -2946,10 +2946,10 @@
     "copyCoordinates": "Koordinatları kopyala"
   },
   "shell": {
-    "documentTitle": "World Monitor — Gerçek Zamanlı Küresel İstihbarat Paneli",
+    "documentTitle": "HealthRadar24 — Gerçek Zamanlı Küresel İstihbarat Paneli",
     "metaDescription": "Gerçek zamanlı küresel istihbarat platformu. WIRED'de yer aldı. 190 ülkede 2M+ kişi tarafından kullanılıyor. Çatışmalar, piyasalar, askeri, OSINT tek görünümde.",
     "offlineTitle": "Çevrimdışısınız",
-    "offlineMessage": "World Monitor, gerçek zamanlı istihbarat verileri için internet bağlantısı gerektirir.",
+    "offlineMessage": "HealthRadar24, gerçek zamanlı istihbarat verileri için internet bağlantısı gerektirir.",
     "offlineRetry": "Yeniden Dene"
   },
   "widgets": {
@@ -3020,7 +3020,7 @@
   },
   "premium": {
     "pro": "PRO",
-    "lockedDesc": "World Monitor lisans anahtarı gereklidir",
+    "lockedDesc": "HealthRadar24 lisans anahtarı gereklidir",
     "signInToUnlock": "Premium özelliklerin kilidini açmak için oturum açın",
     "signIn": "Kilidini Açmak İçin Oturum Aç",
     "upgradeDesc": "Premium analitiğe tam erişim için Pro'ya yükseltin",

@@ -26,7 +26,7 @@
     "asFeaturedIn": "Apărut în"
   },
   "twoPath": {
-    "proTitle": "World Monitor Pro",
+    "proTitle": "HealthRadar24 Pro",
     "proDesc": "Analistul tău IA. Un birou personal de intelligence. O platformă pe care să construiești. O cheie pentru 30+ de servicii live.",
     "proF1": "Chat WM Analyst — interoghează cele 30+ de servicii conversațional",
     "proF2": "Digest IA — zilnic, de două ori pe zi sau săptămânal — pe Slack, Discord, Telegram, Email sau webhook",
@@ -39,7 +39,7 @@
     "proF9": "AI Market Implications și Regional Intelligence (În curând: supraveghere orbitală, straturi premium de hartă, istoric extins)",
     "proCta": "Rezervă-ți accesul anticipat",
     "choosePlan": "Alege planul",
-    "entTitle": "World Monitor Enterprise",
+    "entTitle": "HealthRadar24 Enterprise",
     "entDesc": "Pentru echipe care au nevoie de monitoring partajat, acces API, opțiuni de deployment, aplicații TV și suport direct.",
     "entF1": "Tot din Pro, plus:",
     "entF2": "Imagini satelitare live și SAR",
@@ -82,10 +82,10 @@
     "channels": "Slack · Discord · Telegram · Email · Webhook · Criptare AES-256 · Ore silențioase"
   },
   "livePreview": {
-    "windowTitle": "worldmonitor.app — Panou live",
+    "windowTitle": "healthradar24.com — Panou live",
     "openFullScreen": "Deschide pe ecran complet",
     "tryLiveDashboard": "Încearcă panoul live",
-    "iframeTitle": "World Monitor — Panou live de intelligence",
+    "iframeTitle": "HealthRadar24 — Panou live de intelligence",
     "description": "Glob WebGL 3D · 50+ straturi de hartă interactive · Date în timp real despre piață, macroeconomie, geopolitică, energie și infrastructură"
   },
   "socialProof": {
@@ -113,7 +113,7 @@
     "teamsDesc": "Treci de la uz individual la fluxuri partajate, acces API, aplicații TV și deployment gestionat."
   },
   "dataCoverage": {
-    "title": "Ce urmărește World Monitor",
+    "title": "Ce urmărește HealthRadar24",
     "subtitle": "30+ domenii de servicii ingerate simultan. Piețe, macro, geopolitică, energie, infrastructură — totul normalizat și randat pe un glob WebGL.",
     "markets": "Piețe financiare și acțiuni",
     "marketsDesc": "Analiză globală de acțiuni, mărfuri, cripto, fluxuri ETF, ținte de analiști și date macro FRED",
@@ -177,7 +177,7 @@
   "apiSection": {
     "apiTier": "NIVEL API",
     "title": "Intelligence programatic",
-    "subtitle": "Pentru dezvoltatori, analiști și echipe care construiesc pe date World Monitor. Separat de Pro — folosește ambele sau unul.",
+    "subtitle": "Pentru dezvoltatori, analiști și echipe care construiesc pe date HealthRadar24. Separat de Pro — folosește ambele sau unul.",
     "restApi": "API REST pe toate cele 30+ domenii de servicii",
     "authenticated": "Autentificat per cheie, rate-limited per nivel",
     "structured": "JSON structurat cu header-e de cache și documentație OpenAPI 3.1",
@@ -196,7 +196,7 @@
     "security": "Securitate de nivel guvernamental",
     "securityDesc": "Deployment air-gapped, Docker on-premises, tenant cloud dedicat, parcurs SOC 2 Type II, SSO/MFA și audit trail complet.",
     "aiAgents": "Agenți IA și MCP",
-    "aiAgentsDesc": "Agenți de intelligence autonomi cu personalități de investitor. Conectează World Monitor ca instrument la Claude, GPT sau LLM-uri proprii via MCP.",
+    "aiAgentsDesc": "Agenți de intelligence autonomi cu personalități de investitor. Conectează HealthRadar24 ca instrument la Claude, GPT sau LLM-uri proprii via MCP.",
     "dataLayers": "Straturi de date extinse",
     "dataLayersDesc": "Zeci de mii de active de infrastructură mapate global. Integrare imagini satelitare cu detecție de schimbări și SAR.",
     "connectors": "100+ conectori de date",
@@ -225,7 +225,7 @@
     "submitContact": "Trimite mesaj",
     "contactSending": "Se trimite...",
     "contactSent": "Mesaj trimis. Vom reveni.",
-    "contactFailed": "Trimitere eșuată. Scrie la enterprise@worldmonitor.app"
+    "contactFailed": "Trimitere eșuată. Scrie la enterprise@healthradar24.com"
   },
   "pricingTable": {
     "title": "Compară nivele",
@@ -276,7 +276,7 @@
   },
   "faq": {
     "title": "Întrebări frecvente",
-    "q1": "World Monitor este în continuare gratuit?",
+    "q1": "HealthRadar24 este în continuare gratuit?",
     "a1": "Da. Platforma de bază rămâne gratuită. Pro adaugă equity research, analitică macro și briefinguri IA. Enterprise adaugă deployment-uri de echipă și aplicații TV.",
     "q2": "De ce să plătești pentru Pro?",
     "a2": "Pro este pentru investitori, analiști și profesioniști care vor monitorizare acțiuni, analiză geopolitică, analitică economică și briefinguri zilnice IA — totul sub o cheie.",
@@ -285,7 +285,7 @@
     "q4": "Pot începe cu Pro și face upgrade mai târziu?",
     "a4": "Da. Pro funcționează pentru persoane serioase. Enterprise este acolo când nevoile de echipă și deployment cresc.",
     "q5": "Este doar pentru monitorizare conflicte?",
-    "a5": "Nu. World Monitor este în principal o platformă globală de intelligence care acoperă piețe de acțiuni, macroeconomie, analiză geopolitică, energie, infrastructură și mai mult. Urmărirea conflictelor este una dintre multele capacități — nu focus-ul.",
+    "a5": "Nu. HealthRadar24 este în principal o platformă globală de intelligence care acoperă piețe de acțiuni, macroeconomie, analiză geopolitică, energie, infrastructură și mai mult. Urmărirea conflictelor este una dintre multele capacități — nu focus-ul.",
     "q6": "De ce menții platforma de bază gratuită?",
     "a6": "Pentru că accesul public contează. Planurile plătite finanțează fluxuri mai profunde pentru utilizatori serioși și organizații.",
     "q7": "Pot folosi în continuare propriile chei API?",
@@ -305,7 +305,7 @@
   },
   "finalCta": {
     "title": "Începe cu Pro. Scalează la Enterprise.",
-    "subtitle": "Continuă să folosești World Monitor gratuit, sau fă upgrade pentru equity research, analitică macro și briefinguri IA. Dacă organizația ta are nevoie de acces de echipă, aplicații TV sau suport API, vorbește cu noi.",
+    "subtitle": "Continuă să folosești HealthRadar24 gratuit, sau fă upgrade pentru equity research, analitică macro și briefinguri IA. Dacă organizația ta are nevoie de acces de echipă, aplicații TV sau suport API, vorbește cu noi.",
     "getPro": "Rezervă-ți accesul anticipat",
     "talkToSales": "Vorbește cu vânzările"
   },
@@ -329,16 +329,16 @@
     "linkedin": "LinkedIn",
     "whatsapp": "WhatsApp",
     "telegram": "Telegram",
-    "shareText": "Tocmai m-am alăturat listei de așteptare World Monitor Pro — monitorizare acțiuni, analiză geopolitică și briefinguri zilnice IA într-o singură platformă. Alătură-te:",
-    "joinWaitlistShare": "Alătură-te listei de așteptare World Monitor Pro:",
+    "shareText": "Tocmai m-am alăturat listei de așteptare HealthRadar24 Pro — monitorizare acțiuni, analiză geopolitică și briefinguri zilnice IA într-o singură platformă. Alătură-te:",
+    "joinWaitlistShare": "Alătură-te listei de așteptare HealthRadar24 Pro:",
     "youreIn": "Ești înăuntru!",
     "invitedBanner": "Ai fost invitat — alătură-te listei de așteptare"
   },
   "soonBadge": "În curând",
   "meta": {
-    "title": "World Monitor Pro — AI Analyst, Personal Intelligence Desk, MCP pentru Claude & GPT",
+    "title": "HealthRadar24 Pro — AI Analyst, Personal Intelligence Desk, MCP pentru Claude & GPT",
     "description": "Stratul geopolitic AI. Întrebați-l, abonați-vă la el, construiți pe el. WM Analyst chat în 30+ servicii live, un rezumat AI livrat zilnic, de două ori pe zi sau săptămânal către Slack, Discord, Telegram, Email sau webhook, un constructor de widget-uri personalizat (HTML/CSS/JS + AI) și conectori MCP pentru Claude, GPT și LLM-uri personalizate.",
-    "ogTitle": "World Monitor Pro — Stratul Geopolitic AI",
+    "ogTitle": "HealthRadar24 Pro — Stratul Geopolitic AI",
     "ogDescription": "Întrebați-l, abonați-vă la el, construiți pe el. WM Analyst chat, un rezumat AI după programul dvs. (zilnic, de două ori pe zi sau săptămânal), constructor de widget-uri personalizat și MCP pentru Claude/GPT — în 30+ servicii live sub o singură cheie."
   },
   "pricing": {

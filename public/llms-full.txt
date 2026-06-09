@@ -1,8 +1,8 @@
-# World Monitor
+# HealthRadar24
 
 > Real-time global intelligence dashboard — AI-powered news aggregation, geopolitical monitoring, and infrastructure tracking in a unified situational awareness interface.
 
-World Monitor is an open-source (AGPL-3.0) intelligence platform that aggregates 500+ curated news feeds, 56 map layer types, and multiple AI models into a single dashboard. It runs as a web app, installable PWA, and native desktop application (Tauri) for macOS, Windows, and Linux.
+HealthRadar24 is an open-source (AGPL-3.0) intelligence platform that aggregates 500+ curated news feeds, 56 map layer types, and multiple AI models into a single dashboard. It runs as a web app, installable PWA, and native desktop application (Tauri) for macOS, Windows, and Linux.
 
 A single codebase produces six specialized variants — geopolitical, technology, finance, commodity, happy, and energy — each with distinct feeds, panels, map layers, and branding. The multi-variant architecture uses build-time selection via the VITE_VARIANT environment variable, with runtime switching available via the header bar. Each variant tree-shakes unused data files so audience-specific builds can omit unrelated panels, feeds, and map registries.
 
@@ -10,17 +10,17 @@ The project is built with TypeScript, Vite, MapLibre GL JS, deck.gl, D3.js, and 
 
 ## Live Instances
 
-- [World Monitor](https://worldmonitor.app): Geopolitics, military, conflicts, infrastructure — ~25 RSS categories, 44 panels, military bases, nuclear facilities, hotspots
-- [Tech Monitor](https://tech.worldmonitor.app): Startups, AI/ML, cloud, cybersecurity — ~20 RSS categories, 31 panels, tech HQs, cloud regions, startup hubs
-- [Finance Monitor](https://finance.worldmonitor.app): Global markets, trading, central banks, Gulf FDI — ~18 RSS categories, 30 panels, stock exchanges, central banks, Gulf investments
-- [Commodity Monitor](https://commodity.worldmonitor.app): Mining, metals, energy, supply chains, commodity markets
-- [Happy Monitor](https://happy.worldmonitor.app): Positive news, breakthroughs, conservation, renewable energy
-- [Energy Monitor](https://energy.worldmonitor.app): Energy security, oil and gas, chokepoints, disruption timelines
+- [HealthRadar24](https://healthradar24.com): Geopolitics, military, conflicts, infrastructure — ~25 RSS categories, 44 panels, military bases, nuclear facilities, hotspots
+- [Tech Monitor](https://tech.healthradar24.com): Startups, AI/ML, cloud, cybersecurity — ~20 RSS categories, 31 panels, tech HQs, cloud regions, startup hubs
+- [Finance Monitor](https://finance.healthradar24.com): Global markets, trading, central banks, Gulf FDI — ~18 RSS categories, 30 panels, stock exchanges, central banks, Gulf investments
+- [Commodity Monitor](https://commodity.healthradar24.com): Mining, metals, energy, supply chains, commodity markets
+- [Happy Monitor](https://happy.healthradar24.com): Positive news, breakthroughs, conservation, renewable energy
+- [Energy Monitor](https://energy.healthradar24.com): Energy security, oil and gas, chokepoints, disruption timelines
 
 ## Documentation
 
-- [README](https://github.com/koala73/worldmonitor/blob/main/README.md): Full project documentation with architecture details, algorithm descriptions, and data source specifications
-- [Full Documentation](https://github.com/koala73/worldmonitor/blob/main/docs/DOCUMENTATION.md): Detailed feature documentation, data layer reference, panel descriptions, and clustering logic
+- [README](https://github.com/HealthRadar24/healthradar24/blob/main/README.md): Full project documentation with architecture details, algorithm descriptions, and data source specifications
+- [Full Documentation](https://github.com/HealthRadar24/healthradar24/blob/main/docs/DOCUMENTATION.md): Detailed feature documentation, data layer reference, panel descriptions, and clustering logic
 
 ## Data Layers — Geopolitical
 
@@ -165,12 +165,12 @@ English (en), French (fr), Spanish (es), German (de), Italian (it), Polish (pl),
 
 A single codebase produces six specialized dashboards controlled by the VITE_VARIANT environment variable:
 
-- **World Monitor** (worldmonitor.app): geopolitics, military, conflicts, infrastructure security, regional intelligence, and global risk.
-- **Tech Monitor** (tech.worldmonitor.app): AI/ML, startups, cybersecurity, cloud, semiconductors, and technology policy.
-- **Finance Monitor** (finance.worldmonitor.app): global markets, trading, central banks, macro, Gulf finance, and equity research.
-- **Commodity Monitor** (commodity.worldmonitor.app): commodities, mining, metals, energy markets, shipping, and supply chains.
-- **Happy Monitor** (happy.worldmonitor.app): constructive news, science, climate progress, health, conservation, and positive public action.
-- **Energy Monitor** (energy.worldmonitor.app): energy security, oil and gas, chokepoints, policy response, and energy-market intelligence.
+- **HealthRadar24** (healthradar24.com): geopolitics, military, conflicts, infrastructure security, regional intelligence, and global risk.
+- **Tech Monitor** (tech.healthradar24.com): AI/ML, startups, cybersecurity, cloud, semiconductors, and technology policy.
+- **Finance Monitor** (finance.healthradar24.com): global markets, trading, central banks, macro, Gulf finance, and equity research.
+- **Commodity Monitor** (commodity.healthradar24.com): commodities, mining, metals, energy markets, shipping, and supply chains.
+- **Happy Monitor** (happy.healthradar24.com): constructive news, science, climate progress, health, conservation, and positive public action.
+- **Energy Monitor** (energy.healthradar24.com): energy security, oil and gas, chokepoints, policy response, and energy-market intelligence.
 
 Build-time: Vite HTML plugin transforms meta tags, Open Graph data, PWA manifest, and JSON-LD structured data. Each variant tree-shakes unused data files. Runtime: variant selector in header navigates between deployed domains (web) or sets localStorage preference (desktop).
 
@@ -235,6 +235,6 @@ Native desktop app built with Tauri (Rust + Node.js sidecar). The sidecar mirror
 
 ## Optional
 
-- [Source Code](https://github.com/koala73/worldmonitor): GitHub repository (AGPL-3.0)
-- [Releases](https://github.com/koala73/worldmonitor/releases): All desktop releases for macOS, Windows, and Linux
-- [Issues](https://github.com/koala73/worldmonitor/issues): Bug reports and feature requests
+- [Source Code](https://github.com/HealthRadar24/healthradar24): GitHub repository (AGPL-3.0)
+- [Releases](https://github.com/HealthRadar24/healthradar24/releases): All desktop releases for macOS, Windows, and Linux
+- [Issues](https://github.com/HealthRadar24/healthradar24/issues): Bug reports and feature requests

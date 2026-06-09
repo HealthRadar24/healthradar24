@@ -19,7 +19,7 @@ import { strict as assert } from 'node:assert';
 import { readFileSync } from 'node:fs';
 
 const VALID_KEY = 'wm_test_key_123';
-const BASE_URL = 'https://worldmonitor.app/mcp';
+const BASE_URL = 'https://healthradar24.com/mcp';
 
 const originalEnv = { ...process.env };
 

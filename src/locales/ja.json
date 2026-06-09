@@ -532,7 +532,7 @@
         "needsKeys": "機能を有効にするためAPIキーを設定してください",
         "some": "一部の機能にAPIキーが必要"
       },
-      "skipSetup": "セットアップをスキップ — World Monitorライセンス1つですべてが利用可能になります。早期アクセスのウェイトリストにご参加ください。",
+      "skipSetup": "セットアップをスキップ — HealthRadar24ライセンス1つですべてが利用可能になります。早期アクセスのウェイトリストにご参加ください。",
       "summary": {
         "desktop": "デスクトップモード",
         "web": "Webモード（読み取り専用、サーバー管理の認証情報）",
@@ -586,7 +586,7 @@
         "dividerOr": "または",
         "register": {
           "title": "あなたの席を確保",
-          "description": "World Monitorライセンスのローンチ準備中です。今すぐ登録して優先アクセスと創設メンバー価格を手に入れましょう。",
+          "description": "HealthRadar24ライセンスのローンチ準備中です。今すぐ登録して優先アクセスと創設メンバー価格を手に入れましょう。",
           "submitBtn": "ウェイトリストに参加"
         }
       },
@@ -2949,7 +2949,7 @@
     "documentTitle": "ワールドモニター — リアルタイム グローバルインテリジェンスダッシュボード",
     "metaDescription": "リアルタイムグローバルインテリジェンスプラットフォーム。WIREDで紹介。190カ国2M+ユーザーが利用。紛争、市場、軍事、OSINTを一画面で。",
     "offlineTitle": "オフラインです",
-    "offlineMessage": "World Monitorはリアルタイムインテリジェンスデータのためにインターネット接続が必要です。",
+    "offlineMessage": "HealthRadar24はリアルタイムインテリジェンスデータのためにインターネット接続が必要です。",
     "offlineRetry": "再試行"
   },
   "widgets": {
@@ -3020,7 +3020,7 @@
   },
   "premium": {
     "pro": "PRO",
-    "lockedDesc": "World Monitor ライセンスキーが必要です",
+    "lockedDesc": "HealthRadar24 ライセンスキーが必要です",
     "signInToUnlock": "サインインしてプレミアム機能を利用",
     "signIn": "サインインして利用",
     "upgradeDesc": "Proにアップグレードしてプレミアム分析に完全アクセス",

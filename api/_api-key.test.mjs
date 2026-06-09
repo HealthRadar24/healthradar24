@@ -17,13 +17,13 @@ function makeReq({ origin, referer, secFetchSite, key, cookie } = {}) {
   if (secFetchSite) headers.set('sec-fetch-site', secFetchSite);
   if (key) headers.set('x-worldmonitor-key', key);
   if (cookie) headers.set('cookie', cookie);
-  return new Request('https://api.worldmonitor.app/api/test', { headers });
+  return new Request('https://api.healthradar24.com/api/test', { headers });
 }
 
 // ── #3541 regression: header-only signals must NEVER pass ──────────────────
 
 test('#3541: forged Referer alone is rejected', async () => {
-  const r = await validateApiKey(makeReq({ referer: 'https://worldmonitor.app/' }));
+  const r = await validateApiKey(makeReq({ referer: 'https://healthradar24.com/' }));
   assert.equal(r.valid, false);
   assert.equal(r.required, true);
 });
@@ -33,15 +33,15 @@ test('#3541: forged Sec-Fetch-Site: same-origin alone is rejected (this was the 
   assert.equal(r.valid, false);
 });
 
-test('#3541: forged Origin: https://worldmonitor.app alone is rejected (no key, no session)', async () => {
-  const r = await validateApiKey(makeReq({ origin: 'https://worldmonitor.app' }));
+test('#3541: forged Origin: https://healthradar24.com alone is rejected (no key, no session)', async () => {
+  const r = await validateApiKey(makeReq({ origin: 'https://healthradar24.com' }));
   assert.equal(r.valid, false);
 });
 
 test('#3541: combined forged Origin + Sec-Fetch-Site + Referer all together is still rejected', async () => {
   const r = await validateApiKey(makeReq({
-    origin: 'https://worldmonitor.app',
-    referer: 'https://worldmonitor.app/',
+    origin: 'https://healthradar24.com',
+    referer: 'https://healthradar24.com/',
     secFetchSite: 'same-origin',
   }));
   assert.equal(r.valid, false);

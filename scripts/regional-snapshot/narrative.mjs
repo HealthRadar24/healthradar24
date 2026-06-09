@@ -56,8 +56,8 @@ const DEFAULT_PROVIDERS = [
     headers: (key) => ({
       Authorization: `Bearer ${key}`,
       'Content-Type': 'application/json',
-      'HTTP-Referer': 'https://worldmonitor.app',
-      'X-Title': 'World Monitor',
+      'HTTP-Referer': 'https://healthradar24.com',
+      'X-Title': 'HealthRadar24',
       'User-Agent': CHROME_UA,
     }),
   },

@@ -27,10 +27,10 @@ function overrideGlobal(name, value) {
 
 function installBrowserEnv() {
   const location = {
-    hostname: 'worldmonitor.app',
+    hostname: 'healthradar24.com',
     protocol: 'https:',
-    host: 'worldmonitor.app',
-    origin: 'https://worldmonitor.app',
+    host: 'healthradar24.com',
+    origin: 'https://healthradar24.com',
   };
   const navigator = { userAgent: 'node-test', onLine: true };
   const window = { location, navigator };

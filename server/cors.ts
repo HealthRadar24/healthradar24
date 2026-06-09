@@ -6,8 +6,8 @@
  */
 
 const PRODUCTION_PATTERNS: RegExp[] = [
-  /^https:\/\/(.*\.)?worldmonitor\.app$/,
-  /^https:\/\/worldmonitor-[a-z0-9-]+-elie-[a-z0-9]+\.vercel\.app$/,
+  /^https:\/\/(.*\.)?healthradar24\.com$/,
+  /^https:\/\/healthradar24-[a-z0-9-]+-healthradar24-[a-z0-9]+\.vercel\.app$/,
   /^https?:\/\/tauri\.localhost(:\d+)?$/,
   /^https?:\/\/[a-z0-9-]+\.tauri\.localhost(:\d+)?$/i,
   /^tauri:\/\/localhost$/,
@@ -30,7 +30,7 @@ export function isAllowedOrigin(origin: string): boolean {
 
 export function getCorsHeaders(req: Request): Record<string, string> {
   const origin = req.headers.get('origin') || '';
-  const allowOrigin = isAllowedOrigin(origin) ? origin : 'https://worldmonitor.app';
+  const allowOrigin = isAllowedOrigin(origin) ? origin : 'https://healthradar24.com';
   return {
     'Access-Control-Allow-Origin': allowOrigin,
     'Access-Control-Allow-Credentials': 'true',
