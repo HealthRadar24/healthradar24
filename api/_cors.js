@@ -5,6 +5,10 @@ const ALLOWED_ORIGIN_PATTERNS = [
   //   worldmonitor-<hash>-eliewm.vercel.app        (deployment URL)
   // Tight on purpose: never a bare *.vercel.app (this is a security allowlist).
   /^https:\/\/worldmonitor-[a-z0-9-]+-eliewm\.vercel\.app$/,
+  // HealthRadar24 fork — production domains and Vercel preview deployments
+  /^https:\/\/(.*\.)?healthradar24\.com$/,
+  /^https:\/\/(.*\.)?healthradar24\.app$/,
+  /^https:\/\/healthradar24(?:-[a-z0-9-]+)?\.vercel\.app$/,
   /^https?:\/\/tauri\.localhost(:\d+)?$/,
   /^https?:\/\/[a-z0-9-]+\.tauri\.localhost(:\d+)?$/i,
   /^tauri:\/\/localhost$/,
