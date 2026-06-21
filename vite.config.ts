@@ -8,6 +8,7 @@ import pkg from './package.json';
 import { VARIANT_META, type VariantMeta } from './src/config/variant-meta';
 
 // Env-dependent constants moved inside defineConfig function
+// Initial production deploy: Convex + Clerk production integration wired
 
 
 const brotliCompressAsync = promisify(brotliCompress);
