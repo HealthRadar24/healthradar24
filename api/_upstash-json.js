@@ -1,8 +1,12 @@
 import { unwrapEnvelope } from './_seed-envelope.js';
 
+// Support both direct Upstash env vars and Vercel KV integration names.
+const getUpstashUrl = () => process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
+const getUpstashToken = () => process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
+
 export async function readJsonFromUpstash(key, timeoutMs = 3_000) {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = getUpstashUrl();
+  const token = getUpstashToken();
   if (!url || !token) return null;
 
   const resp = await fetch(`${url}/get/${encodeURIComponent(key)}`, {
@@ -46,8 +50,8 @@ export async function readJsonFromUpstash(key, timeoutMs = 3_000) {
  * @returns {Promise<unknown | null>}
  */
 export async function readRawJsonFromUpstash(key, timeoutMs = 3_000) {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = getUpstashUrl();
+  const token = getUpstashToken();
   if (!url || !token) {
     throw new Error('readRawJsonFromUpstash: UPSTASH_REDIS_REST_URL/TOKEN not configured');
   }
@@ -72,8 +76,8 @@ export async function readRawJsonFromUpstash(key, timeoutMs = 3_000) {
 
 /** Returns Redis credentials or null if not configured. */
 export function getRedisCredentials() {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = getUpstashUrl();
+  const token = getUpstashToken();
   if (!url || !token) return null;
   return { url, token };
 }

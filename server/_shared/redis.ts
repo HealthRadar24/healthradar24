@@ -29,8 +29,12 @@ function errMsg(err: unknown): string {
   return err instanceof Error ? err.message : String(err);
 }
 
+// Support both direct Upstash env vars and Vercel KV integration names.
+const getRedisUrl = () => process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
+const getRedisToken = () => process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
+
 function hasRemoteRedisConfig(): boolean {
-  return Boolean(process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN);
+  return Boolean(getRedisUrl() && getRedisToken());
 }
 
 /**
@@ -71,8 +75,8 @@ async function readCachedJson(key: string, raw = false): Promise<CacheReadResult
     }
   }
 
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = getRedisUrl();
+  const token = getRedisToken();
   if (!url || !token) return { status: 'miss' };
   try {
     const finalKey = raw ? key : prefixKey(key);
@@ -123,8 +127,8 @@ export async function getRawJson(key: string): Promise<unknown | null> {
     const { sidecarCacheGet } = await import('./sidecar-cache');
     return sidecarCacheGet(key);
   }
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = getRedisUrl();
+  const token = getRedisToken();
   if (!url || !token) throw new Error('Redis credentials not configured');
   const resp = await fetch(`${url}/get/${encodeURIComponent(key)}`, {
     headers: { Authorization: `Bearer ${token}` },
@@ -154,8 +158,8 @@ export async function getCachedRawString(key: string): Promise<string | null> {
     const v = sidecarCacheGet(key);
     return typeof v === 'string' ? v : null;
   }
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = getRedisUrl();
+  const token = getRedisToken();
   if (!url || !token) return null;
   try {
     const resp = await fetch(`${url}/get/${encodeURIComponent(key)}`, {
@@ -190,8 +194,8 @@ export async function setCachedJson(key: string, value: unknown, ttlSeconds: num
     return true;
   }
 
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = getRedisUrl();
+  const token = getRedisToken();
   if (!url || !token) return false;
   try {
     const finalKey = raw ? key : prefixKey(key);
@@ -291,8 +295,8 @@ export async function getCachedJsonBatch(keys: string[]): Promise<Map<string, un
   const result = new Map<string, unknown>();
   if (keys.length === 0) return result;
 
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = getRedisUrl();
+  const token = getRedisToken();
   if (!url || !token) return result;
 
   try {
@@ -342,8 +346,8 @@ export async function runRedisPipeline(commands: RedisPipelineCommand[], raw = f
   if (process.env.LOCAL_API_MODE === 'tauri-sidecar') return [];
   if (commands.length === 0) return [];
 
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = getRedisUrl();
+  const token = getRedisToken();
   if (!url || !token) return [];
 
   try {
@@ -369,8 +373,8 @@ export async function runRedisPipeline(commands: RedisPipelineCommand[], raw = f
 
 export async function compareAndDeleteRedisKey(key: string, expectedValue: string, raw = false): Promise<boolean> {
   if (process.env.LOCAL_API_MODE === 'tauri-sidecar') return false;
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = getRedisUrl();
+  const token = getRedisToken();
   if (!url || !token || !expectedValue) return false;
 
   const finalKey = raw ? key : prefixKey(key);
@@ -692,8 +696,8 @@ function emitUpstreamFromHook(usage: UsageHook | undefined, status: number, dura
 }
 
 export async function geoSearchByBox(key: string, lon: number, lat: number, widthKm: number, heightKm: number, count: number, raw = false): Promise<string[]> {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = getRedisUrl();
+  const token = getRedisToken();
   if (!url || !token) return [];
   try {
     const finalKey = raw ? key : prefixKey(key);
@@ -719,8 +723,8 @@ export async function geoSearchByBox(key: string, lon: number, lat: number, widt
 export async function getHashFieldsBatch(key: string, fields: string[], raw = false): Promise<Map<string, string>> {
   const result = new Map<string, string>();
   if (fields.length === 0) return result;
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = getRedisUrl();
+  const token = getRedisToken();
   if (!url || !token) return result;
   try {
     const finalKey = raw ? key : prefixKey(key);
@@ -757,8 +761,8 @@ export async function getHashFieldsBatch(key: string, fields: string[], raw = fa
  * @param raw - When true, skips the environment prefix (use for global keys like entitlements)
  */
 export async function deleteRedisKey(key: string, raw = false): Promise<void> {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = getRedisUrl();
+  const token = getRedisToken();
   if (!url || !token) return;
 
   try {
