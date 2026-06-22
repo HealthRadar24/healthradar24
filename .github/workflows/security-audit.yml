@@ -44,6 +44,10 @@ jobs:
             path: docker
             package_json: docker/runtime-package.json
             lockfile: docker/runtime-package-lock.json
+          - name: api-cors-preflight-worker
+            path: workers/api-cors-preflight
+            package_json: workers/api-cors-preflight/package.json
+            lockfile: workers/api-cors-preflight/package-lock.json
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

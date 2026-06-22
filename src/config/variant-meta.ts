@@ -16,7 +16,7 @@ export const VARIANT_META: { full: VariantMeta; [k: string]: VariantMeta } = {
     title: 'HealthRadar24 - Real-Time Global Intelligence Dashboard',
     description: 'Real-time global intelligence dashboard with live news, markets, military tracking, infrastructure monitoring, and geopolitical data. OSINT in one view.',
     keywords: 'global intelligence, geopolitical dashboard, world news, market data, military bases, nuclear facilities, undersea cables, conflict zones, real-time monitoring, situation awareness, OSINT, flight tracking, AIS ships, earthquake monitor, protest tracker, power outages, oil prices, government spending, polymarket predictions',
-    url: 'https://www.healthradar24.com/dashboard',
+    url: 'https://www.worldmonitor.app/dashboard',
     siteName: 'HealthRadar24',
     shortName: 'HealthRadar24',
     subject: 'Real-Time Global Intelligence and Situation Awareness',
