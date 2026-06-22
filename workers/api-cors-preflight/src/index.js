@@ -23,6 +23,17 @@
 // origins that the function would accept get the canonical fallback origin
 // echoed back and fail CORS at the browser.
 const ALLOWED_ORIGIN_PATTERNS = [
+  // worldmonitor.app remains the canonical production domain during the
+  // HealthRadar24 migration. The Worker's allowlist MUST stay a superset of
+  // api/_cors.js (which still accepts both), or origins the function would
+  // accept get the canonical fallback echoed and fail CORS at the browser.
+  /^https:\/\/(.*\.)?worldmonitor\.app$/,
+  // Vercel preview deployments under the "eliewm" team scope, e.g.
+  //   worldmonitor-git-<branch>-eliewm.vercel.app  (git-branch alias)
+  //   worldmonitor-<hash>-eliewm.vercel.app        (deployment URL)
+  // Tight on purpose: never a bare *.vercel.app (this is a security allowlist).
+  /^https:\/\/worldmonitor-[a-z0-9-]+-eliewm\.vercel\.app$/,
+  // HealthRadar24 fork — production domains and Vercel preview deployments
   /^https:\/\/(.*\.)?healthradar24\.com$/,
   /^https:\/\/(.*\.)?healthradar24\.app$/,
   // Vercel preview deployments for this project, e.g.
