@@ -78,7 +78,8 @@ import { hasPremiumAccess } from '@/services/panel-gating';
 import { BETA_MODE } from '@/config/beta';
 import { trackEvent, trackDeeplinkOpened, initAuthAnalytics } from '@/services/analytics';
 import { preloadCountryGeometry, getCountryNameByCode } from '@/services/country-geometry';
-import { initI18n, t } from '@/services/i18n';
+import { initI18n, t, I18N_RESOURCES_LOADED_EVENT, type I18nResourcesLoadedDetail } from '@/services/i18n';
+import { initDeferredDashboardFonts } from '@/bootstrap/secondary-startup';
 
 import { computeDefaultDisabledSources, getLocaleBoostedSources, getTotalFeedCount, FEEDS, INTEL_SOURCES } from '@/config/feeds';
 import { selectSourcesUnderCap, findFullyDisabledCategories } from '@/services/source-cap';
@@ -94,6 +95,7 @@ import { RefreshScheduler } from '@/app/refresh-scheduler';
 import { PanelLayoutManager } from '@/app/panel-layout';
 import { DataLoaderManager } from '@/app/data-loader';
 import { EventHandlerManager } from '@/app/event-handlers';
+import { replaceRawI18nKeyPlaceholders } from '@/app/i18n-raw-key-healer';
 import { resolveUserRegion, resolvePreciseUserCoordinates, type PreciseCoordinates } from '@/utils/user-location';
 import { showProBanner } from '@/components/ProBanner';
 import { initAuthState, subscribeAuthState } from '@/services/auth-state';
@@ -183,6 +185,13 @@ export class App {
   };
   private readonly handleConnectivityChange = (): void => {
     this.updateConnectivityUi();
+  };
+  private readonly handleI18nResourcesLoaded = (ev: Event): void => {
+    const language = (ev as CustomEvent<I18nResourcesLoadedDetail>).detail?.language;
+    if (language !== 'en') return;
+    // Scope this to the app container: body-level modals are user-opened after
+    // startup, by which point the full English bundle should already be loaded.
+    replaceRawI18nKeyPlaceholders(this.state.container, t);
   };
   private readonly handleFollowedCountriesCapDrop = (ev: Event): void => {
     const detail = (ev as CustomEvent<{ kept?: unknown; dropped?: unknown }>).detail;
@@ -1002,10 +1011,13 @@ export class App {
       },
     });
 
+    window.addEventListener(I18N_RESOURCES_LOADED_EVENT, this.handleI18nResourcesLoaded);
+
     await initDB();
     startFlightHistoryCleanup();
     startVesselHistoryCleanup();
     await initI18n();
+    initDeferredDashboardFonts();
     // Localize the static index.html shell — <title>, meta description, and
     // sr-only <h1> are baked in English so search crawlers see something
     // before JS runs; once i18n is ready we swap them to the user's locale.
@@ -1518,6 +1530,7 @@ export class App {
     window.removeEventListener('resize', this.handleViewportPrime);
     window.removeEventListener('online', this.handleConnectivityChange);
     window.removeEventListener('offline', this.handleConnectivityChange);
+    window.removeEventListener(I18N_RESOURCES_LOADED_EVENT, this.handleI18nResourcesLoaded);
     window.removeEventListener(WM_FOLLOWED_COUNTRIES_CAP_DROP, this.handleFollowedCountriesCapDrop);
     window.removeEventListener(CLOUD_PREFS_APPLIED_EVENT, this.handleCloudPrefsApplied);
     if (this.visiblePanelPrimeRaf !== null) {
