@@ -26,14 +26,15 @@ import { strict as assert } from 'node:assert';
 import test from 'node:test';
 
 const BROWSER_UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
-const ORIGIN = 'https://www.worldmonitor.app';
+const ORIGIN = process.env.LIVE_SMOKE_ORIGIN || 'https://www.worldmonitor.app';
+const API_BASE = (process.env.LIVE_SMOKE_API_BASE_URL || 'https://api.worldmonitor.app').replace(/\/+$/, '');
 
 // Endpoints we hit. /api/health is canonical (always available, no auth).
 // Add a representative second one to catch route-specific Worker rules if
 // anyone ever adds them.
 const ENDPOINTS = [
-  'https://api.worldmonitor.app/api/health',
-  'https://api.worldmonitor.app/api/bootstrap?tier=fast',
+  `${API_BASE}/api/health`,
+  `${API_BASE}/api/bootstrap?tier=fast`,
 ];
 
 const SHOULD_RUN = process.env.LIVE_SMOKE === '1';
@@ -47,9 +48,9 @@ if (!SHOULD_RUN) {
 // must receive the Vercel function's own CORS policy (typically ACAO: * for
 // OAuth/MCP), not the Worker's worldmonitor.app-only echo.
 const PUBLIC_CORS_PROBES = [
-  { url: 'https://api.worldmonitor.app/api/mcp', origin: 'https://claude.ai' },
-  { url: 'https://api.worldmonitor.app/api/oauth/register', origin: 'https://claude.com' },
-  { url: 'https://api.worldmonitor.app/api/oauth-protected-resource', origin: 'https://claude.ai' },
+  { url: `${API_BASE}/api/mcp`, origin: 'https://claude.ai' },
+  { url: `${API_BASE}/api/oauth/register`, origin: 'https://claude.com' },
+  { url: `${API_BASE}/api/oauth-protected-resource`, origin: 'https://claude.ai' },
 ];
 
 for (const { url, origin } of PUBLIC_CORS_PROBES) {

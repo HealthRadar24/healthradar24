@@ -82,6 +82,9 @@ jobs:
       - name: Live cache/auth regression sweep against production
         env:
           LIVE_API_CACHE_TESTS: '1'
+          WM_LIVE_API_BASE_URL: ${{ vars.WM_API_BASE_URL }}
+          WM_LIVE_WEB_BASE_URL: ${{ vars.WM_WEB_BASE_URL }}
+          WM_LIVE_TEST_KEY: ${{ secrets.WM_LIVE_TEST_KEY }}
         # The bug this workflow exists to fix is "the suite silently ran zero
         # assertions and CI went green". Simply setting the env var reintroduces
         # that exact failure one rename away: the whole suite is a single

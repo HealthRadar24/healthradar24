@@ -25,4 +25,7 @@ jobs:
           node-version: '24'
 
       - name: Probe analytics collector
+        if: vars.WM_ANALYTICS_COLLECTOR_ORIGIN != ''
+        env:
+          ANALYTICS_COLLECTOR_ORIGIN: ${{ vars.WM_ANALYTICS_COLLECTOR_ORIGIN }}
         run: node scripts/check-analytics-collector.mjs

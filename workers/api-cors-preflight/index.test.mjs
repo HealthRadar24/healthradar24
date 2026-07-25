@@ -47,6 +47,12 @@ test('isAllowedOrigin accepts apex worldmonitor.app and subdomains', () => {
   assert.equal(isAllowedOrigin('https://commodity.worldmonitor.app'), true);
 });
 
+test('isAllowedOrigin accepts HealthRadar24 production and scoped preview origins', () => {
+  assert.equal(isAllowedOrigin('https://healthradar24.com'), true);
+  assert.equal(isAllowedOrigin('https://www.healthradar24.com'), true);
+  assert.equal(isAllowedOrigin('https://healthradar24-git-feature-kernelius.vercel.app'), true);
+});
+
 test('isAllowedOrigin accepts Vercel preview deploys under the eliewm team scope (mirrors api/_cors.js)', () => {
   // The project deploys previews under the "eliewm" Vercel team scope, so URLs
   // end in `-eliewm.vercel.app` (git-branch alias AND hash deployment forms).

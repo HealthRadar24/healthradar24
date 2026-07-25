@@ -38,4 +38,6 @@ jobs:
 
       - name: Check seed metadata freshness
         if: github.event_name == 'workflow_dispatch' || steps.gate.outputs.should_run == 'true'
+        env:
+          HEALTH_URL: ${{ vars.WM_HEALTH_URL }}
         run: node scripts/check-seed-freshness.mjs

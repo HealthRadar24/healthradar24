@@ -36,6 +36,18 @@ test('rejects unrelated external origins', () => {
   assert.equal(cors['Access-Control-Allow-Credentials'], 'true');
 });
 
+test('allows HealthRadar24 production and scoped Vercel preview origins', () => {
+  for (const origin of [
+    'https://healthradar24.com',
+    'https://www.healthradar24.com',
+    'https://healthradar24-git-feature-kernelius.vercel.app',
+  ]) {
+    const req = makeRequest(origin);
+    assert.equal(isDisallowedOrigin(req), false, `origin should be allowed: ${origin}`);
+    assert.equal(getCorsHeaders(req)['Access-Control-Allow-Origin'], origin);
+  }
+});
+
 test('requests without origin remain allowed', () => {
   const req = makeRequest(null);
   assert.equal(isDisallowedOrigin(req), false);
