@@ -6,23 +6,46 @@
  * Both derive their `resource`/`issuer` + endpoint origin from the request Host
  * so PRM and AS metadata stay self-consistent per host (apex, www, api, variant
  * subdomains). The Host header is client-controlled, so `resolveMetadataOrigin`
- * validates it against the worldmonitor.app apex + single-level subdomain
- * allowlist and falls back to the apex for anything else. Without this, a
+ * validates it against the configured public apex + single-level subdomain
+ * allowlist and falls back to the configured public origin. Without this, a
  * spoofed `Host: evil.com` would be reflected into `issuer`/`token_endpoint` —
  * metadata a non-Host-aware downstream cache could serve to an agent, pointing
  * its token exchange at an attacker origin.
  */
 
-// apex + exactly one DNS label (www, api, tech, finance, …). Rejects
-// `evil.com`, `worldmonitor.app.evil.com`, `evilworldmonitor.app`, and any
-// host carrying a port.
-const ALLOWED_HOST = /^(?:[a-z0-9-]+\.)?worldmonitor\.app$/;
-const FALLBACK_ORIGIN = 'https://worldmonitor.app';
+const DEFAULT_PUBLIC_ORIGIN = 'https://worldmonitor.app';
+
+function metadataDomainConfig(): { apex: string; fallbackOrigin: string } {
+  const configured = process.env.WORLDMONITOR_PUBLIC_BASE_URL ?? DEFAULT_PUBLIC_ORIGIN;
+  try {
+    const url = new URL(configured);
+    if (
+      url.protocol !== 'https:'
+      || url.username
+      || url.password
+      || url.port
+      || url.pathname !== '/'
+      || url.search
+      || url.hash
+    ) {
+      throw new Error('invalid public origin');
+    }
+    const hostname = url.hostname.toLowerCase();
+    const apex = hostname.startsWith('www.') ? hostname.slice(4) : hostname;
+    return { apex, fallbackOrigin: `https://${hostname}` };
+  } catch {
+    return { apex: 'worldmonitor.app', fallbackOrigin: DEFAULT_PUBLIC_ORIGIN };
+  }
+}
 
 export function resolveMetadataOrigin(req: Request): string {
   const url = new URL(req.url);
   const host = (req.headers.get('host') ?? url.host).toLowerCase();
-  return ALLOWED_HOST.test(host) ? `https://${host}` : FALLBACK_ORIGIN;
+  const { apex, fallbackOrigin } = metadataDomainConfig();
+  const labels = host.split('.');
+  const allowed = host === apex
+    || (labels.length === apex.split('.').length + 1 && host.endsWith(`.${apex}`));
+  return allowed ? `https://${host}` : fallbackOrigin;
 }
 
 /**
