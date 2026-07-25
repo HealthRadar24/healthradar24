@@ -26,6 +26,9 @@ const CONVEX_SITE_URL =
   process.env.CONVEX_SITE_URL ??
   (process.env.CONVEX_URL ?? '').replace('.convex.cloud', '.convex.site');
 const RELAY_SHARED_SECRET = process.env.RELAY_SHARED_SECRET ?? '';
+// Fork-safe commerce gate. Checkout stays disabled until this deployment
+// explicitly opts in after its own Dodo products and webhook contract exist.
+const PAYMENTS_ENABLED = process.env.PAYMENTS_ENABLED === 'true';
 const ACTIVE_SUBSCRIPTION_EXISTS = 'ACTIVE_SUBSCRIPTION_EXISTS';
 const CHECKOUT_RELAY_USER_AGENT = 'worldmonitor-checkout-edge/1.0';
 
@@ -100,6 +103,13 @@ export default async function handler(
 
   if (req.method !== 'POST') {
     return json({ error: 'Method not allowed' }, 405, cors);
+  }
+
+  if (!PAYMENTS_ENABLED) {
+    return json({
+      error: 'COMMERCE_NOT_CONFIGURED',
+      message: 'Paid plans are not available yet.',
+    }, 503, cors);
   }
 
   // Validate Clerk bearer token
