@@ -99,7 +99,7 @@ export function isAllowedOrigin(origin) {
 export { hasPublicCorsPolicy };
 
 export function buildCorsHeaders(origin) {
-  const allowOrigin = isAllowedOrigin(origin) ? origin : 'https://worldmonitor.app';
+  const allowOrigin = isAllowedOrigin(origin) ? origin : 'https://www.healthradar24.com';
   return {
     'Access-Control-Allow-Origin': allowOrigin,
     // Required because the app fetch interceptor sends credentials: 'include'
