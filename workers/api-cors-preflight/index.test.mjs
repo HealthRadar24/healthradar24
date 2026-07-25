@@ -28,7 +28,7 @@ function makeRequest(method, url, headers = {}) {
   return new Request(url, { method, headers });
 }
 
-const CANONICAL_FALLBACK = 'https://worldmonitor.app';
+const CANONICAL_FALLBACK = 'https://www.healthradar24.com';
 const KNOWN_GOOD = 'https://www.worldmonitor.app';
 const ACAH_EXPECTED = 'Content-Type, Authorization, X-WorldMonitor-Key, X-Api-Key, X-Widget-Key, X-Pro-Key, X-WorldMonitor-Desktop-Timestamp, X-WorldMonitor-Desktop-Signature, Idempotency-Key, Mcp-Session-Id, MCP-Protocol-Version, Last-Event-ID';
 const ACEH_EXPECTED = 'Mcp-Session-Id, WWW-Authenticate, Retry-After, Idempotency-Key, Idempotent-Replayed, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-WorldMonitor-Bbox, X-WorldMonitor-Bbox-Missing, X-WorldMonitor-Bbox-Invalid, X-Military-Bbox';

@@ -32,7 +32,7 @@ test('rejects unrelated external origins', () => {
   const req = makeRequest('https://evil.example.com');
   assert.equal(isDisallowedOrigin(req), true);
   const cors = getCorsHeaders(req);
-  assert.equal(cors['Access-Control-Allow-Origin'], 'https://worldmonitor.app');
+  assert.equal(cors['Access-Control-Allow-Origin'], 'https://www.healthradar24.com');
   assert.equal(cors['Access-Control-Allow-Credentials'], 'true');
 });
 

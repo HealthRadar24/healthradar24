@@ -25,13 +25,18 @@ describe('public product URLs', () => {
     assert.equal(getProUrl({
       origin: 'tauri://localhost',
       protocol: 'tauri:',
-    }), 'https://worldmonitor.app/pro');
+    }), 'https://www.healthradar24.com/pro');
   });
 
   it('rejects malformed HTTP origins', () => {
     assert.equal(getProUrl({
       origin: 'not a URL',
       protocol: 'https:',
-    }), 'https://worldmonitor.app/pro');
+    }), 'https://www.healthradar24.com/pro');
+  });
+
+  it('falls back to the HealthRadar24 site outside an HTTP browser runtime', () => {
+    assert.equal(getPublicSiteOrigin(undefined), 'https://www.healthradar24.com');
+    assert.equal(getProUrl(undefined), 'https://www.healthradar24.com/pro');
   });
 });

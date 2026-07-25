@@ -1,4 +1,4 @@
-const UPSTREAM_PUBLIC_ORIGIN = 'https://worldmonitor.app';
+const CANONICAL_PUBLIC_ORIGIN = 'https://www.healthradar24.com';
 
 export interface PublicLocation {
   origin: string;
@@ -19,7 +19,7 @@ export function getPublicSiteOrigin(
       // Fall through to the canonical hosted origin.
     }
   }
-  return UPSTREAM_PUBLIC_ORIGIN;
+  return CANONICAL_PUBLIC_ORIGIN;
 }
 
 export function getProUrl(location?: PublicLocation): string {

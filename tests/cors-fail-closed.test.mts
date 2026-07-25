@@ -148,7 +148,7 @@ describe('CORS Worker superset invariant — edge allowlist ⊇ function allowli
   // The api-cors-preflight Worker (workers/api-cors-preflight) short-circuits
   // OPTIONS preflights at the edge, so its allowlist MUST be a superset of
   // api/_cors.js. If the Worker rejects an origin the function would accept,
-  // the preflight echoes the canonical worldmonitor.app fallback and the
+  // the preflight echoes the canonical HealthRadar24 fallback and the
   // browser blocks the request before it reaches Vercel.
   //
   // The Worker's own test (workers/api-cors-preflight/index.test.mjs) lives
@@ -163,6 +163,9 @@ describe('CORS Worker superset invariant — edge allowlist ⊇ function allowli
     !isDisallowedOriginJs(new Request('https://worldmonitor.app/x', { headers: { Origin: origin } }));
 
   const PROD_ORIGINS = [
+    'https://healthradar24.com',
+    'https://www.healthradar24.com',
+    'https://healthradar24-git-feature-kernelius.vercel.app',
     'https://worldmonitor.app',
     'https://www.worldmonitor.app',
     'https://tech.worldmonitor.app',
