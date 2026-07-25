@@ -174,10 +174,10 @@ for (const [tierGroup, entries] of tierGroups) {
     }
   } else if (!primary.selfServe && primary.priceCents === 0) {
     tier.cta = 'Get Started';
-    tier.href = 'https://worldmonitor.app/dashboard';
+    tier.href = 'https://healthradar24.com/dashboard';
   } else if (!primary.selfServe && primary.priceCents === null) {
     tier.cta = 'Contact Sales';
-    tier.href = 'mailto:enterprise@worldmonitor.app';
+    tier.href = 'https://healthradar24.com/pro#enterprise-contact';
   }
 
   tier.highlighted = primary.highlighted;

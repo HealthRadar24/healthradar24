@@ -9,6 +9,8 @@ import fallbackTiers from '../generated/tiers.json';
 import { resolveCheckoutProduct } from './pricing-billing-mode';
 import { API_BASE } from '../services/api';
 
+const PAYMENTS_ENABLED = import.meta.env.VITE_PAYMENTS_ENABLED === 'true';
+
 interface Tier {
   name: string;
   localeKey?: string;
@@ -31,6 +33,7 @@ function usePricingData(): Tier[] {
   const [tiers, setTiers] = useState<Tier[]>(fallbackTiers as Tier[]);
 
   useEffect(() => {
+    if (!PAYMENTS_ENABLED) return;
     let cancelled = false;
     fetch(`${API_BASE}/product-catalog`, { signal: AbortSignal.timeout(5000) })
       .then(res => res.ok ? res.json() : null)
@@ -79,6 +82,14 @@ function formatPrice(tier: Tier, billing: 'monthly' | 'annual'): { amount: strin
   if (tier.price === 0) {
     return { amount: "$0", suffix: t('pricing.suffixForever') };
   }
+  // Do not advertise the upstream merchant's fallback prices while this fork
+  // is still establishing its own products and commercial terms.
+  if (!PAYMENTS_ENABLED && (tier.monthlyPrice !== undefined || tier.annualPrice !== undefined)) {
+    return {
+      amount: t('pricing.amountPending', { defaultValue: 'TBD' }),
+      suffix: t('pricing.suffixPending', { defaultValue: 'pricing coming soon' }),
+    };
+  }
   // Enterprise / custom
   if (tier.price === null && tier.monthlyPrice === undefined) {
     return { amount: t('pricing.amountCustom'), suffix: t('pricing.suffixTailored') };
@@ -96,7 +107,8 @@ function formatPrice(tier: Tier, billing: 'monthly' | 'annual'): { amount: strin
 
 type CtaProps =
   | { type: 'link'; label: string; href: string; external: boolean }
-  | { type: 'checkout'; label: string; productId: string; billedMonthlyOnly: boolean };
+  | { type: 'checkout'; label: string; productId: string; billedMonthlyOnly: boolean }
+  | { type: 'disabled'; label: string };
 
 /**
  * Is this href pointing back at our own product surface (so a
@@ -124,6 +136,8 @@ function isInProductHref(href: string): boolean {
     if (url.protocol !== 'http:' && url.protocol !== 'https:') return false;
     return url.hostname === 'worldmonitor.app' ||
            url.hostname.endsWith('.worldmonitor.app') ||
+           url.hostname === 'healthradar24.com' ||
+           url.hostname.endsWith('.healthradar24.com') ||
            // localhost dev-server case so relative CTAs work in pro-test
            url.hostname === 'localhost' ||
            url.hostname === '127.0.0.1';
@@ -157,6 +171,12 @@ function getCtaProps(tier: Tier, billing: 'monthly' | 'annual'): CtaProps {
   }
   const resolved = resolveCheckoutProduct(tier, billing);
   if (resolved) {
+    if (!PAYMENTS_ENABLED) {
+      return {
+        type: 'disabled',
+        label: t('pricing.cta.comingSoon', { defaultValue: 'Coming soon' }),
+      };
+    }
     // Honor per-tier CTA text from the catalog (e.g. "Start Pro",
     // "Subscribe") when present; fall back to a localized generic label
     // so paid checkout buttons aren't English-only on non-English locales.
@@ -227,7 +247,7 @@ export function PricingSection({ refCode }: { refCode?: string }) {
               vanish from the tier the user clicked. Locking the toggle
               during the flow is the simplest correct behavior: the
               user committed to a plan by clicking Checkout. */}
-          <motion.div
+          {PAYMENTS_ENABLED && <motion.div
             className="inline-flex items-center gap-3 bg-wm-card border border-wm-border rounded-sm p-1"
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -267,7 +287,7 @@ export function PricingSection({ refCode }: { refCode?: string }) {
                 {t('pricing.saveAnnual')}
               </span>
             </button>
-          </motion.div>
+          </motion.div>}
         </div>
 
         {/* Tier cards grid */}
@@ -343,7 +363,15 @@ export function PricingSection({ refCode }: { refCode?: string }) {
                 </ul>
 
                 {/* CTA button */}
-                {cta.type === 'link' ? (
+                {cta.type === 'disabled' ? (
+                  <button
+                    type="button"
+                    disabled
+                    className="block w-full text-center py-3 rounded-sm font-mono text-xs uppercase tracking-wider font-bold border border-wm-border text-wm-muted opacity-70 cursor-not-allowed"
+                  >
+                    {cta.label}
+                  </button>
+                ) : cta.type === 'link' ? (
                   <a
                     href={cta.href}
                     target={cta.external ? "_blank" : undefined}
@@ -394,9 +422,9 @@ export function PricingSection({ refCode }: { refCode?: string }) {
         </div>
 
         {/* Discount code note */}
-        <p className="text-center text-xs text-wm-muted font-mono mt-8">
+        {PAYMENTS_ENABLED && <p className="text-center text-xs text-wm-muted font-mono mt-8">
           {t('pricing.promoCodeNote')}
-        </p>
+        </p>}
       </div>
     </section>
   );

@@ -19,6 +19,7 @@ declare const __CLERK_JS_VERSION__: string;
 interface ImportMetaEnv {
   readonly VITE_SENTRY_DSN?: string;
   readonly VITE_WS_API_URL?: string;
+  readonly VITE_PAYMENTS_ENABLED?: string;
 }
 
 interface ImportMeta {

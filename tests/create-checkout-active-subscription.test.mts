@@ -13,6 +13,7 @@ function restoreEnv(): void {
 async function importFreshCreateCheckout() {
   process.env.CONVEX_SITE_URL = 'https://convex.test';
   process.env.RELAY_SHARED_SECRET = 'relay-secret';
+  process.env.PAYMENTS_ENABLED = 'true';
   return import(`../api/create-checkout.ts?test=${Date.now()}-${Math.random()}`);
 }
 
@@ -37,6 +38,27 @@ afterEach(() => {
 });
 
 describe('/api/create-checkout ACTIVE_SUBSCRIPTION_EXISTS relay handling', () => {
+  it('fails closed before authentication when commerce is explicitly disabled', async () => {
+    process.env.CONVEX_SITE_URL = 'https://convex.test';
+    process.env.RELAY_SHARED_SECRET = 'relay-secret';
+    process.env.PAYMENTS_ENABLED = 'false';
+    const mod = await import(`../api/create-checkout.ts?test=${Date.now()}-${Math.random()}`);
+    const validateBearerToken = mock.fn(async () => ({
+      valid: true,
+      userId: 'should_not_be_called',
+    }));
+    mod.__setCreateCheckoutDepsForTests({ validateBearerToken });
+
+    const res = await mod.default(makeCheckoutRequest());
+
+    assert.equal(res.status, 503);
+    assert.deepEqual(await res.json(), {
+      error: 'COMMERCE_NOT_CONFIGURED',
+      message: 'Paid plans are not available yet.',
+    });
+    assert.equal(validateBearerToken.mock.calls.length, 0);
+  });
+
   it('forwards the typed duplicate-subscription response without logging a production error', async () => {
     const mod = await importFreshCreateCheckout();
     const consoleError = mock.method(console, 'error', () => {});

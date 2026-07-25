@@ -26,6 +26,7 @@ const UPSTASH_URL = process.env.UPSTASH_REDIS_REST_URL ?? '';
 const UPSTASH_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN ?? '';
 const DODO_API_KEY = process.env.DODO_API_KEY ?? '';
 const DODO_ENV = process.env.DODO_PAYMENTS_ENVIRONMENT ?? 'test_mode';
+const PAYMENTS_ENABLED = process.env.PAYMENTS_ENABLED === 'true';
 const RELAY_SECRET = process.env.RELAY_SHARED_SECRET ?? '';
 
 const CACHE_KEY = 'product-catalog:v2';
@@ -56,7 +57,7 @@ const TIER_CONFIG = {
     description: 'Get started with the essentials',
     features: ['Core dashboard panels', 'Global news feed', 'Earthquake & weather alerts', 'Basic map view'],
     cta: 'Get Started',
-    href: 'https://worldmonitor.app/dashboard',
+    href: 'https://healthradar24.com/dashboard',
     highlighted: false,
   },
   pro: {
@@ -88,7 +89,7 @@ const TIER_CONFIG = {
     description: 'Custom solutions for organizations',
     features: ['Everything in Pro + API', 'Unlimited API requests', 'Dedicated support', 'Custom integrations', 'SLA guarantee', 'On-premise option'],
     cta: 'Contact Sales',
-    href: 'mailto:enterprise@worldmonitor.app',
+    href: 'https://healthradar24.com/pro#enterprise-contact',
     highlighted: false,
   },
 };
@@ -128,6 +129,23 @@ async function getFromCache() {
     // values pass through unchanged.
     return unwrapEnvelope(JSON.parse(result)).data;
   } catch { return null; }
+}
+
+function publicCatalog(data) {
+  if (PAYMENTS_ENABLED) return { ...data, commerceEnabled: true };
+  return {
+    ...data,
+    commerceEnabled: false,
+    tiers: Array.isArray(data?.tiers)
+      ? data.tiers.map(({
+        monthlyProductId: _monthlyProduct,
+        annualProductId: _annualProduct,
+        monthlyPrice: _monthlyPrice,
+        annualPrice: _annualPrice,
+        ...tier
+      }) => tier)
+      : [],
+  };
 }
 
 async function setCache(data) {
@@ -271,12 +289,12 @@ export default async function handler(req) {
   // Read from Redis (populated by Railway ais-relay seed loop)
   const cached = await getFromCache();
   if (cached) {
-    return json(cached, 200, cors, 'public, max-age=300, s-maxage=600, stale-while-revalidate=300', 'cache');
+    return json(publicCatalog(cached), 200, cors, 'public, max-age=300, s-maxage=600, stale-while-revalidate=300', 'cache');
   }
 
   // Redis empty (purged or seed hasn't run). Try Dodo directly as backup.
   // May fail from Vercel IPs (401) — falls back to static prices.
-  if (DODO_API_KEY) {
+  if (PAYMENTS_ENABLED && DODO_API_KEY) {
     const dodoPrices = await fetchPricesFromDodo();
     const pricedPublicIds = Object.entries(CATALOG)
       .filter(([, v]) => PUBLIC_TIER_GROUPS.includes(v.tierGroup) && v.tierGroup !== 'free' && v.tierGroup !== 'enterprise')
@@ -291,12 +309,12 @@ export default async function handler(req) {
       // Just return the result with short cache so the next Railway cycle repopulates properly.
       // Header must carry the SAME source as the body: a partial Dodo read
       // stamped 'dodo' here made probes read a degraded response as fully live.
-      return json(result, 200, cors, 'public, max-age=60, s-maxage=60', priceSource);
+      return json(publicCatalog(result), 200, cors, 'public, max-age=60, s-maxage=60', priceSource);
     }
   }
 
   // All sources failed. Return fallback with short cache.
   const tiers = buildTiers({});
   const now = Date.now();
-  return json({ tiers, fetchedAt: now, cachedUntil: now + 60_000, priceSource: 'fallback' }, 200, cors, 'public, max-age=60, s-maxage=60', 'fallback');
+  return json(publicCatalog({ tiers, fetchedAt: now, cachedUntil: now + 60_000, priceSource: 'fallback' }), 200, cors, 'public, max-age=60, s-maxage=60', 'fallback');
 }

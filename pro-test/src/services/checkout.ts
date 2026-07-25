@@ -17,6 +17,7 @@ import { API_BASE } from './api';
 export { ensureClerk } from './clerk';
 
 const DODO_PORTAL_FALLBACK_URL = 'https://customer.dodopayments.com';
+const PAYMENTS_ENABLED = import.meta.env.VITE_PAYMENTS_ENABLED === 'true';
 const ACTIVE_SUBSCRIPTION_EXISTS = 'ACTIVE_SUBSCRIPTION_EXISTS';
 const PAYMENT_IN_PROGRESS = 'PAYMENT_IN_PROGRESS';
 
@@ -394,6 +395,7 @@ export async function startCheckout(
   productId: string,
   options?: { referralCode?: string; discountCode?: string; bypassPendingGuard?: boolean },
 ): Promise<boolean> {
+  if (!PAYMENTS_ENABLED) return false;
   if (checkoutInFlight) return false;
   if (startCheckoutEntryInFlight) return false;
   startCheckoutEntryInFlight = true;
@@ -447,6 +449,7 @@ async function startCheckoutInner(
 }
 
 export async function tryResumeCheckoutFromUrl(): Promise<boolean> {
+  if (!PAYMENTS_ENABLED) return false;
   const intent = parseCheckoutIntentFromSearch(window.location.search);
   if (!intent) return false;
 
