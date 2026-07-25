@@ -23,6 +23,7 @@ import { getCurrentClerkUser, getClerkToken, openSignIn } from './clerk';
 import { subscribeAuthState } from './auth-state';
 import { saveCheckoutAttempt, clearCheckoutAttempt } from './checkout-attempt';
 import { safeHostedCheckoutUrl } from './hosted-checkout-url';
+import { getProUrl } from './public-urls';
 import {
   classifyHttpCheckoutError,
   classifySyntheticCheckoutError,
@@ -1061,7 +1062,7 @@ function renderCheckoutErrorSurface(
   fallbackToPricingPage: boolean,
 ): void {
   if (fallbackToPricingPage) {
-    window.location.assign('https://worldmonitor.app/pro');
+    window.location.assign(getProUrl());
     return;
   }
   showCheckoutErrorToast(error.userMessage);

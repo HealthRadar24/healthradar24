@@ -16,6 +16,7 @@ import {
   type RuntimeSecretKey,
 } from '@/services/runtime-config';
 import { invokeTauri } from '@/services/tauri-bridge';
+import { getProUrl } from '@/services/public-urls';
 import { escapeHtml } from '@/utils/sanitize';
 import { isDesktopRuntime } from '@/services/runtime';
 import { fetchOllamaModels as fetchOllamaModelsFromService } from '@/services/ollama-models';
@@ -372,7 +373,7 @@ export class RuntimeConfigPanel extends Panel {
 
     if (this.mode === 'alert') {
       this.content.querySelector<HTMLButtonElement>('[data-early-access]')?.addEventListener('click', () => {
-        const url = 'https://www.worldmonitor.app/pro';
+        const url = getProUrl();
         if (isDesktopRuntime()) {
           void invokeTauri<void>('open_url', { url }).catch(() => window.open(url, '_blank', 'noopener,noreferrer'));
         } else {

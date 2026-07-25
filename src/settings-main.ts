@@ -1,6 +1,7 @@
 import './styles/main.css';
 import './styles/settings-window.css';
 import { SettingsManager } from '@/services/settings-manager';
+import { getProUrl } from '@/services/public-urls';
 import { exportSettings, importSettings, type ImportResult } from '@/utils/settings-persistence';
 import {
   SETTINGS_CATEGORIES,
@@ -253,7 +254,7 @@ function initOverviewListeners(area: HTMLElement): void {
   });
 
   area.querySelector('[data-wm-open-pro]')?.addEventListener('click', () => {
-    const url = 'https://worldmonitor.app/pro';
+    const url = getProUrl();
     void invokeTauri<void>('open_url', { url }).catch(() => window.open(url, '_blank', 'noopener,noreferrer'));
   });
 

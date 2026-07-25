@@ -28,6 +28,7 @@ import {
 import type { GetRouteExplorerLaneResponse, GetRouteImpactResponse, BypassCorridorOption } from '@/generated/server/worldmonitor/supply_chain/v1/service_server';
 import { fetchRouteExplorerLane, fetchRouteImpact } from '@/services/supply-chain';
 import { hasPremiumAccess } from '@/services/panel-gating';
+import { getProUrl } from '@/services/public-urls';
 import { getAuthState } from '@/services/auth-state';
 import { trackGateHit, track, type UmamiEvent } from '@/services/analytics';
 
@@ -358,7 +359,7 @@ export class RouteExplorer {
         });
         void import('@/services/checkout')
           .then((m) => m.startCheckout('pro_monthly'))
-          .catch(() => window.open('https://worldmonitor.app/pro', '_blank', 'noopener,noreferrer'));
+          .catch(() => window.open(getProUrl(), '_blank', 'noopener,noreferrer'));
       }, { once: true });
     }
   }
