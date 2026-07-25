@@ -7,6 +7,7 @@ import { t, tArray } from '../i18n';
 // Static fallback from build-time generation (used while fetching live prices)
 import fallbackTiers from '../generated/tiers.json';
 import { resolveCheckoutProduct } from './pricing-billing-mode';
+import { API_BASE } from '../services/api';
 
 interface Tier {
   name: string;
@@ -26,14 +27,12 @@ interface Tier {
   annualProductId?: string;
 }
 
-const CATALOG_API = 'https://api.worldmonitor.app/api/product-catalog';
-
 function usePricingData(): Tier[] {
   const [tiers, setTiers] = useState<Tier[]>(fallbackTiers as Tier[]);
 
   useEffect(() => {
     let cancelled = false;
-    fetch(CATALOG_API, { signal: AbortSignal.timeout(5000) })
+    fetch(`${API_BASE}/product-catalog`, { signal: AbortSignal.timeout(5000) })
       .then(res => res.ok ? res.json() : null)
       .then(data => {
         if (!cancelled && data?.tiers?.length) {

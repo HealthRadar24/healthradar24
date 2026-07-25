@@ -35,8 +35,8 @@ import {
   DASHBOARD_PATH,
   DASHBOARD_URL,
 } from './routes';
+import { API_BASE } from './services/api';
 
-const API_BASE = 'https://api.worldmonitor.app/api';
 const TURNSTILE_SITE_KEY = '0x4AAAAAACnaYgHIyxclu8Tj';
 
 declare global {
