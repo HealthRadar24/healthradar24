@@ -1747,6 +1747,31 @@ describe('agent readiness: MCP/OAuth origin alignment', () => {
     }
   });
 
+  it('OAuth metadata accepts the deployment domain configured by public base URL', async () => {
+    const previous = process.env.WORLDMONITOR_PUBLIC_BASE_URL;
+    process.env.WORLDMONITOR_PUBLIC_BASE_URL = 'https://www.healthradar24.com';
+    try {
+      const handler = (await import('../api/oauth-protected-resource.ts')).default;
+      for (const host of ['healthradar24.com', 'www.healthradar24.com', 'api.healthradar24.com']) {
+        const res = await handler(new Request(`https://${host}/.well-known/oauth-protected-resource`, {
+          headers: { host },
+        }));
+        const json = await res.json();
+        assert.equal(json.resource, `https://${host}`);
+        assert.deepEqual(json.authorization_servers, [`https://${host}`]);
+      }
+
+      const spoofed = await handler(new Request(
+        'https://www.healthradar24.com/.well-known/oauth-protected-resource',
+        { headers: { host: 'evil.healthradar24.com.evil.com' } },
+      ));
+      assert.equal((await spoofed.json()).resource, 'https://www.healthradar24.com');
+    } finally {
+      if (previous === undefined) delete process.env.WORLDMONITOR_PUBLIC_BASE_URL;
+      else process.env.WORLDMONITOR_PUBLIC_BASE_URL = previous;
+    }
+  });
+
   it('MCP server card authentication.resource is a valid https URL on a known host', () => {
     const mcpCard = JSON.parse(
       readFileSync(resolve(__dirname, '../public/.well-known/mcp/server-card.json'), 'utf-8')
