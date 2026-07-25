@@ -7,11 +7,11 @@ name = "api-cors-preflight"
 main = "src/index.js"
 compatibility_date = "2025-05-01"
 
-# Bind to api.worldmonitor.app/*. The route is the load-bearing config:
+# Bind to api.healthradar24.com/*. The route is the load-bearing config:
 # without it the Worker is uploaded but receives no traffic.
 [[routes]]
-pattern = "api.worldmonitor.app/*"
-zone_name = "worldmonitor.app"
+pattern = "api.healthradar24.com/*"
+zone_name = "healthradar24.com"
 
 # Observability: surface Worker errors in CF dashboard logs.
 [observability]
@@ -22,7 +22,7 @@ enabled = true
 # per POP. Namespace id is config, not a secret.
 [[kv_namespaces]]
 binding = "BOOTSTRAP_KV"
-id = "40d42ec8064b4813ac87e61b43fb697f"
+id = "e7fa512f4665460e805397433be198ac"
 
 # Shadow flag — "1" = measuring. The Worker shadow-reads BOOTSTRAP_KV per POP on public-tier
 # bootstrap GETs (in ctx.waitUntil; response untouched) and emits per-region latency to Axiom.
@@ -35,5 +35,5 @@ id = "40d42ec8064b4813ac87e61b43fb697f"
 # Any miss/stale/invalid/error/timeout falls through to the Vercel/Redis origin (strictly additive).
 # Kill-switch = set back to "off" and redeploy. Once "all" is proven, flip BOOTSTRAP_KV_SHADOW to "0".
 [vars]
-BOOTSTRAP_KV_SHADOW = "1"
+BOOTSTRAP_KV_SHADOW = "0"
 BOOTSTRAP_KV_SERVE = "off"

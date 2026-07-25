@@ -50,3 +50,8 @@ jobs:
         with:
           node-version: '24'
       - run: node scripts/mcp-live-smoke.mjs
+        env:
+          MCP_SMOKE_HOSTS: ${{ vars.WM_MCP_SMOKE_HOSTS }}
+          MCP_SMOKE_CANONICAL_ORIGIN: ${{ vars.WM_WEB_BASE_URL }}
+          MCP_SMOKE_VARIANT_HOSTS: ${{ vars.WM_MCP_VARIANT_HOSTS }}
+          MCP_SMOKE_VARIANT_DOMAIN: ${{ vars.WM_VARIANT_DOMAIN }}

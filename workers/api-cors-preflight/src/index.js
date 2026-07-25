@@ -1,7 +1,7 @@
 // Cloudflare Worker: api-cors-preflight
 //
-// Bound to: api.worldmonitor.app/*
-// Source of truth for CORS on api.worldmonitor.app. Short-circuits OPTIONS
+// Bound to: api.healthradar24.com/*
+// Source of truth for CORS on api.healthradar24.com. Short-circuits OPTIONS
 // preflights at the edge (skip Vercel) and stamps the same CORS headers onto
 // non-OPTIONS responses on the way back to the browser.
 //
@@ -27,10 +27,12 @@ import { maybeServeBootstrapFromKv } from './kv-serve.js';
 // echoed back and fail CORS at the browser.
 const ALLOWED_ORIGIN_PATTERNS = [
   /^https:\/\/(.*\.)?worldmonitor\.app$/,
+  /^https:\/\/(.*\.)?healthradar24\.com$/,
   // Vercel previews under the "eliewm" team scope, e.g.
   //   worldmonitor-git-<branch>-eliewm.vercel.app / worldmonitor-<hash>-eliewm.vercel.app
   // Mirror of api/_cors.js + server/cors.ts (see superset note above).
   /^https:\/\/worldmonitor-[a-z0-9-]+-eliewm\.vercel\.app$/,
+  /^https:\/\/healthradar24-[a-z0-9-]+-kernelius\.vercel\.app$/,
   /^https?:\/\/tauri\.localhost(:\d+)?$/,
   /^https?:\/\/[a-z0-9-]+\.tauri\.localhost(:\d+)?$/i,
   /^tauri:\/\/localhost$/,
