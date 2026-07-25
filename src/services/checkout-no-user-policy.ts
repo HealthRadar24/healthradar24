@@ -22,15 +22,15 @@
  * checkout.ts dependency tree (Clerk, Dodo SDK, Convex).
  */
 
+import { getProUrl } from './public-urls';
+
 export type NoUserPathOutcome =
   | { kind: 'redirect-pro'; persist: false; redirectUrl: string }
   | { kind: 'inline-signin'; persist: true };
 
-const PRO_URL = 'https://worldmonitor.app/pro';
-
 export function decideNoUserPathOutcome(fallbackToPricingPage: boolean): NoUserPathOutcome {
   if (fallbackToPricingPage) {
-    return { kind: 'redirect-pro', persist: false, redirectUrl: PRO_URL };
+    return { kind: 'redirect-pro', persist: false, redirectUrl: getProUrl() };
   }
   return { kind: 'inline-signin', persist: true };
 }

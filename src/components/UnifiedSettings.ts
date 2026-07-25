@@ -25,6 +25,7 @@ import { getAuthState } from '@/services/auth-state';
 import { track } from '@/services/analytics';
 import { isEntitled, hasFeature, onEntitlementChange, getEntitlementState } from '@/services/entitlements';
 import { hasPremiumAccess } from '@/services/panel-gating';
+import { getProUrl } from '@/services/public-urls';
 import { getSubscription, onSubscriptionChange, openBillingPortal, prereserveBillingPortalTab } from '@/services/billing';
 import { BusinessSeatsSection } from '@/components/BusinessSeatsSection';
 import { deriveBillingUxState, getReactivationHref } from '@/services/billing-state';
@@ -788,11 +789,11 @@ export class UnifiedSettings {
     }
     this.close();
     if (this.config.isDesktopApp) {
-      window.open('https://worldmonitor.app/pro', '_blank', 'noopener,noreferrer');
+      window.open(getProUrl(), '_blank', 'noopener,noreferrer');
       return;
     }
     import('@/services/checkout').then(m => import('@/config/products').then(p => m.startCheckout(p.DEFAULT_UPGRADE_PRODUCT))).catch(() => {
-      window.open('https://worldmonitor.app/pro', '_blank', 'noopener,noreferrer');
+      window.open(getProUrl(), '_blank', 'noopener,noreferrer');
     });
   }
 
@@ -1175,7 +1176,7 @@ export class UnifiedSettings {
           : p.DODO_PRODUCTS.PRO_MONTHLY;
         return m.startCheckout(product);
       })).catch(() => {
-        window.open('https://worldmonitor.app/pro', '_blank', 'noopener,noreferrer');
+        window.open(getProUrl(), '_blank', 'noopener,noreferrer');
       });
       return;
     }
@@ -1207,7 +1208,7 @@ export class UnifiedSettings {
         } else {
           this.close();
           import('@/services/checkout').then(m => import('@/config/products').then(p => m.startCheckout(p.DODO_PRODUCTS.API_STARTER_MONTHLY))).catch(() => {
-            window.open('https://worldmonitor.app/pro', '_blank', 'noopener,noreferrer');
+            window.open(getProUrl(), '_blank', 'noopener,noreferrer');
           });
         }
       });

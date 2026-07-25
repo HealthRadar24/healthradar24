@@ -1,5 +1,6 @@
 import { type AuthSession, getAuthState, subscribeAuthState } from '@/services/auth-state';
 import { PanelGateReason, getPanelGateReason } from '@/services/panel-gating';
+import { getProUrl } from '@/services/public-urls';
 import { getResilienceScore, type ResilienceDomain, type ResilienceScoreResponse } from '@/services/resilience';
 import { h, replaceChildren } from '@/utils/dom-utils';
 import {
@@ -213,7 +214,7 @@ export class ResilienceWidget {
           return;
         }
         void this.openUpgradeFlow().catch(() => {
-          window.open('https://worldmonitor.app/pro', '_blank', 'noopener,noreferrer');
+          window.open(getProUrl(), '_blank', 'noopener,noreferrer');
         });
       },
     }, cta) as HTMLButtonElement;
@@ -482,15 +483,16 @@ export class ResilienceWidget {
 
     if (isDesktopRuntime()) {
       const { invokeTauri } = await import('@/services/tauri-bridge');
-      await invokeTauri<void>('open_url', { url: 'https://worldmonitor.app/pro' })
-        .catch(() => { window.open('https://worldmonitor.app/pro', '_blank', 'noopener,noreferrer'); });
+      const proUrl = getProUrl();
+      await invokeTauri<void>('open_url', { url: proUrl })
+        .catch(() => { window.open(proUrl, '_blank', 'noopener,noreferrer'); });
       return;
     }
 
     await import('@/services/checkout')
       .then((module) => module.startCheckout(DEFAULT_UPGRADE_PRODUCT))
       .catch(() => {
-        window.open('https://worldmonitor.app/pro', '_blank', 'noopener,noreferrer');
+        window.open(getProUrl(), '_blank', 'noopener,noreferrer');
       });
   }
 }
