@@ -3,9 +3,6 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- The app fires a CORS /api/me/entitlement fetch right after boot;
-         warming DNS+TLS here takes the connection setup off that path. -->
-    <link rel="preconnect" href="https://api.worldmonitor.app" crossorigin />
     <!-- Tag <html> with .js so the seo-prerender content (visible by default
          for AEO scanners that don't execute JS) is CSS-hidden for real users.
          Mirrors the same pattern in the SPA's index.html. -->

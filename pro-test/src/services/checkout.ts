@@ -13,9 +13,9 @@
 import * as Sentry from '@sentry/react';
 import type { CheckoutEvent } from 'dodopayments-checkout';
 import { ensureClerk, type LoadedClerk } from './clerk';
+import { API_BASE } from './api';
 export { ensureClerk } from './clerk';
 
-const API_BASE = 'https://api.worldmonitor.app/api';
 const DODO_PORTAL_FALLBACK_URL = 'https://customer.dodopayments.com';
 const ACTIVE_SUBSCRIPTION_EXISTS = 'ACTIVE_SUBSCRIPTION_EXISTS';
 const PAYMENT_IN_PROGRESS = 'PAYMENT_IN_PROGRESS';
