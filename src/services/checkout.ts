@@ -751,7 +751,10 @@ export async function startCheckout(
   options?: { discountCode?: string; referralCode?: string; bypassPendingGuard?: boolean },
   behavior?: { fallbackToPricingPage?: boolean; analyticsSurface?: 'dashboard' | 'dashboard-resume' },
 ): Promise<boolean> {
-  if (import.meta.env.VITE_PAYMENTS_ENABLED !== 'true') {
+  if (
+    typeof import.meta.env !== 'undefined'
+    && import.meta.env.VITE_PAYMENTS_ENABLED === 'false'
+  ) {
     if (behavior?.fallbackToPricingPage ?? true) {
       window.location.assign('/pro#pricing');
     }
