@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "productBoundary": {
+    "purpose": "aggregate situational awareness and research",
+    "clinicalUse": "not_for_diagnosis_treatment_or_emergency_guidance",
+    "personalData": "not_collected",
+    "protectedHealthInformation": "prohibited"
+  },
+  "capabilities": [
+    {
+      "id": "diseaseOutbreaks",
+      "status": "required_baseline",
+      "apiRoute": "/api/health/v1/list-disease-outbreaks",
+      "canonicalKey": "health:disease-outbreaks:v1",
+      "seedMetaKey": "seed-meta:health:disease-outbreaks",
+      "cadenceMinutes": 1440,
+      "maxStaleMinutes": 2880,
+      "dataClass": "public_aggregate_advisory",
+      "decisionUse": "situational_awareness_only",
+      "sources": [
+        {
+          "id": "who-don",
+          "name": "WHO Disease Outbreak News",
+          "role": "primary_public_advisory",
+          "credential": "none",
+          "commercialTermsReview": "required_before_republication_expansion"
+        },
+        {
+          "id": "cdc-han",
+          "name": "CDC Health Alert Network",
+          "role": "public_advisory_supplement",
+          "credential": "none",
+          "commercialTermsReview": "required_before_republication_expansion"
+        },
+        {
+          "id": "outbreak-news-today",
+          "name": "Outbreak News Today",
+          "role": "secondary_news_aggregation",
+          "credential": "none",
+          "commercialTermsReview": "required"
+        },
+        {
+          "id": "think-global-health",
+          "name": "Think Global Health disease tracker",
+          "role": "geolocation_supplement",
+          "credential": "none",
+          "commercialTermsReview": "required"
+        }
+      ]
+    },
+    {
+      "id": "healthAirQuality",
+      "status": "required_baseline",
+      "apiRoute": "/api/health/v1/list-air-quality-alerts",
+      "canonicalKey": "health:air-quality:v1",
+      "seedMetaKey": "seed-meta:health:air-quality",
+      "cadenceMinutes": 60,
+      "maxStaleMinutes": 180,
+      "dataClass": "public_environmental_measurement",
+      "decisionUse": "situational_awareness_only",
+      "sources": [
+        {
+          "id": "openaq",
+          "name": "OpenAQ",
+          "role": "primary_pm25_measurements",
+          "credential": "OPENAQ_API_KEY",
+          "commercialTermsReview": "required"
+        },
+        {
+          "id": "waqi",
+          "name": "World Air Quality Index",
+          "role": "optional_coverage_supplement",
+          "credential": "WAQI_API_KEY_optional",
+          "commercialTermsReview": "required_before_enablement"
+        }
+      ]
+    }
+  ]
+}

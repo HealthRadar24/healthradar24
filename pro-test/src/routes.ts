@@ -1,5 +1,7 @@
+import { HEALTHRADAR_DASHBOARD_URL } from '../healthradar-brand.mjs';
+
 export const DASHBOARD_PATH = '/dashboard';
-export const DASHBOARD_URL = 'https://www.worldmonitor.app/dashboard';
+export const DASHBOARD_URL = HEALTHRADAR_DASHBOARD_URL;
 export const DASHBOARD_CHECKOUT_SUCCESS_URL = `${DASHBOARD_URL}?wm_checkout=success`;
 // Guarded checkout-return contract (mirrors the dashboard's
 // buildDashboardCheckoutReturnUrl). Use this as the Dodo `return_url`: unlike

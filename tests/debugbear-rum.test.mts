@@ -118,15 +118,15 @@ function installDebugBearHarness(
 
 describe('DebugBear RUM loader', () => {
   it('enables only first-party production dashboard hosts', () => {
-    assert.equal(shouldEnableDebugBearRum('www.worldmonitor.app'), true);
-    assert.equal(shouldEnableDebugBearRum('happy.worldmonitor.app'), true);
+    assert.equal(shouldEnableDebugBearRum('www.healthradar24.com'), true);
+    assert.equal(shouldEnableDebugBearRum('healthradar24.com'), true);
     assert.equal(shouldEnableDebugBearRum('localhost'), false);
     assert.equal(shouldEnableDebugBearRum('worldmonitor-git-codex-preview-eliewm.vercel.app'), false);
-    assert.equal(shouldEnableDebugBearRum('evilworldmonitor.app'), false);
+    assert.equal(shouldEnableDebugBearRum('evilhealthradar24.com'), false);
   });
 
   it('installs DebugBear RUM with presampling and pre-script error buffering', () => {
-    const h = installDebugBearHarness('www.worldmonitor.app');
+    const h = installDebugBearHarness('www.healthradar24.com');
     try {
       initDebugBearRum();
 
@@ -153,7 +153,7 @@ describe('DebugBear RUM loader', () => {
   });
 
   it('queues only numeric U3a durations and closed low-cardinality tags', () => {
-    const h = installDebugBearHarness('www.worldmonitor.app');
+    const h = installDebugBearHarness('www.healthradar24.com');
     try {
       initDebugBearRum();
       reportBootstrapR2Rum({
@@ -195,7 +195,7 @@ describe('DebugBear RUM loader', () => {
 
   it('does not append a duplicate script when one already exists', () => {
     const existing = { async: true, src: DEBUGBEAR_RUM_SCRIPT_SRC };
-    const h = installDebugBearHarness('worldmonitor.app', existing);
+    const h = installDebugBearHarness('healthradar24.com', existing);
     try {
       initDebugBearRum();
 
@@ -209,7 +209,7 @@ describe('DebugBear RUM loader', () => {
   it('keeps the RUM sample rate at 10% and skips out-of-sample loads', () => {
     assert.equal(DEBUGBEAR_RUM_SAMPLE_RATE, 10);
 
-    const h = installDebugBearHarness('worldmonitor.app', null, () => 0.1);
+    const h = installDebugBearHarness('healthradar24.com', null, () => 0.1);
     try {
       initDebugBearRum();
 
@@ -231,16 +231,11 @@ describe('DebugBear RUM marketing loader', () => {
 
   it('uses the same production-host gate as the dashboard loader', () => {
     for (const host of [
-      'worldmonitor.app',
-      'www.worldmonitor.app',
-      'tech.worldmonitor.app',
-      'finance.worldmonitor.app',
-      'commodity.worldmonitor.app',
-      'happy.worldmonitor.app',
-      'energy.worldmonitor.app',
+      'healthradar24.com',
+      'www.healthradar24.com',
       'localhost',
       'worldmonitor-git-codex-preview-eliewm.vercel.app',
-      'evilworldmonitor.app',
+      'evilhealthradar24.com',
     ]) {
       assert.equal(
         shouldEnableMarketingDebugBearRum(host),
@@ -251,7 +246,7 @@ describe('DebugBear RUM marketing loader', () => {
   });
 
   it('installs DebugBear RUM on marketing pages', () => {
-    const h = installDebugBearHarness('www.worldmonitor.app');
+    const h = installDebugBearHarness('www.healthradar24.com');
     try {
       initMarketingDebugBearRum();
 
@@ -268,7 +263,7 @@ describe('DebugBear RUM marketing loader', () => {
   });
 
   it('skips out-of-sample marketing page loads', () => {
-    const h = installDebugBearHarness('worldmonitor.app', null, () => 0.1);
+    const h = installDebugBearHarness('healthradar24.com', null, () => 0.1);
     try {
       initMarketingDebugBearRum();
 

@@ -10,3 +10,18 @@ export const FALLBACK_PRICES = {
   'pdt_0Nbu2lawHYE3dv2THgSEV': 99900,  // API Starter Annual
   'pdt_0Nbttg7NuOJrhbyBGCius': 29999,  // API Business
 };
+
+/**
+ * Stable plan key for each inherited Dodo product ID.
+ *
+ * Fork-owned billing adapters use this generated map so they can accept the
+ * upstream checkout contract without duplicating provider IDs.
+ */
+export const PRODUCT_PLAN_KEYS = {
+  'pdt_0Nbtt71uObulf7fGXhQup': 'pro_monthly',
+  'pdt_0NbttMIfjLWC10jHQWYgJ': 'pro_annual',
+  'pdt_0NbttVmG1SERrxhygbbUq': 'api_starter',
+  'pdt_0Nbu2lawHYE3dv2THgSEV': 'api_starter_annual',
+  'pdt_0Nbttg7NuOJrhbyBGCius': 'api_business',
+  'pdt_0Nbttnqrfh51cRqhMdVLx': 'enterprise',
+};

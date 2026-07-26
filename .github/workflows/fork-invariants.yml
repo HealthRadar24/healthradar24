@@ -20,3 +20,5 @@ jobs:
         run: node scripts/check-fork-invariants.mjs
       - name: Validate HealthRadar24 readiness policy
         run: npm run fork:readiness:config
+      - name: Validate HealthRadar24 healthcare source governance
+        run: npm run health:governance

@@ -1,3 +1,30 @@
+# HealthRadar24
+
+HealthRadar24 is a Kernelius-operated fork of
+[WorldMonitor](https://github.com/koala73/worldmonitor). The fork preserves the
+upstream architecture and sync path while owning its domains, deployment
+credentials, runtime services, product identity, and healthcare/life-science
+roadmap.
+
+- Production: [healthradar24.com](https://www.healthradar24.com)
+- Fork operations: [docs/healthradar-operations.md](docs/healthradar-operations.md)
+- Provider policy: [docs/healthradar-provider-policy.md](docs/healthradar-provider-policy.md)
+- Commercial launch: [docs/healthradar-commercial-launch.md](docs/healthradar-commercial-launch.md)
+- Healthcare foundation: [docs/healthradar-healthcare-foundation.md](docs/healthradar-healthcare-foundation.md)
+- Upstream sync procedure: [FORK_SYNC.md](FORK_SYNC.md)
+- Security and support: [SECURITY.md](SECURITY.md)
+
+Commercial payments are intentionally disabled until the Stripe test-mode,
+webhook, legal, and launch gates documented in the operations guide pass.
+HealthRadar24 is an intelligence and research product; it is not a medical
+device and does not provide medical advice.
+
+The remainder of this README is the upstream WorldMonitor reference. It is kept
+close to upstream intentionally so application changes remain straightforward
+to sync.
+
+---
+
 # World Monitor
 
 [简体中文](README.zh-CN.md) | [日本語](README.ja-JP.md)

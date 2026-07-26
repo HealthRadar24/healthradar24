@@ -36,6 +36,14 @@ import {
   DASHBOARD_URL,
 } from './routes';
 import { API_BASE } from './services/api';
+import {
+  HEALTHRADAR_COMPANY,
+  HEALTHRADAR_FORK_URL,
+  HEALTHRADAR_NAME,
+  HEALTHRADAR_ORIGIN,
+  HEALTHRADAR_SUPPORT_URL,
+  HEALTHRADAR_UPSTREAM_URL,
+} from '../healthradar-brand.mjs';
 
 const TURNSTILE_SITE_KEY = '0x4AAAAAACnaYgHIyxclu8Tj';
 
@@ -231,7 +239,7 @@ function ClerkUserButton({ user }: { user: UserResource | null }): ReactElement 
       .then((clerk) => {
         if (unmounted || !el) return;
         clerk.mountUserButton(el, {
-          afterSignOutUrl: 'https://www.worldmonitor.app/pro',
+          afterSignOutUrl: `${HEALTHRADAR_ORIGIN}/pro`,
         });
       })
       .catch((err) => {
@@ -629,7 +637,7 @@ const LivePreview = () => (
             <source type="image/webp" srcSet={DASHBOARD_SCREENSHOT_WEBP_SRCSET} sizes={LIVE_PREVIEW_IMAGE_SIZES} />
             <img
               src={DASHBOARD_SCREENSHOT_JPG}
-              alt="World Monitor Dashboard"
+              alt={`${HEALTHRADAR_NAME} Dashboard`}
               className="absolute inset-0 w-full h-full object-cover"
               loading="lazy"
               decoding="async"
@@ -783,7 +791,7 @@ const ProShowcase = () => (
           <div className="w-3 h-3 rounded-full bg-red-500" />
           <div className="w-3 h-3 rounded-full bg-yellow-500" />
           <div className="w-3 h-3 rounded-full bg-green-500" />
-          <span className="ml-2 font-mono text-xs text-gray-400">#world-monitor-alerts</span>
+          <span className="ml-2 font-mono text-xs text-gray-400">#healthradar-alerts</span>
         </div>
         <div className="p-6 space-y-6 font-sans text-sm">
           <div className="flex gap-4">
@@ -792,7 +800,7 @@ const ProShowcase = () => (
             </div>
             <div>
               <div className="flex items-baseline gap-2 mb-1">
-                <span className="font-bold text-gray-200">World Monitor</span>
+                <span className="font-bold text-gray-200">{HEALTHRADAR_NAME}</span>
                 <span className="text-xs text-gray-500 bg-gray-800 px-1 rounded">APP</span>
                 <span className="text-xs text-gray-500">8:00 AM</span>
               </div>
@@ -859,13 +867,12 @@ const ApiSection = () => (
         <div className="bg-black border border-wm-border rounded-lg overflow-hidden font-mono text-sm">
           <div className="bg-wm-card px-4 py-2 border-b border-wm-border flex items-center gap-2">
             <Terminal className="w-4 h-4 text-wm-muted" aria-hidden="true" />
-            <span className="text-wm-muted text-xs">api.worldmonitor.app</span>
+            <span className="text-wm-muted text-xs">www.healthradar24.com/api</span>
           </div>
           <div className="p-6 text-gray-300 overflow-x-auto">
             <pre><code>
 <span className="text-wm-blue">curl</span> \<br/>
-  <span className="text-wm-green">"https://api.worldmonitor.app/v1/intelligence/convergence?region=MENA&time_window=6h"</span> \<br/>
-  -H <span className="text-wm-green">"Authorization: Bearer wm_live_xxx"</span><br/><br/>
+  <span className="text-wm-green">"https://www.healthradar24.com/api/health"</span><br/><br/>
 <span className="text-wm-muted">{"{"}</span><br/>
   <span className="text-wm-blue">"status"</span>: <span className="text-wm-green">"success"</span>,<br/>
   <span className="text-wm-blue">"data"</span>: <span className="text-wm-muted">{"["}</span><br/>
@@ -1313,20 +1320,18 @@ const EnterprisePage = () => (
         <div className="flex items-center gap-3 mb-4 md:mb-0">
           <img src="/favico/favicon-32x32.png" alt="" width="28" height="28" loading="lazy" className="rounded-full" />
           <div className="flex flex-col">
-            <span className="font-display font-bold text-sm leading-none tracking-tight text-wm-text">WORLD MONITOR</span>
-            <span className="text-[9px] uppercase tracking-[2px] opacity-60 mt-0.5">by Someone.ceo</span>
+            <span className="font-display font-bold text-sm leading-none tracking-tight text-wm-text">HEALTHRADAR24</span>
+            <span className="text-[9px] uppercase tracking-[2px] opacity-60 mt-0.5">by {HEALTHRADAR_COMPANY}</span>
           </div>
         </div>
         <div className="flex items-center gap-6">
           <a href={DASHBOARD_PATH} className="hover:text-wm-text transition-colors">Dashboard</a>
-          <a href="https://www.worldmonitor.app/blog/" className="hover:text-wm-text transition-colors">Blog</a>
-          <a href="https://www.worldmonitor.app/docs" className="hover:text-wm-text transition-colors">Docs</a>
-          <a href="https://status.worldmonitor.app/" target="_blank" rel="noreferrer" className="hover:text-wm-text transition-colors">Status</a>
-          <a href="https://github.com/koala73/worldmonitor" target="_blank" rel="noreferrer" className="hover:text-wm-text transition-colors">GitHub</a>
-          <a href="https://discord.gg/re63kWKxaz" target="_blank" rel="noreferrer" className="hover:text-wm-text transition-colors">Discord</a>
-          <a href="https://x.com/worldmonitorai" target="_blank" rel="noreferrer" className="hover:text-wm-text transition-colors">X</a>
+          <a href={`${HEALTHRADAR_ORIGIN}/docs`} className="hover:text-wm-text transition-colors">Docs</a>
+          <a href={HEALTHRADAR_SUPPORT_URL} className="hover:text-wm-text transition-colors">Support</a>
+          <a href={HEALTHRADAR_FORK_URL} target="_blank" rel="noreferrer" className="hover:text-wm-text transition-colors">Source</a>
+          <a href={HEALTHRADAR_UPSTREAM_URL} target="_blank" rel="noreferrer" className="hover:text-wm-text transition-colors">Upstream</a>
         </div>
-        <span className="text-[10px] opacity-40 mt-4 md:mt-0">&copy; {new Date().getFullYear()} WorldMonitor</span>
+        <span className="text-[10px] opacity-40 mt-4 md:mt-0">&copy; {new Date().getFullYear()} {HEALTHRADAR_NAME}</span>
       </div>
     </footer>
   </div>

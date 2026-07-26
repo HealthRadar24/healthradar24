@@ -21,4 +21,6 @@ jobs:
         env:
           WM_HEALTH_URL: ${{ vars.WM_HEALTH_URL }}
           WM_WEB_BASE_URL: ${{ vars.WM_WEB_BASE_URL }}
+          WM_BUILD_READINESS_URL: ${{ vars.WM_BUILD_READINESS_URL }}
+          WM_PRO_BUILD_READINESS_URL: ${{ vars.WM_PRO_BUILD_READINESS_URL }}
         run: npm run fork:readiness

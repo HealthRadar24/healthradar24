@@ -5,11 +5,10 @@ name: Pro bundle freshness
 # fails if generated config, locale placeholders, or committed public/pro/
 # do not match the regenerated and rebuilt output.
 #
-# Why: public/pro/ is committed to the repo and served verbatim by Vercel.
-# The root build script does NOT run pro-test's vite build, so if a PR
-# changes pro-test/src/** or catalog-fed pricing copy but forgets to commit
-# the regenerated bundle, the deploy silently ships stale JS. Happened with
-# PR #3227 -> #3228 and catalog copy drift in #4563 -> #4574.
+# Why: public/pro/ remains a committed artifact for Docker/local/static
+# consumers and upstream compatibility. HealthRadar's root Vercel build also
+# rebuilds pro-test into dist/pro with deployment env, so this check protects
+# both the committed fallback and generated product/locale parity.
 
 on:
   pull_request:
@@ -52,7 +51,7 @@ jobs:
         run: |
           if ! git diff --exit-code src/config/products.generated.ts api/_product-fallback-prices.js pro-test/src/generated/tiers.json pro-test/src/locales/ public/pro/; then
             echo "::error::Product catalog, generated config, pro locales, or public/pro/ is stale."
-            echo "Vercel ships whatever is committed under public/pro/ — it does NOT rebuild pro-test on deploy."
+            echo "The committed public/pro fallback must match a clean pro-test build."
             echo "Run 'npx tsx scripts/generate-product-config.mjs', then 'cd pro-test && npm run build', and commit generated config, pro locales, plus public/pro/."
             exit 1
           fi

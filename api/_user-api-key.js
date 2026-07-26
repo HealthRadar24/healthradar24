@@ -28,7 +28,10 @@ const ENTITLEMENT_CACHE_TTL_SECONDS = 900;
 // customer (#5600). See the fuller note in entitlement-check.ts.
 const LAPSED_BILLING_MARKER_TTL_SECONDS = 60;
 const NOT_APPLICABLE_VERIFICATION_TTL_SECONDS = 60;
-const ENTITLEMENT_ENV_PREFIX = process.env.DODO_PAYMENTS_ENVIRONMENT === 'live_mode' ? 'live' : 'test';
+const ENTITLEMENT_ENV_PREFIX =
+  (process.env.BILLING_ENVIRONMENT ?? process.env.DODO_PAYMENTS_ENVIRONMENT) === 'live_mode'
+    ? 'live'
+    : 'test';
 const NEG_SENTINEL = '__WM_NEG__';
 
 const userKeyInFlight = new Map();

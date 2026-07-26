@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import { describe, it } from 'node:test';
 
 import {
+  evaluateBuildReadinessPayload,
   evaluateReadinessPayload,
   validateReadinessConfig,
 } from '../scripts/check-fork-readiness.mjs';
@@ -32,7 +33,45 @@ describe('HealthRadar24 fork readiness', () => {
     assert.equal(new URL(config.identity.webBaseUrl).hostname, 'www.healthradar24.com');
     assert.equal(new URL(config.identity.apiBaseUrl).hostname, 'api.healthradar24.com');
     assert.equal(new URL(config.identity.healthUrl).hostname, 'api.healthradar24.com');
+    assert.equal(
+      new URL(config.identity.buildReadinessUrl).hostname,
+      'www.healthradar24.com',
+    );
+    assert.equal(
+      new URL(config.identity.proBuildReadinessUrl).pathname,
+      '/pro/healthradar-pro-build.json',
+    );
     assert.equal([...sets.required].some((name) => sets.blocked.has(name)), false);
+  });
+
+  it('requires the deployed browser build to contain Clerk while commerce stays disabled', () => {
+    const healthy = evaluateBuildReadinessPayload(config, {
+      schemaVersion: 1,
+      product: 'HealthRadar24',
+      buildHash: 'abc123',
+      auth: { clerkPublishableKeyConfigured: true },
+      commerce: { browserEnabled: false, provider: 'disabled' },
+    });
+    assert.deepEqual(healthy.failures, []);
+
+    const missingAuth = evaluateBuildReadinessPayload(config, {
+      schemaVersion: 1,
+      product: 'HealthRadar24',
+      buildHash: 'abc123',
+      auth: { clerkPublishableKeyConfigured: false },
+      commerce: { browserEnabled: false, provider: 'disabled' },
+    });
+    assert.match(missingAuth.failures.join('\n'), /Clerk publishable key/);
+
+    const pro = evaluateBuildReadinessPayload(config, {
+      schemaVersion: 1,
+      product: 'HealthRadar24',
+      surface: 'pro',
+      buildHash: 'abc123',
+      auth: { clerkPublishableKeyConfigured: true },
+      commerce: { browserEnabled: false, provider: 'disabled' },
+    }, 'pro');
+    assert.deepEqual(pro.failures, []);
   });
 
   it('accepts provider-blocked and advisory upstream gaps when the intentional baseline is healthy', () => {
@@ -106,6 +145,8 @@ describe('HealthRadar24 fork readiness', () => {
     assert.match(readinessWorkflow, /node-version:\s*['"]24['"]/);
     assert.match(readinessWorkflow, /vars\.WM_HEALTH_URL/);
     assert.match(readinessWorkflow, /vars\.WM_WEB_BASE_URL/);
+    assert.match(readinessWorkflow, /vars\.WM_BUILD_READINESS_URL/);
+    assert.match(readinessWorkflow, /vars\.WM_PRO_BUILD_READINESS_URL/);
     assert.match(readinessWorkflow, /npm run fork:readiness/);
   });
 });

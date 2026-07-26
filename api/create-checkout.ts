@@ -21,6 +21,8 @@ import {
   getIdempotencyKey,
 } from './_idempotency.js';
 import { validateBearerToken } from '../server/auth-session';
+// @ts-expect-error — self-contained Edge helper, intentionally plain JS
+import { assertStripeTestMode, billingProvider, resolvePlanKey, stripeCheckoutBody, stripePriceForPlan, trustedCheckoutReturnUrl } from './_billing-provider.js';
 
 const CONVEX_SITE_URL =
   process.env.CONVEX_SITE_URL ??
@@ -29,6 +31,7 @@ const RELAY_SHARED_SECRET = process.env.RELAY_SHARED_SECRET ?? '';
 // Fork-safe commerce gate. Checkout stays disabled until this deployment
 // explicitly opts in after its own Dodo products and webhook contract exist.
 const PAYMENTS_ENABLED = process.env.PAYMENTS_ENABLED === 'true';
+const BILLING_PROVIDER = billingProvider();
 const ACTIVE_SUBSCRIPTION_EXISTS = 'ACTIVE_SUBSCRIPTION_EXISTS';
 const CHECKOUT_RELAY_USER_AGENT = 'worldmonitor-checkout-edge/1.0';
 
@@ -84,6 +87,61 @@ function checkoutBlockedBody(data: RelayErrorBody): {
   };
 }
 
+async function createStripeCheckout(
+  body: {
+    productId?: string;
+    planKey?: string;
+    returnUrl?: string;
+  },
+  session: { userId?: string; email?: string },
+  idempotencyKey: string | null,
+): Promise<Response> {
+  const stripe = assertStripeTestMode();
+  if (!stripe.ok) {
+    return json({ error: stripe.error }, 503, {});
+  }
+  const planKey = resolvePlanKey(body.planKey ?? body.productId);
+  const priceId = planKey ? stripePriceForPlan(planKey) : null;
+  const returnUrl = trustedCheckoutReturnUrl(body.returnUrl);
+  if (!planKey || !priceId) {
+    return json({ error: 'UNKNOWN_OR_UNCONFIGURED_PLAN' }, 400, {});
+  }
+  if (!returnUrl || !session.userId) {
+    return json({ error: 'INVALID_RETURN_URL' }, 400, {});
+  }
+
+  const response = await createCheckoutDeps.fetch('https://api.stripe.com/v1/checkout/sessions', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${stripe.secret}`,
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'User-Agent': 'healthradar24-checkout-edge/1.0',
+      ...(idempotencyKey ? { 'Idempotency-Key': idempotencyKey } : {}),
+    },
+    body: stripeCheckoutBody({
+      priceId,
+      planKey,
+      userId: session.userId,
+      email: session.email,
+      returnUrl,
+    }).toString(),
+    signal: AbortSignal.timeout(15_000),
+  });
+  const data = await response.json().catch(() => ({})) as {
+    url?: unknown;
+    error?: { code?: unknown; type?: unknown };
+  };
+  if (!response.ok || typeof data.url !== 'string') {
+    console.error('[create-checkout] Stripe session creation failed', {
+      status: response.status,
+      code: data.error?.code,
+      type: data.error?.type,
+    });
+    return json({ error: 'CHECKOUT_CREATION_FAILED' }, 502, {});
+  }
+  return json({ checkout_url: data.url, provider: 'stripe' }, 200, {});
+}
+
 export default async function handler(
   req: Request,
   ctx?: { waitUntil: (p: Promise<unknown>) => void },
@@ -127,6 +185,7 @@ export default async function handler(
   // Parse request body
   let body: {
     productId?: string;
+    planKey?: string;
     returnUrl?: string;
     discountCode?: string;
     referralCode?: string;
@@ -138,8 +197,11 @@ export default async function handler(
     return json({ error: 'Invalid JSON' }, 400, cors);
   }
 
-  if (!body.productId || typeof body.productId !== 'string') {
-    return json({ error: 'productId is required' }, 400, cors);
+  if (
+    (!body.productId || typeof body.productId !== 'string') &&
+    (!body.planKey || typeof body.planKey !== 'string')
+  ) {
+    return json({ error: 'productId or planKey is required' }, 400, cors);
   }
 
   const idempotencyKey = getIdempotencyKey(req);
@@ -159,6 +221,27 @@ export default async function handler(
     idempotency.kind !== 'disabled'
   ) {
     return idempotency.response;
+  }
+
+  if (BILLING_PROVIDER === 'stripe') {
+    try {
+      const response = await createStripeCheckout(body, session, idempotencyKey);
+      const stripeBody = await response.json().catch(() => ({}));
+      return completeStandaloneIdempotency(
+        idempotency,
+        json(stripeBody, response.status, cors),
+      );
+    } catch (err) {
+      console.error('[create-checkout] Stripe request failed:', (err as Error).message);
+      captureSilentError(err, {
+        tags: { route: 'api/create-checkout', provider: 'stripe' },
+        ctx,
+      });
+      return completeStandaloneIdempotency(
+        idempotency,
+        json({ error: 'Checkout service unavailable' }, 502, cors),
+      );
+    }
   }
 
   if (!CONVEX_SITE_URL || !RELAY_SHARED_SECRET) {

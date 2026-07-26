@@ -188,7 +188,7 @@ describe('pro built HTML critical CSS contract', () => {
   it('/pro preserves crawler-visible prerendered content while JS browsers can hide it', () => {
     const html = builtSrc('public/pro/index.html');
     assert.match(html, /id="seo-prerender"/);
-    assert.match(html, /World Monitor Pro/);
+    assert.match(html, /HealthRadar24 Pro/);
     assert.match(html, /document\.documentElement\.classList\.add\('js'\)/);
     assert.match(html, /html\.js #seo-prerender/);
   });

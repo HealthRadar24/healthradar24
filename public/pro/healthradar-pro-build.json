@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "product": "HealthRadar24",
+  "surface": "pro",
+  "buildHash": "dev",
+  "auth": {
+    "clerkPublishableKeyConfigured": false
+  },
+  "commerce": {
+    "browserEnabled": false,
+    "provider": "disabled"
+  }
+}

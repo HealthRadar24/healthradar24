@@ -13,7 +13,7 @@ export const Nav = () => (
         <a href="#depth" className="hover:text-wm-text transition-colors">{t('welcome.nav.depth')}</a>
         <a href="/pro#pricing" className="hover:text-wm-green transition-colors">{t('welcome.nav.pricing')}</a>
         <a href="#faq" className="hover:text-wm-text transition-colors">{t('welcome.nav.faq')}</a>
-        <a href="https://www.worldmonitor.app/docs" className="hover:text-wm-text transition-colors">{t('welcome.nav.docs')}</a>
+        <a href="/docs" className="hover:text-wm-text transition-colors">{t('welcome.nav.docs')}</a>
       </div>
       <a
         href={`${DASHBOARD_PATH}?ref=welcome-nav`}
