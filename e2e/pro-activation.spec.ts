@@ -64,6 +64,7 @@ interface CapturedOutcomeCall {
   activationKey: string;
   claimNonce: string;
   outcome: {
+    cohort?: 'day0';
     confirmedSteps: string[];
     skippedSteps: string[];
     /** Browser-refused steps (#5617); present-and-empty when nothing was blocked. */
@@ -500,6 +501,204 @@ test.describe('Pro activation flow — markerless first-cycle handoff', () => {
   });
 });
 
+type Day0Status = 'opened' | 'already_recorded' | 'not_eligible';
+
+/**
+ * Drive the REAL day-0 (post-checkout) flow: `onlyIfUnactivated: false`, with
+ * the subscription identity the controller now supplies for both cohorts.
+ */
+async function runDay0FlowHarness(
+  page: Page,
+  input: {
+    day0Status?: Day0Status;
+    day0Throws?: boolean;
+    day0NeverResolves?: boolean;
+    day0ResolveAfterMs?: number;
+  } = {},
+): Promise<{ result: string; claimCalls: number; confirmCalls: number; day0Calls: number }> {
+  return await page.evaluate(async (scenario) => {
+    const { initI18n } = await import('/src/services/i18n.ts');
+    await initI18n();
+    const mod = await import('/src/components/ProActivationInterstitial.ts');
+    const w = window as unknown as {
+      __proOutcomeCalls: CapturedOutcomeCall[];
+      __proOutcomeAttempts: number;
+    };
+    w.__proOutcomeCalls = [];
+    w.__proOutcomeAttempts = 0;
+    let claimCalls = 0;
+    let confirmCalls = 0;
+    let day0Calls = 0;
+    const result = await mod.openProActivationFlow(
+      {
+        accountUserId: 'day0-user',
+        accountEmail: 'day0@worldmonitor.app',
+        onlyIfUnactivated: false,
+        expectedActivationKey: 'opaque-subscription',
+        activationClaimNonce: 'tab-nonce',
+        isAccountCurrent: () => true,
+      },
+      {
+        readContext: async () => ({
+          config: {
+            hasVerifiedEmailChannel: false,
+            hasEmailDelivery: false,
+            hasEnabledDigestRule: false,
+            hasTunedDigestHour: false,
+            hasWebPushChannel: false,
+            hasWebPushDelivery: false,
+            hasUsedPowerFeature: false,
+          },
+          capabilities: { webPushSupported: false },
+          channels: [],
+          channelsKnown: true,
+          hasEnabledRule: false,
+        }),
+        claimPresentation: async () => {
+          claimCalls += 1;
+          return 'claimed';
+        },
+        confirmPresentation: async () => {
+          confirmCalls += 1;
+          return true;
+        },
+        openDay0Presentation: async () => {
+          day0Calls += 1;
+          if (scenario.day0NeverResolves) return await new Promise<never>(() => {});
+          if (scenario.day0Throws) throw new Error('day-0 record transport failed');
+          if (scenario.day0ResolveAfterMs !== undefined) {
+            await new Promise<void>((resolve) => setTimeout(resolve, scenario.day0ResolveAfterMs));
+          }
+          return scenario.day0Status ?? 'opened';
+        },
+        recordOutcome: async (activationKey, claimNonce, outcome) => {
+          w.__proOutcomeAttempts += 1;
+          w.__proOutcomeCalls.push({ activationKey, claimNonce, outcome });
+          return true;
+        },
+        operationTimeoutMs: 200,
+      },
+    );
+    return { result, claimCalls, confirmCalls, day0Calls };
+  }, input);
+}
+
+test.describe('Pro activation flow — day-0 outcome rows (#5621)', () => {
+  test.beforeEach(async ({ page }) => {
+    await gotoHarness(page);
+  });
+
+  test('day-0 opens its own record and persists cohort-tagged outcome snapshots', async ({ page }) => {
+    // Before #5621 the day-0 path ran with no activation key or nonce, so
+    // persistActivationOutcomeWithRetry returned early and the entire
+    // post-checkout cohort was absent from Convex.
+    const result = await runDay0FlowHarness(page);
+    expect(result).toEqual({ result: 'opened', claimCalls: 0, confirmCalls: 0, day0Calls: 1 });
+    await expect(page.locator(OVERLAY)).toBeVisible();
+
+    await page.locator('.pro-activation-close').click();
+    await expect(page.locator(SUMMARY)).toBeVisible();
+    await page.locator(FINISH_BTN).click();
+
+    await expect.poll(async () => (await readCapturedOutcomes(page)).length).toBe(2);
+    expect(await readCapturedOutcomes(page)).toEqual([
+      {
+        activationKey: 'opaque-subscription',
+        claimNonce: 'tab-nonce',
+        outcome: {
+          cohort: 'day0',
+          confirmedSteps: [],
+          skippedSteps: ['brief', 'power'],
+          // Same full-replacement contract the markerless snapshots pin
+          // (#5617): the day-0 payload carries every bucket, so the cohort tag
+          // rides alongside them rather than replacing any.
+          blockedSteps: [],
+          failedSteps: [],
+          revision: 1,
+          finalized: false,
+        },
+      },
+      {
+        activationKey: 'opaque-subscription',
+        claimNonce: 'tab-nonce',
+        outcome: {
+          cohort: 'day0',
+          confirmedSteps: [],
+          skippedSteps: ['brief', 'power'],
+          blockedSteps: [],
+          failedSteps: [],
+          revision: 2,
+          finalized: true,
+        },
+      },
+    ]);
+  });
+
+  test('day-0 never touches the markerless claim/confirm lease', async ({ page }) => {
+    // The lease is what makes the retro backfill fire exactly once per
+    // subscription. Day-0 borrowing it would consume that budget and lock the
+    // subscriber out of the backfill they may still need (#5600).
+    const result = await runDay0FlowHarness(page);
+    expect(result.claimCalls).toBe(0);
+    expect(result.confirmCalls).toBe(0);
+  });
+
+  test('a late successful day-0 open still flushes queued finalized snapshots', async ({ page }) => {
+    const result = await runDay0FlowHarness(page, { day0ResolveAfterMs: 350 });
+    expect(result.result).toBe('opened');
+    await expect(page.locator(OVERLAY)).toBeVisible();
+
+    // Both snapshots are queued before the open resolves, and after the 200ms
+    // observation deadline. A timeout warning must not turn that eventual
+    // server success into a permanent refusal.
+    await page.locator('.pro-activation-close').click();
+    await expect(page.locator(SUMMARY)).toBeVisible();
+    await page.locator(FINISH_BTN).click();
+
+    await expect.poll(async () => (await readCapturedOutcomes(page)).length).toBe(2);
+    expect((await readCapturedOutcomes(page)).map(({ outcome }) => ({
+      revision: outcome.revision,
+      finalized: outcome.finalized,
+    }))).toEqual([
+      { revision: 1, finalized: false },
+      { revision: 2, finalized: true },
+    ]);
+  });
+
+  test.describe('a refused or unreachable day-0 record never blocks the welcome flow', () => {
+    for (const [name, scenario] of [
+      ['server refuses (already finalized)', { day0Status: 'already_recorded' as const }],
+      ['server refuses (ineligible)', { day0Status: 'not_eligible' as const }],
+      ['transport throws', { day0Throws: true }],
+      ['transport hangs past the deadline', { day0NeverResolves: true }],
+    ] as const) {
+      test(name, async ({ page }) => {
+        const result = await runDay0FlowHarness(page, scenario);
+        // Post-checkout onboarding is the product; the ledger is telemetry.
+        // It must open regardless, and never return the 'retry' that the
+        // markerless path uses when its lease is in doubt.
+        expect(result.result).toBe('opened');
+        await expect(page.locator(OVERLAY)).toBeVisible();
+
+        await page.locator('.pro-activation-close').click();
+        await expect(page.locator(SUMMARY)).toBeVisible();
+        await page.locator(FINISH_BTN).click();
+        await expect(page.locator(OVERLAY)).toHaveCount(0);
+
+        // Outlast the 200ms observation deadline. A never-resolving readiness
+        // promise stays pending, but neither blocks the UI nor attempts a
+        // write against a row that does not exist.
+        await page.waitForTimeout(400);
+
+        // No row to attach to → snapshots are dropped rather than written
+        // against a row this session does not own.
+        expect(await readCapturedOutcomes(page)).toEqual([]);
+        expect(await readOutcomeAttempts(page)).toBe(0);
+      });
+    }
+  });
+});
+
 test.describe('Pro activation interstitial — shell step flow', () => {
   test('happy path: confirm every step → verified exit summary → dashboard', async ({ page }) => {
     await gotoHarness(page);
@@ -702,6 +901,115 @@ test.describe('Pro activation flow — telemetry + finish-setup chip', () => {
     await expect(page.locator(CHIP)).toHaveCount(0);
     const dismissed = await page.evaluate((k) => localStorage.getItem(k), CHIP_DISMISS_KEY);
     expect(dismissed).toBeNull();
+  });
+
+  test('a failed confirm fires step-failed telemetry and is never reported as a skip', async ({
+    page,
+  }) => {
+    // #5600: every per-step write in this harness fails (authFetch throws with
+    // no Clerk session — see the HARNESS NOTE), which is exactly the day-0
+    // production shape. The failure must reach Umami as its own event; before
+    // the fix the only trace was a `step-skipped`, so the funnel counted broken
+    // writes as user disinterest.
+    await gotoHarness(page);
+    await openFlow(page, /* withOpeners */ false);
+
+    await expect(page.locator(CONFIRM_BTN)).toBeVisible();
+    await page.locator(CONFIRM_BTN).click();
+    await expect(page.locator('.pro-activation-status.status-failed')).toBeVisible();
+
+    const afterConfirm = await readCapturedEvents(page);
+    const failed = afterConfirm.filter((e) => e.event === 'pro-activation-step-failed');
+    expect(failed.length).toBe(1);
+    expect(failed[0]?.stepId).toBe('brief');
+    expect(afterConfirm.some((e) => e.event === 'pro-activation-step-skipped')).toBe(false);
+
+    // Moving on from a failed step records the outcome as `failed`; it must not
+    // also emit a skip for the same step.
+    await page.locator(SKIP_BTN).first().click();
+    const afterSkip = await readCapturedEvents(page);
+    expect(
+      afterSkip.some((e) => e.event === 'pro-activation-step-skipped' && e.stepId === 'brief'),
+    ).toBe(false);
+    expect(
+      afterSkip.filter((e) => e.event === 'pro-activation-step-failed' && e.stepId === 'brief')
+        .length,
+    ).toBe(1);
+  });
+
+  test('a failed confirm reaches Sentry with the step and activation-path tags', async ({
+    page,
+  }) => {
+    // #5600 blind spot 3: the confirm catch blocks only console.warn'd, and
+    // sentry-init.ts has no captureConsole integration — so the error text
+    // never left the browser. Drives the REAL deferred-Sentry queue with an
+    // injected loader (timers collapsed so the 10s audit-window delay does not
+    // dominate the run).
+    await gotoHarness(page);
+    await page.evaluate(async () => {
+      const w = window as unknown as {
+        __sentryCaptures: Array<{ message: string; tags?: Record<string, string> }>;
+      };
+      w.__sentryCaptures = [];
+      const realSetTimeout = window.setTimeout.bind(window);
+      window.setTimeout = ((fn: TimerHandler, ms?: number, ...rest: unknown[]) =>
+        realSetTimeout(fn as () => void, (ms ?? 0) >= 1_000 ? 0 : ms, ...rest)) as typeof setTimeout;
+      (window as unknown as { requestIdleCallback?: unknown }).requestIdleCallback = (
+        cb: () => void,
+      ) => realSetTimeout(cb, 0);
+      const sentryDefer = await import('/src/bootstrap/sentry-defer.ts');
+      sentryDefer._resetSentryDeferStateForTests();
+      sentryDefer._setSentryLoaderForTests(async () => ({
+        captureException: (err: unknown, ctx?: { tags?: Record<string, string> }) => {
+          w.__sentryCaptures.push({
+            message: err instanceof Error ? err.message : String(err),
+            tags: ctx?.tags,
+          });
+          return 'test-event-id';
+        },
+      }) as never);
+      // Deliberately NOT calling scheduleSentryInit() here. Production defers
+      // real init ~10s from page load (main.ts) and the day-0 interstitial opens
+      // on that same post-checkout load, so a failing step enqueues into the
+      // pending buffer rather than dispatching straight through. Awaiting init
+      // first would exercise enqueueSentryCall's immediate branch — not the one
+      // this scenario depends on. reportActivationStepFailure kicks init itself.
+    });
+
+    await openFlow(page, /* withOpeners */ false);
+    await expect(page.locator(CONFIRM_BTN)).toBeVisible();
+    await page.locator(CONFIRM_BTN).click();
+    await expect(page.locator('.pro-activation-status.status-failed')).toBeVisible();
+
+    const readCaptures = () =>
+      page.evaluate(
+        () =>
+          (window as unknown as {
+            __sentryCaptures: Array<{ message: string; tags?: Record<string, string> }>;
+          }).__sentryCaptures,
+      );
+
+    // reportActivationStepFailure kicks the idempotent scheduleSentryInit() itself
+    // (#5600), so the capture must arrive without the test driving init — that
+    // explicit kick is what stops a user who closes the tab inside the ~10s
+    // deferral window from losing the only signal for a failed activation.
+    await expect.poll(async () => (await readCaptures()).length).toBeGreaterThan(0);
+
+    const captures = await readCaptures();
+    const briefCapture = captures.find((c) => c.tags?.step === 'brief');
+    expect(briefCapture).toBeTruthy();
+    expect(briefCapture?.tags).toMatchObject({
+      component: 'pro-activation',
+      step: 'brief',
+      stage: 'brief-confirm',
+      activation_path: 'day0',
+    });
+    // Assert the message this harness actually produces. It fails at
+    // assertExpectedAccount (src/services/notification-channels.ts:55) — no Clerk
+    // user in the harness — so there is no HTTP status to carry here; the
+    // `set email channel: <status>` shape lives on the post-auth path. A bare
+    // length check passed on literally any string, including an empty-ish one.
+    expect(briefCapture?.message).toContain('Authenticated account changed during notification setup');
   });
 
   test('power-toolkit pointer confirms the step and fires step-confirmed telemetry', async ({
