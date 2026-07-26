@@ -85,7 +85,15 @@ describe('relay warm-ping internal auth', () => {
 describe('relay warm-ping auth wiring (source guardrail)', () => {
   it('keeps the active Service Statuses relay loop on shared warm-ping auth headers', async () => {
     const src = await readFile(new URL('../scripts/ais-relay.cjs', import.meta.url), 'utf8');
-    assert.match(src, /const SERVICE_STATUSES_RPC_URL = 'https:\/\/api\.worldmonitor\.app\/api\/infrastructure\/v1\/list-service-statuses'/);
+    assert.match(
+      src,
+      /const API_BASE_URL = \(process\.env\.API_BASE_URL \|\| 'https:\/\/api\.worldmonitor\.app'\)\.replace\(\/\\\/\+\$\/, ''\)/,
+      'self-hosted relays must be able to target their own API gateway while retaining the upstream default',
+    );
+    assert.match(
+      src,
+      /const SERVICE_STATUSES_RPC_URL = `\$\{API_BASE_URL\}\/api\/infrastructure\/v1\/list-service-statuses`/,
+    );
     assert.match(
       src,
       /fetch\(SERVICE_STATUSES_RPC_URL,\s*\{[\s\S]{0,240}?headers: warmPingHeaders\(\{ 'Content-Type': 'application\/json' \}\)/,

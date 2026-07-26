@@ -55,6 +55,10 @@ console.log(`[Relay] Heap limit: ${(_heapStats.heap_size_limit / 1024 / 1024).to
 const AISSTREAM_URL = 'wss://stream.aisstream.io/v0/stream';
 const API_KEY = process.env.AISSTREAM_API_KEY || process.env.VITE_AISSTREAM_API_KEY;
 const PORT = process.env.PORT || 3004;
+// Self-hosted forks can point relay-originated API calls at their own gateway.
+// Keep upstream as the default so upstream deployments and local development
+// remain unchanged when API_BASE_URL is not configured.
+const API_BASE_URL = (process.env.API_BASE_URL || 'https://api.worldmonitor.app').replace(/\/+$/, '');
 
 if (!API_KEY) {
   console.error('[Relay] Error: AISSTREAM_API_KEY environment variable not set');
@@ -3806,7 +3810,7 @@ async function classifyFetchLlm(titles) {
 let classifyInFlight = false;
 
 async function seedClassifyForVariant(variant, seenTitles) {
-  const digestUrl = `https://api.worldmonitor.app/api/news/v1/list-feed-digest?variant=${variant}&lang=en`;
+  const digestUrl = `${API_BASE_URL}/api/news/v1/list-feed-digest?variant=${variant}&lang=en`;
   let digest;
   try {
     const resp = await new Promise((resolve, reject) => {
@@ -4037,7 +4041,7 @@ async function startClassifySeedLoop() {
 // so service statuses are always cached (TTL is 30 min).
 // ─────────────────────────────────────────────────────────────
 const SERVICE_STATUSES_SEED_INTERVAL_MS = 15 * 60 * 1000; // 15 min (TTL/2)
-const SERVICE_STATUSES_RPC_URL = 'https://api.worldmonitor.app/api/infrastructure/v1/list-service-statuses';
+const SERVICE_STATUSES_RPC_URL = `${API_BASE_URL}/api/infrastructure/v1/list-service-statuses`;
 
 async function seedServiceStatuses() {
   try {
@@ -4602,9 +4606,9 @@ function startTheaterPostureSeedLoop() {
 }
 
 // ─────────────────────────────────────────────────────────────
-// Warm-ping shared auth — relay → api.worldmonitor.app
+// Warm-ping shared auth — relay → configured API gateway
 //
-// All warm-pings call api.worldmonitor.app/api/* edge functions. These are
+// All warm-pings call API_BASE_URL/api/* edge functions. These are
 // non-premium but NOT anonymous: in normal traffic they require a browser
 // session token or an API key. Origin-trust used to satisfy them, but the
 // gateway dropped all Origin/Referer trust in the #3541 hardening — Origin
@@ -4652,7 +4656,7 @@ function warmPingHeaders(extra = {}) {
 // keeps CDN caching from hiding the handler from the warm-ping loop.
 // ─────────────────────────────────────────────────────────────
 const CII_WARM_PING_INTERVAL_MS = 8 * 60 * 1000; // 8 min (live cache TTL is 10 min)
-const CII_RPC_URL = 'https://api.worldmonitor.app/api/intelligence/v1/get-risk-scores';
+const CII_RPC_URL = `${API_BASE_URL}/api/intelligence/v1/get-risk-scores`;
 
 function ciiWarmPingUrl() {
   return `${CII_RPC_URL}?_wm_warm_ping=${Date.now()}`;
@@ -4688,7 +4692,7 @@ function startCiiWarmPingLoop() {
 // Interval matches health.js maxStaleMin (60 min) with a 2× margin.
 // ─────────────────────────────────────────────────────────────
 const CHOKEPOINT_WARM_PING_INTERVAL_MS = 30 * 60 * 1000; // 30 min
-const CHOKEPOINT_RPC_URL = 'https://api.worldmonitor.app/api/supply-chain/v1/get-chokepoint-status';
+const CHOKEPOINT_RPC_URL = `${API_BASE_URL}/api/supply-chain/v1/get-chokepoint-status`;
 
 async function seedChokepointWarmPing() {
   try {
@@ -4723,7 +4727,7 @@ function startChokepointWarmPingLoop() {
 // seed-meta on every live fetch; we just need to call it regularly.
 // ─────────────────────────────────────────────────────────────
 const CABLE_HEALTH_WARM_PING_INTERVAL_MS = 30 * 60 * 1000; // 30 min
-const CABLE_HEALTH_RPC_URL = 'https://api.worldmonitor.app/api/infrastructure/v1/get-cable-health';
+const CABLE_HEALTH_RPC_URL = `${API_BASE_URL}/api/infrastructure/v1/get-cable-health`;
 
 async function seedCableHealthWarmPing() {
   try {
@@ -11203,7 +11207,7 @@ async function handleWidgetAgentRequest(req, res) {
           }
 
           try {
-            const url = new URL(endpoint, 'https://api.worldmonitor.app');
+            const url = new URL(endpoint, API_BASE_URL);
             for (const [k, v] of Object.entries(params)) {
               url.searchParams.set(k, String(v));
             }

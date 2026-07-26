@@ -109,11 +109,11 @@ describe('widget-agent relay — security', () => {
   it('SSRF guard — allowlist is checked before any fetch call in tool loop', () => {
     const allowlistCheck = relay.indexOf('isWidgetEndpointAllowed(endpoint)');
     assert.ok(allowlistCheck !== -1, 'isWidgetEndpointAllowed() check missing in tool loop');
-    // The fetch call to api.worldmonitor.app must come AFTER the check
-    const fetchCallIdx = relay.indexOf("'https://api.worldmonitor.app'", allowlistCheck);
+    // URL construction for the configured API gateway must come AFTER the check.
+    const fetchCallIdx = relay.indexOf('new URL(endpoint, API_BASE_URL)', allowlistCheck);
     assert.ok(
       fetchCallIdx > allowlistCheck,
-      'fetch() to api.worldmonitor.app must appear after allowlist check',
+      'fetch() to the configured API gateway must appear after allowlist check',
     );
   });
 
