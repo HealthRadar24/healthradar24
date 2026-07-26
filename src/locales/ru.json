@@ -135,11 +135,17 @@
       "title": "Обзор по Китаю",
       "description": "Текущие макроэкономика, рынок, торговля, энергетика и операционная доступность на основе существующих публичных контрактов данных.",
       "macroPolicy": "Макро и политика",
+      "policyEvents": "Policy & Enforcement",
       "marketCredit": "Рынок и кредит",
       "tradeSupply": "Торговля и цепочки поставок",
       "energy": "Энергетика",
       "availability": "Опасности и авиация",
       "observed": "По состоянию на:",
+      "published": "Published:",
+      "effective": "Effective:",
+      "sectors": "Sectors:",
+      "entities": "Entities:",
+      "translation": "Translation:",
       "source": "Источник:",
       "imfGrowth": "Прогноз роста МВФ",
       "creditGdp": "Кредит к ВВП",
@@ -170,6 +176,8 @@
       "tradeUnavailable": "Данные по торговле и цепочкам поставок временно недоступны.",
       "energyUnavailable": "Данные по энергетике временно недоступны.",
       "availabilityUnavailable": "Данные об опасностях и авиации временно недоступны.",
+      "policyUnavailable": "Official policy and enforcement events are currently unavailable.",
+      "policyPartial": "{{count}} official agencies are temporarily degraded.",
       "status": {
         "loading": "Загрузка",
         "available": "Доступно",
@@ -2145,7 +2153,11 @@
       "infoTooltip": "<strong>Disaster Cascade</strong> Обнаруживает сходящиеся сигналы природных бедствий и инфраструктуры:<ul><li>Коррелирует землетрясения, лесные пожары, наводнения и экстремальную погоду</li><li>Отслеживает каскадные эффекты на инфраструктуру и цепи поставок</li><li>Выделяет регионы с сопутствующим риском бедствий</li></ul>Нажмите на карточку, чтобы увеличить затронутый регион."
     },
     "markets": {
-      "infoTooltip": "<strong>Markets</strong> Котировки индексов в реальном времени, акции и цены крипто. Настройте свой список отслеживания с помощью кнопки Список отслеживания. Спарклайны показывают недавний ценовой тренд."
+      "infoTooltip": "<strong>Markets</strong> Котировки индексов в реальном времени, акции и цены крипто. Настройте свой список отслеживания с помощью кнопки Список отслеживания. Спарклайны показывают недавний ценовой тренд.",
+      "chart": {
+        "title": "{{symbol}} price chart",
+        "close": "Close chart"
+      }
     },
     "heatmap": {
       "infoTooltip": "<strong>Sector Heatmap</strong> Производительность секторов S&P 500 с первого взгляда. Интенсивность цвета отражает величину дневного изменения. Зеленый = прибыль, Красный = убытки."
@@ -2267,7 +2279,7 @@
           "pointers": {
             "widgets": "Создать пользовательский виджет",
             "analyst": "Спросить AI-аналитика",
-            "apiKeys": "Получить ваши ключи API и MCP",
+            "mcpClients": "Настроить MCP",
             "channels": "Настройте их в настройках уведомлений"
           }
         }

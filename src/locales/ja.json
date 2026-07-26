@@ -135,11 +135,17 @@
       "title": "中国カントリースナップショット",
       "description": "既存の公開データ契約に基づくマクロ・市場・貿易・エネルギー・運用可用性の現況。",
       "macroPolicy": "マクロ・政策",
+      "policyEvents": "Policy & Enforcement",
       "marketCredit": "市場・信用",
       "tradeSupply": "貿易・サプライチェーン",
       "energy": "エネルギー",
       "availability": "災害・航空",
       "observed": "基準日:",
+      "published": "Published:",
+      "effective": "Effective:",
+      "sectors": "Sectors:",
+      "entities": "Entities:",
+      "translation": "Translation:",
       "source": "出典:",
       "imfGrowth": "IMF成長率見通し",
       "creditGdp": "信用残高対GDP比",
@@ -166,6 +172,8 @@
       "tradeUnavailable": "貿易・サプライチェーンデータは現在利用できません。",
       "energyUnavailable": "エネルギーデータは現在利用できません。",
       "availabilityUnavailable": "災害・航空の可用性データは現在利用できません。",
+      "policyUnavailable": "Official policy and enforcement events are currently unavailable.",
+      "policyPartial": "{{count}} official agencies are temporarily degraded.",
       "status": {
         "loading": "読み込み中",
         "available": "利用可能",
@@ -2127,7 +2135,11 @@
       "infoTooltip": "<strong>災害カスケード</strong> 自然災害とインフラシグナルの収束を検出:<ul><li>地震、山火事、洪水、極端な天候を相関させる</li><li>インフラとサプライチェーンへの波及効果を追跡</li><li>複合災害リスクを抱える地域をハイライト</li></ul>カードをクリックして影響を受けた領域にズームします。"
     },
     "markets": {
-      "infoTooltip": "<strong>マーケット</strong> リアルタイムの株価指数、株式、暗号資産価格。ウォッチリストボタンでウォッチリストをカスタマイズしてください。スパークラインは最近の価格トレンドを表示します。"
+      "infoTooltip": "<strong>マーケット</strong> リアルタイムの株価指数、株式、暗号資産価格。ウォッチリストボタンでウォッチリストをカスタマイズしてください。スパークラインは最近の価格トレンドを表示します。",
+      "chart": {
+        "title": "{{symbol}} price chart",
+        "close": "Close chart"
+      }
     },
     "heatmap": {
       "infoTooltip": "<strong>セクターヒートマップ</strong> S&P 500 セクターのパフォーマンスが一目でわかります。色の濃淡は日次変動の大きさを反映しています。緑 = 上昇、赤 = 下落。"
@@ -2249,7 +2261,7 @@
           "pointers": {
             "widgets": "カスタムウィジェットを作成",
             "analyst": "AIアナリストに質問",
-            "apiKeys": "APIとMCPのキーを取得",
+            "mcpClients": "MCPをセットアップ",
             "channels": "通知設定でセットアップ"
           }
         }

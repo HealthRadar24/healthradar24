@@ -19,6 +19,7 @@ import { resolveUserId, requireUserId } from "../lib/auth";
 import { getFeaturesForPlan } from "../lib/entitlements";
 import { ANON_ID_V4_REGEX, verifyAnonClaimToken } from "../lib/identitySigning";
 import { PLAN_PRECEDENCE, PRODUCT_CATALOG, resolveProductToPlan } from "../config/productCatalog";
+import { proActivationStepIdValidator } from "../constants";
 import {
   isCoveringAt,
   isNewerEvent,
@@ -692,11 +693,16 @@ export const claimProActivationPresentation = mutation({
   },
 });
 
+const PRO_ACTIVATION_OUTCOME_TRACKING_VERSION = 1 as const;
+
 /** Confirm that the browser holding the claim actually rendered the flow. */
 export const confirmProActivationPresentation = mutation({
   args: {
     activationKey: v.id("subscriptions"),
     claimNonce: v.string(),
+    // Optional for mixed deploys: legacy clients can still confirm presentation
+    // without marking their row as outcome-aware.
+    outcomeTrackingVersion: v.optional(v.literal(1)),
   },
   handler: async (ctx, args) => {
     const userId = await requireUserId(ctx);
@@ -711,9 +717,113 @@ export const confirmProActivationPresentation = mutation({
     ) {
       return false;
     }
-    if (presentation.presentedAt === undefined) {
-      await ctx.db.patch(presentation._id, { presentedAt: Date.now() });
+    if (
+      presentation.presentedAt === undefined ||
+      (
+        args.outcomeTrackingVersion === PRO_ACTIVATION_OUTCOME_TRACKING_VERSION &&
+        presentation.outcomeTrackingVersion !== PRO_ACTIVATION_OUTCOME_TRACKING_VERSION
+      )
+    ) {
+      await ctx.db.patch(presentation._id, {
+        ...(presentation.presentedAt === undefined ? { presentedAt: Date.now() } : {}),
+        ...(args.outcomeTrackingVersion === PRO_ACTIVATION_OUTCOME_TRACKING_VERSION
+          ? { outcomeTrackingVersion: PRO_ACTIVATION_OUTCOME_TRACKING_VERSION }
+          : {}),
+      });
     }
+    return true;
+  },
+});
+
+// One progress write per allowed step, plus one extra for a mid-flow
+// permission denial (the alerts step flushes its `blocked` outcome the instant
+// the browser refuses, before the user advances past it — #5617), plus one
+// final write on exit. Keep the cap derived from the same validator used by the
+// mutation and schema so their accepted step set cannot drift from this bound.
+const MAX_PRO_ACTIVATION_OUTCOME_REVISION =
+  proActivationStepIdValidator.members.length + 2;
+
+/**
+ * Persist a monotonic snapshot of the wizard outcome (#5582). Progress writes
+ * happen as steps resolve so a lost exit cannot censor disengaged sessions;
+ * the final write sets `exitedAt` and freezes the record. Invalid,
+ * overlapping, stale, and replayed classifications are rejected.
+ */
+export const recordProActivationOutcome = mutation({
+  args: {
+    activationKey: v.id("subscriptions"),
+    claimNonce: v.string(),
+    confirmedSteps: v.array(proActivationStepIdValidator),
+    skippedSteps: v.array(proActivationStepIdValidator),
+    // Optional for mixed deploys (#5617): a client from before the blocked
+    // bucket existed sends only the original three, and genuinely has no
+    // blocked steps to report — it classified them as skips.
+    blockedSteps: v.optional(v.array(proActivationStepIdValidator)),
+    failedSteps: v.array(proActivationStepIdValidator),
+    revision: v.number(),
+    finalized: v.boolean(),
+  },
+  handler: async (ctx, args) => {
+    const userId = await requireUserId(ctx);
+    const presentation = await ctx.db
+      .query("proActivationPresentations")
+      .withIndex("by_subscription", (q) => q.eq("subscriptionId", args.activationKey))
+      .first();
+    if (
+      presentation === null ||
+      presentation.userId !== userId ||
+      presentation.claimNonce !== args.claimNonce ||
+      presentation.exitedAt !== undefined
+    ) {
+      return false;
+    }
+
+    if (
+      !Number.isSafeInteger(args.revision) ||
+      args.revision < 1 ||
+      args.revision > MAX_PRO_ACTIVATION_OUTCOME_REVISION
+    ) {
+      throw new ConvexError(
+        `activation outcome revision must be an integer from 1 to ${MAX_PRO_ACTIVATION_OUTCOME_REVISION}`,
+      );
+    }
+    const allSteps = [
+      ...args.confirmedSteps,
+      ...args.skippedSteps,
+      ...(args.blockedSteps ?? []),
+      ...args.failedSteps,
+    ];
+    if (
+      allSteps.length > proActivationStepIdValidator.members.length ||
+      new Set(allSteps).size !== allSteps.length
+    ) {
+      throw new ConvexError(
+        `activation outcome buckets must be disjoint and contain at most ${proActivationStepIdValidator.members.length} steps`,
+      );
+    }
+    if (args.revision <= (presentation.outcomeRevision ?? 0)) {
+      return false;
+    }
+
+    const now = Date.now();
+    await ctx.db.patch(presentation._id, {
+      confirmedSteps: args.confirmedSteps,
+      skippedSteps: args.skippedSteps,
+      // Written straight from the arg, NOT coerced to []. Convex removes a
+      // field patched as `undefined`, so a client too old to report blocked
+      // steps leaves the field ABSENT ("could not report") instead of claiming
+      // "none were blocked" — a claim that is actively false for that client,
+      // which classified denials as skips. Absent is also what lets an analyst
+      // exclude those rows from a denial rate. Every snapshot stays a full
+      // replacement either way: an explicit [] clears, and so does absence.
+      blockedSteps: args.blockedSteps,
+      failedSteps: args.failedSteps,
+      outcomeRevision: args.revision,
+      outcomeUpdatedAt: now,
+      outcomeTrackingVersion: PRO_ACTIVATION_OUTCOME_TRACKING_VERSION,
+      ...(presentation.presentedAt === undefined ? { presentedAt: now } : {}),
+      ...(args.finalized ? { exitedAt: now } : {}),
+    });
     return true;
   },
 });
