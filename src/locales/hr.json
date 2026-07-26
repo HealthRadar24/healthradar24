@@ -211,11 +211,17 @@
       "title": "Pregled zemlje: Kina",
       "description": "Trenutačno stanje makroekonomije, tržišta, trgovine, energetike i operativne dostupnosti iz postojećih javnih podatkovnih ugovora.",
       "macroPolicy": "Makro i politika",
+      "policyEvents": "Policy & Enforcement",
       "marketCredit": "Tržište i kredit",
       "tradeSupply": "Trgovina i opskrbni lanac",
       "energy": "Energetika",
       "availability": "Opasnosti i zrakoplovstvo",
       "observed": "Na dan:",
+      "published": "Published:",
+      "effective": "Effective:",
+      "sectors": "Sectors:",
+      "entities": "Entities:",
+      "translation": "Translation:",
       "source": "Izvor:",
       "imfGrowth": "MMF-ova prognoza rasta",
       "creditGdp": "Kredit prema BDP-u",
@@ -244,6 +250,8 @@
       "tradeUnavailable": "Podaci o trgovini i opskrbnom lancu trenutačno su nedostupni.",
       "energyUnavailable": "Energetski podaci trenutačno su nedostupni.",
       "availabilityUnavailable": "Podaci o opasnostima i zrakoplovstvu trenutačno su nedostupni.",
+      "policyUnavailable": "Official policy and enforcement events are currently unavailable.",
+      "policyPartial": "{{count}} official agencies are temporarily degraded.",
       "status": {
         "loading": "Učitavanje",
         "available": "Dostupno",
@@ -2072,7 +2080,11 @@
       "infoTooltip": "<strong>Kaskada katastrofa</strong> Detektira konvergirajuće signale prirodnih katastrofa i infrastrukture:<ul><li>Korelira zemljotrese, šumske požare, poplave i ekstremne vremenske pojave</li><li>Prati kaskadne učinke na infrastrukturu i lanac opskrbe</li><li>Ističe regije s povećanim rizikom od više katastrofa</li></ul>Kliknite na karticu za uvećanje pogođene regije."
     },
     "markets": {
-      "infoTooltip": "<strong>Tržišta</strong> Životijedni indeksi dionica, dionice i cijene kriptovaluta. Prilagodite svoju listu praćenja gumbom Watchlist. Sparklines prikazuju nedavni trend cijena."
+      "infoTooltip": "<strong>Tržišta</strong> Životijedni indeksi dionica, dionice i cijene kriptovaluta. Prilagodite svoju listu praćenja gumbom Watchlist. Sparklines prikazuju nedavni trend cijena.",
+      "chart": {
+        "title": "{{symbol}} price chart",
+        "close": "Close chart"
+      }
     },
     "heatmap": {
       "infoTooltip": "<strong>Toplinska karta sektora</strong> Izvedba S&P 500 sektora na prvi pogled. Intenzitet boje odražava veličinu dnevne promjene. Zelena = dobit, Crvena = gubitak."
@@ -2495,7 +2507,7 @@
           "pointers": {
             "widgets": "Izradi prilagođeni widget",
             "analyst": "Pitaj AI analitičara",
-            "apiKeys": "Preuzmi svoje API i MCP ključeve",
+            "mcpClients": "Postavi MCP",
             "channels": "Postavite ih u postavkama obavijesti"
           }
         }

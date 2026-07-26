@@ -143,11 +143,17 @@
       "title": "China Country Snapshot",
       "description": "Current macro, market, trade, energy, and operational availability from existing public data contracts.",
       "macroPolicy": "Macro & Policy",
+      "policyEvents": "Policy & Enforcement",
       "marketCredit": "Market & Credit",
       "tradeSupply": "Trade & Supply Chain",
       "energy": "Energy",
       "availability": "Hazards & Aviation",
       "observed": "As of:",
+      "published": "Published:",
+      "effective": "Effective:",
+      "sectors": "Sectors:",
+      "entities": "Entities:",
+      "translation": "Translation:",
       "source": "Source:",
       "imfGrowth": "IMF growth forecast",
       "creditGdp": "Credit to GDP",
@@ -174,6 +180,8 @@
       "tradeUnavailable": "Trade and supply-chain data are currently unavailable.",
       "energyUnavailable": "Energy data are currently unavailable.",
       "availabilityUnavailable": "Hazard and aviation availability data are currently unavailable.",
+      "policyUnavailable": "Unavailable",
+      "policyPartial": "Degraded: {{count}}",
       "status": {
         "loading": "Loading",
         "available": "Available",
@@ -1918,7 +1926,11 @@
       "infoTooltip": "<strong>Disaster Cascade</strong> Detects converging natural disaster and infrastructure signals:<ul><li>Correlates earthquakes, wildfires, floods, and weather extremes</li><li>Tracks cascading effects on infrastructure and supply chains</li><li>Highlights regions with compounding disaster risk</li></ul>Click a card to zoom to the affected region."
     },
     "markets": {
-      "infoTooltip": "<strong>Markets</strong> Real-time stock indices, equities, and crypto prices. Customize your watchlist with the Watchlist button. Sparklines show recent price trend."
+      "infoTooltip": "<strong>Markets</strong> Real-time stock indices, equities, and crypto prices. Customize your watchlist with the Watchlist button. Sparklines show recent price trend.",
+      "chart": {
+        "title": "{{symbol}} price chart",
+        "close": "Close chart"
+      }
     },
     "heatmap": {
       "infoTooltip": "<strong>Sector Heatmap</strong> S&P 500 sector performance at a glance. Color intensity reflects the magnitude of daily change. Green = gains, Red = losses."
@@ -2321,7 +2333,7 @@
           "pointers": {
             "widgets": "Build a custom widget",
             "analyst": "Ask the AI analyst",
-            "apiKeys": "Get your API & MCP keys",
+            "mcpClients": "Set up MCP",
             "channels": "Set those up in notification settings"
           }
         }

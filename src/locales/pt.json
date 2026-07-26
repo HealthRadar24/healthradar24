@@ -1878,7 +1878,11 @@
       "infoTooltip": "<strong>Cascata de Desastres</strong> Detecta sinais convergentes de desastres naturais e infraestrutura:<ul><li>Correlaciona terremotos, incêndios florestais, inundações e extremos climáticos</li><li>Rastreia efeitos cascata em infraestrutura e cadeias de suprimentos</li><li>Destaca regiões com risco de desastre composto</li></ul>Clique em um card para ampliar a região afetada."
     },
     "markets": {
-      "infoTooltip": "<strong>Mercados</strong> Índices em tempo real, ações e preços de criptomoedas. Personalize sua watchlist com o botão Watchlist. Os gráficos de tendência mostram a tendência de preço recente."
+      "infoTooltip": "<strong>Mercados</strong> Índices em tempo real, ações e preços de criptomoedas. Personalize sua watchlist com o botão Watchlist. Os gráficos de tendência mostram a tendência de preço recente.",
+      "chart": {
+        "title": "{{symbol}} price chart",
+        "close": "Close chart"
+      }
     },
     "heatmap": {
       "infoTooltip": "<strong>Mapa de Calor de Setores</strong> Desempenho de setores do S&P 500 em um relance. A intensidade da cor reflete a magnitude da mudança diária. Verde = ganhos, Vermelho = perdas."
@@ -2000,7 +2004,7 @@
           "pointers": {
             "widgets": "Criar um widget personalizado",
             "analyst": "Perguntar ao analista de IA",
-            "apiKeys": "Obter suas chaves de API e MCP",
+            "mcpClients": "Configurar MCP",
             "channels": "Configure-os nas configurações de notificação"
           }
         }
@@ -3123,11 +3127,17 @@
       "title": "Panorama do país: China",
       "description": "Situação atual de macro, mercado, comércio, energia e disponibilidade operacional a partir dos contratos de dados públicos existentes.",
       "macroPolicy": "Macro e política",
+      "policyEvents": "Policy & Enforcement",
       "marketCredit": "Mercado e crédito",
       "tradeSupply": "Comércio e cadeia de suprimentos",
       "energy": "Energia",
       "availability": "Riscos e aviação",
       "observed": "Em:",
+      "published": "Published:",
+      "effective": "Effective:",
+      "sectors": "Sectors:",
+      "entities": "Entities:",
+      "translation": "Translation:",
       "source": "Fonte:",
       "imfGrowth": "Previsão de crescimento do FMI",
       "creditGdp": "Crédito sobre o PIB",
@@ -3156,6 +3166,8 @@
       "tradeUnavailable": "Os dados de comércio e cadeia de suprimentos estão indisponíveis no momento.",
       "energyUnavailable": "Os dados de energia estão indisponíveis no momento.",
       "availabilityUnavailable": "Os dados de disponibilidade de riscos e aviação estão indisponíveis no momento.",
+      "policyUnavailable": "Official policy and enforcement events are currently unavailable.",
+      "policyPartial": "{{count}} official agencies are temporarily degraded.",
       "status": {
         "loading": "Carregando",
         "available": "Disponível",
