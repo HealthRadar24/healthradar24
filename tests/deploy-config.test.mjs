@@ -773,16 +773,16 @@ describe('welcome landing page routing', () => {
       'welcome source must not emit legacy /welcome SEO URLs'
     );
     assert.ok(
-      generatedWelcomeHtml.includes('<link rel="canonical" href="https://www.worldmonitor.app/" />'),
-      'generated welcome HTML must canonicalize to root'
+      generatedWelcomeHtml.includes('<link rel="canonical" href="https://www.healthradar24.com/" />'),
+      'generated fork welcome HTML must canonicalize to the HealthRadar24 root'
     );
     assert.ok(
       !generatedWelcomeHtml.includes('https://www.worldmonitor.app/welcome'),
       'generated welcome HTML must not emit legacy /welcome SEO URLs'
     );
     assert.ok(
-      generatedWelcomeHtml.includes('https://www.worldmonitor.app/dashboard'),
-      'generated welcome HTML must launch the dashboard at /dashboard'
+      generatedWelcomeHtml.includes('https://www.healthradar24.com/dashboard'),
+      'generated fork welcome HTML must launch the HealthRadar24 dashboard at /dashboard'
     );
     assert.ok(
       dashboardHtml.includes('<link rel="canonical" href="https://www.worldmonitor.app/dashboard" />'),

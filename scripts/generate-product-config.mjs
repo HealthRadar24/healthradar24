@@ -93,6 +93,11 @@ const fallbackEntries = Object.entries(PRODUCT_CATALOG)
   .map(([, e]) => `  '${e.dodoProductId}': ${e.priceCents},  // ${e.displayName}`)
   .join('\n');
 
+const productPlanEntries = Object.entries(PRODUCT_CATALOG)
+  .filter(([, e]) => e.dodoProductId)
+  .map(([key, e]) => `  '${e.dodoProductId}': '${key}',`)
+  .join('\n');
+
 const fallbackJs = `// AUTO-GENERATED from convex/config/productCatalog.ts
 // Do not edit manually. Run: npx tsx scripts/generate-product-config.mjs
 // @ts-check
@@ -100,6 +105,16 @@ const fallbackJs = `// AUTO-GENERATED from convex/config/productCatalog.ts
 /** Fallback prices (cents) when Dodo API is unreachable for individual products. */
 export const FALLBACK_PRICES = {
 ${fallbackEntries}
+};
+
+/**
+ * Stable plan key for each inherited Dodo product ID.
+ *
+ * Fork-owned billing adapters use this generated map so they can accept the
+ * upstream checkout contract without duplicating provider IDs.
+ */
+export const PRODUCT_PLAN_KEYS = {
+${productPlanEntries}
 };
 `;
 

@@ -4,6 +4,12 @@ HealthRadar24 follows `koala73/worldmonitor` closely while owning a separate
 production stack. Upstream code should remain easy to merge, but upstream
 operational identities must never silently become production defaults here.
 
+The fork topology, deployment sequence, rollback procedures, environment
+ownership, and launch gates are documented in
+[`docs/healthradar-operations.md`](docs/healthradar-operations.md). Provider
+promotion policy is documented in
+[`docs/healthradar-provider-policy.md`](docs/healthradar-provider-policy.md).
+
 ## Remote roles
 
 - `origin`: `HealthRadar24/healthradar24` — the deployable fork.

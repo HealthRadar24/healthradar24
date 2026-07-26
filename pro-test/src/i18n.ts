@@ -1,6 +1,7 @@
 import i18next from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import en from './locales/en.json';
+import { applyHealthRadarTextBrand } from '../healthradar-brand.mjs';
 
 type TranslationDictionary = Record<string, unknown>;
 
@@ -47,10 +48,10 @@ const OG_LOCALE: Record<string, string> = {
 };
 
 function applyMetaTags(prefix = 'meta'): void {
-  const title = i18next.t(`${prefix}.title`);
-  const desc = i18next.t(`${prefix}.description`);
-  const ogTitle = i18next.t(`${prefix}.ogTitle`);
-  const ogDesc = i18next.t(`${prefix}.ogDescription`);
+  const title = applyHealthRadarTextBrand(i18next.t(`${prefix}.title`));
+  const desc = applyHealthRadarTextBrand(i18next.t(`${prefix}.description`));
+  const ogTitle = applyHealthRadarTextBrand(i18next.t(`${prefix}.ogTitle`));
+  const ogDesc = applyHealthRadarTextBrand(i18next.t(`${prefix}.ogDescription`));
   const base = currentLanguageBase();
 
   document.title = title;
@@ -121,7 +122,7 @@ export function currentLanguageBase(): string {
 }
 
 export function t(key: string, options?: Record<string, unknown>): string {
-  return i18next.t(key, options);
+  return applyHealthRadarTextBrand(i18next.t(key, options));
 }
 
 /**
@@ -133,5 +134,7 @@ export function t(key: string, options?: Record<string, unknown>): string {
  */
 export function tArray(key: string): string[] | null {
   const value: unknown = i18next.t(key, { returnObjects: true, defaultValue: null });
-  return Array.isArray(value) && value.every((v): v is string => typeof v === 'string') ? value : null;
+  return Array.isArray(value) && value.every((v): v is string => typeof v === 'string')
+    ? value.map(applyHealthRadarTextBrand)
+    : null;
 }

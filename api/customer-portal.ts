@@ -18,11 +18,37 @@ import {
   getIdempotencyKey,
 } from './_idempotency.js';
 import { validateBearerToken } from '../server/auth-session';
+// @ts-expect-error — self-contained Edge helper, intentionally plain JS
+import { assertStripeTestMode, billingProvider } from './_billing-provider.js';
 
 const CONVEX_SITE_URL =
   process.env.CONVEX_SITE_URL ??
   (process.env.CONVEX_URL ?? '').replace('.convex.cloud', '.convex.site');
 const RELAY_SHARED_SECRET = process.env.RELAY_SHARED_SECRET ?? '';
+const PAYMENTS_ENABLED = process.env.PAYMENTS_ENABLED === 'true';
+const BILLING_PROVIDER = billingProvider();
+
+type CustomerPortalDeps = {
+  validateBearerToken: typeof validateBearerToken;
+  fetch: typeof fetch;
+};
+
+function defaultCustomerPortalDeps(): CustomerPortalDeps {
+  return {
+    validateBearerToken,
+    fetch: (...args) => globalThis.fetch(...args),
+  };
+}
+
+let customerPortalDeps = defaultCustomerPortalDeps();
+
+export function __setCustomerPortalDepsForTests(
+  overrides: Partial<CustomerPortalDeps> | null,
+): void {
+  customerPortalDeps = overrides
+    ? { ...defaultCustomerPortalDeps(), ...overrides }
+    : defaultCustomerPortalDeps();
+}
 
 function json(body: unknown, status: number, cors: Record<string, string>): Response {
   return new Response(JSON.stringify(body), {
@@ -56,11 +82,18 @@ export default async function handler(
     return json({ error: 'Method not allowed' }, 405, cors);
   }
 
+  if (!PAYMENTS_ENABLED) {
+    return json({
+      error: 'COMMERCE_NOT_CONFIGURED',
+      message: 'Billing management is not available yet.',
+    }, 503, cors);
+  }
+
   const authHeader = req.headers.get('Authorization') ?? '';
   const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : '';
   if (!token) return json({ error: 'Unauthorized' }, 401, cors);
 
-  const session = await validateBearerToken(token);
+  const session = await customerPortalDeps.validateBearerToken(token);
   if (!session.valid || !session.userId) {
     return json({ error: 'Unauthorized' }, 401, cors);
   }
@@ -88,7 +121,64 @@ export default async function handler(
   }
 
   try {
-    const resp = await fetch(`${CONVEX_SITE_URL}/relay/customer-portal`, {
+    if (BILLING_PROVIDER === 'stripe') {
+      const stripe = assertStripeTestMode();
+      if (!stripe.ok) {
+        return completeStandaloneIdempotency(
+          idempotency,
+          json({ error: stripe.error }, 503, cors),
+        );
+      }
+      const customerResponse = await customerPortalDeps.fetch(`${CONVEX_SITE_URL}/relay/billing-customer`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${RELAY_SHARED_SECRET}`,
+          'User-Agent': 'healthradar24-customer-portal-edge/1.0',
+        },
+        body: JSON.stringify({ userId: session.userId, provider: 'stripe' }),
+        signal: AbortSignal.timeout(10_000),
+      });
+      const customer = await customerResponse.json().catch(() => ({})) as {
+        customerId?: unknown;
+      };
+      if (!customerResponse.ok || typeof customer.customerId !== 'string') {
+        return completeStandaloneIdempotency(
+          idempotency,
+          json({ error: 'NO_CUSTOMER' }, customerResponse.status === 404 ? 404 : 502, cors),
+        );
+      }
+      const portalBody = new URLSearchParams({
+        customer: customer.customerId,
+        return_url: 'https://www.healthradar24.com/dashboard',
+      });
+      const portalResponse = await customerPortalDeps.fetch('https://api.stripe.com/v1/billing_portal/sessions', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${stripe.secret}`,
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'User-Agent': 'healthradar24-customer-portal-edge/1.0',
+          ...(idempotencyKey ? { 'Idempotency-Key': idempotencyKey } : {}),
+        },
+        body: portalBody.toString(),
+        signal: AbortSignal.timeout(15_000),
+      });
+      const portal = await portalResponse.json().catch(() => ({})) as {
+        url?: unknown;
+      };
+      if (!portalResponse.ok || typeof portal.url !== 'string') {
+        return completeStandaloneIdempotency(
+          idempotency,
+          json({ error: 'Customer portal unavailable' }, 502, cors),
+        );
+      }
+      return completeStandaloneIdempotency(
+        idempotency,
+        json({ portal_url: portal.url, provider: 'stripe' }, 200, cors),
+      );
+    }
+
+    const resp = await customerPortalDeps.fetch(`${CONVEX_SITE_URL}/relay/customer-portal`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

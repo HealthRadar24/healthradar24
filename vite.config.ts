@@ -12,6 +12,10 @@ import {
   renderVariantDashboardHtml,
   variantDashboardFileName,
 } from './src/config/variant-dashboard-html';
+import { healthRadarBuildReadinessPlugin } from './scripts/vite-healthradar-readiness.mts';
+import { healthRadarBrandPlugin } from './scripts/vite-healthradar-brand.mts';
+import { applyHealthRadarClientEnvAliases } from './scripts/healthradar-client-env.mts';
+import { PRODUCT_BRAND } from './src/config/product-brand';
 // Single source of truth for the RSS proxy allowlist — the dev-server proxy
 // below reuses the SAME www-tolerant predicate the Edge handler enforces
 // (api/rss-proxy.js) so dev and prod agree on allow/deny. Previously a
@@ -854,6 +858,7 @@ export default defineConfig(({ mode }) => {
   // This ensures that API keys and other secrets in .env.local are
   // available to the dev server plugins and server-side handlers.
   Object.assign(process.env, env);
+  applyHealthRadarClientEnvAliases(env, process.env);
 
   // Dev-server port: DEV_PORT overrides the 3000 default. Reject non-integer or
   // out-of-range values (fall back to 3000) so a typo can't crash Vite's listen()
@@ -867,7 +872,21 @@ export default defineConfig(({ mode }) => {
   const isE2E = process.env.VITE_E2E === '1';
   const isDesktopBuild = process.env.VITE_DESKTOP_RUNTIME === '1';
   const activeVariant = process.env.VITE_VARIANT || 'full';
-  const activeMeta = VARIANT_META[activeVariant] || VARIANT_META.full;
+  const upstreamMeta = VARIANT_META[activeVariant] || VARIANT_META.full;
+  const activeMeta: VariantMeta = activeVariant === 'full'
+    ? {
+        ...upstreamMeta,
+        title: `${PRODUCT_BRAND.name} — ${PRODUCT_BRAND.tagline}`,
+        description: PRODUCT_BRAND.description,
+        keywords: 'health intelligence, life science intelligence, disease outbreaks, environmental health, air quality, healthcare supply chains, global risk, AI intelligence, OSINT, public health, real-time monitoring, situation awareness',
+        url: `${PRODUCT_BRAND.webOrigin}/`,
+        siteName: PRODUCT_BRAND.name,
+        shortName: PRODUCT_BRAND.name,
+        subject: 'Health, Life Science, and Global Risk Intelligence',
+        classification: 'Health Intelligence Dashboard, Life Science Monitor, Global Risk Platform',
+        categories: ['health', 'news', 'productivity'],
+      }
+    : upstreamMeta;
 
   return {
     html: {
@@ -885,6 +904,8 @@ export default defineConfig(({ mode }) => {
       __BUILD_HASH__: JSON.stringify(process.env.VERCEL_GIT_COMMIT_SHA ?? 'dev'),
     },
     plugins: [
+      healthRadarBuildReadinessPlugin(),
+      healthRadarBrandPlugin(),
       // Emit dist/build-hash.txt with the deployed SHA so the running bundle
       // can fetch /build-hash.txt at tab-focus time and force-reload itself
       // if it's running an older bundle (see src/bootstrap/stale-bundle-check.ts).

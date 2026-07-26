@@ -5,13 +5,8 @@ export const DEBUGBEAR_RUM_SCRIPT_SRC = 'https://cdn.debugbear.com/lpMwA9KpC6pf.
 export const DEBUGBEAR_RUM_SAMPLE_RATE = 10;
 const DEBUGBEAR_RUM_SCRIPT_PATHNAME = new URL(DEBUGBEAR_RUM_SCRIPT_SRC).pathname;
 const DEBUGBEAR_RUM_HOSTS = new Set([
-  'worldmonitor.app',
-  'www.worldmonitor.app',
-  'tech.worldmonitor.app',
-  'finance.worldmonitor.app',
-  'commodity.worldmonitor.app',
-  'happy.worldmonitor.app',
-  'energy.worldmonitor.app',
+  'healthradar24.com',
+  'www.healthradar24.com',
 ]);
 
 import type { BootstrapR2RumSample } from './bootstrap-r2-rum';

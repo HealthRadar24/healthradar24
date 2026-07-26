@@ -67,9 +67,12 @@ describe('agent-mode view (/?mode=agent)', () => {
   it('the marketing homepage points at the agent view via link rel=alternate', () => {
     // Hand-synced pair: the pro-test source and the committed build artifact
     // must both carry the pointer (the pre-push gate rebuilds and compares).
-    const linkTag =
-      '<link rel="alternate" type="application/json" href="https://www.worldmonitor.app/?mode=agent"';
-    for (const path of ['pro-test/welcome.html', 'public/pro/welcome.html']) {
+    const pages = [
+      ['pro-test/welcome.html', 'https://www.worldmonitor.app/?mode=agent'],
+      ['public/pro/welcome.html', 'https://www.healthradar24.com/?mode=agent'],
+    ];
+    for (const [path, href] of pages) {
+      const linkTag = `<link rel="alternate" type="application/json" href="${href}"`;
       assert.ok(
         readFileSync(join(ROOT, path), 'utf-8').includes(linkTag),
         `${path} must advertise the agent-mode view via <link rel="alternate">`,

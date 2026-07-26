@@ -6,6 +6,7 @@ import { renderFollowedOnlyChip, type FollowedOnlyChipHandle } from '@/utils/fol
 import { isFollowed, subscribe as subscribeFollowed } from '@/services/followed-countries';
 import { toIso2 } from '@/utils/country-codes';
 import { setTrustedHtml, trustedHtml } from '@/utils/dom-utils';
+import { PRODUCT_BRAND } from '@/config/product-brand';
 
 
 function alertColor(level: string): string {
@@ -212,6 +213,7 @@ export class DiseaseOutbreaksPanel extends Panel {
         ${rows || empty}
       </div>
       <div style="margin-top:6px;font-size:9px;color:var(--text-dim)">${escapeHtml(t('components.diseaseOutbreaks.attribution'))}</div>
+      <div style="margin-top:6px;padding:6px;border:1px solid var(--border);border-radius:4px;font-size:9px;line-height:1.4;color:var(--text-dim)">${escapeHtml(PRODUCT_BRAND.healthSignalDisclaimer)}</div>
     `, 'legacy Panel.setContent() migration'));
   }
 

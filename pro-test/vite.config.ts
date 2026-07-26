@@ -1,7 +1,10 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
+import { PRO_BUILD_OUTPUT } from './build-output.mjs';
+import { healthRadarProPlugin } from './vite-healthradar.mjs';
+import { applyHealthRadarClientEnvAliases } from '../scripts/healthradar-client-env.mts';
 
 const STATIC_SCRIPT_NONCE = 'wm-static-bootstrap';
 
@@ -14,8 +17,13 @@ function isWelcomeHydrationPreload(dep: string) {
   return basename.startsWith('index-') && basename.endsWith('.js');
 }
 
-export default defineConfig({
-  plugins: [react(), tailwindcss()],
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, __dirname, '');
+  Object.assign(process.env, env);
+  applyHealthRadarClientEnvAliases(env, process.env);
+
+  return {
+  plugins: [react(), tailwindcss(), healthRadarProPlugin()],
   base: '/pro/',
   html: {
     cspNonce: STATIC_SCRIPT_NONCE,
@@ -33,7 +41,7 @@ export default defineConfig({
         return deps.filter(dep => !isWelcomeHydrationPreload(dep));
       },
     },
-    outDir: path.resolve(__dirname, '../public/pro'),
+    outDir: PRO_BUILD_OUTPUT,
     emptyOutDir: true,
     rollupOptions: {
       input: {
@@ -58,4 +66,5 @@ export default defineConfig({
       '@': path.resolve(__dirname, '.'),
     },
   },
+  };
 });

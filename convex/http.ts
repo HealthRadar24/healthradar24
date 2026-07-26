@@ -1,4 +1,4 @@
-import { anyApi, httpRouter } from "convex/server";
+import { anyApi, httpRouter, makeFunctionReference } from "convex/server";
 import { httpAction, type ActionCtx } from "./_generated/server";
 import { internal } from "./_generated/api";
 import { webhookHandler } from "./payments/webhookHandlers";
@@ -6,6 +6,8 @@ import { resendWebhookHandler } from "./resendWebhookHandler";
 import { USER_PREFS_WRITE_RATE_LIMIT } from "./constants";
 
 const TRUSTED = [
+  "https://healthradar24.com",
+  "https://www.healthradar24.com",
   "https://worldmonitor.app",
   "*.worldmonitor.app",
   "http://localhost:3000",
@@ -1411,6 +1413,103 @@ http.route({
   path: "/dodopayments-webhook",
   method: "POST",
   handler: webhookHandler,
+});
+
+const applyBillingEventRef = makeFunctionReference<
+  "mutation",
+  Record<string, unknown>,
+  { duplicate: boolean; kind?: string; entitlementUpdated?: boolean }
+>("payments/providerBilling:applyBillingEvent");
+const getBillingCustomerRef = makeFunctionReference<
+  "query",
+  { userId: string; provider: "dodo" | "stripe" },
+  { customerId: string } | null
+>("payments/providerBilling:getBillingCustomer");
+
+// Fork-owned provider-neutral webhook relay. Stripe signature verification
+// happens at the Vercel edge over the raw body; this hop authenticates the
+// normalized event with the existing service-to-service secret.
+http.route({
+  path: "/relay/billing-event",
+  method: "POST",
+  handler: httpAction(async (ctx, request) => {
+    const secret = process.env.RELAY_SHARED_SECRET ?? "";
+    const provided = (request.headers.get("Authorization") ?? "").replace(
+      /^Bearer\s+/,
+      "",
+    );
+    if (!secret || !(await timingSafeEqualStrings(provided, secret))) {
+      return new Response(JSON.stringify({ error: "UNAUTHORIZED" }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+    const body = await parseJsonObjectBody<Record<string, unknown>>(request);
+    if (!body || body.provider !== "stripe") {
+      return new Response(JSON.stringify({ error: "INVALID_EVENT" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+    try {
+      const result = await ctx.runMutation(applyBillingEventRef, body);
+      return new Response(JSON.stringify(result), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      });
+    } catch (error) {
+      console.error("[billing-event] normalized event rejected", {
+        message: error instanceof Error ? error.message : String(error),
+      });
+      return new Response(JSON.stringify({ error: "EVENT_REJECTED" }), {
+        status: 422,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+  }),
+});
+
+http.route({
+  path: "/relay/billing-customer",
+  method: "POST",
+  handler: httpAction(async (ctx, request) => {
+    const secret = process.env.RELAY_SHARED_SECRET ?? "";
+    const provided = (request.headers.get("Authorization") ?? "").replace(
+      /^Bearer\s+/,
+      "",
+    );
+    if (!secret || !(await timingSafeEqualStrings(provided, secret))) {
+      return new Response(JSON.stringify({ error: "UNAUTHORIZED" }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+    const body = await parseJsonObjectBody<{
+      userId?: unknown;
+      provider?: unknown;
+    }>(request);
+    if (
+      !body ||
+      typeof body.userId !== "string" ||
+      (body.provider !== "stripe" && body.provider !== "dodo")
+    ) {
+      return new Response(JSON.stringify({ error: "INVALID_REQUEST" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+    const customer = await ctx.runQuery(getBillingCustomerRef, {
+      userId: body.userId,
+      provider: body.provider,
+    });
+    return new Response(
+      JSON.stringify(customer ?? { error: "NOT_FOUND" }),
+      {
+        status: customer ? 200 : 404,
+        headers: { "Content-Type": "application/json" },
+      },
+    );
+  }),
 });
 
 // Service-to-service: Vercel edge gateway creates Dodo checkout sessions.

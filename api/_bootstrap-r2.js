@@ -89,56 +89,65 @@ export async function readBootstrapTierObject(tier, options = {}) {
   const config = readConfig(env);
   if (!config) return fallback('unreadable', startedAt);
 
-  let signal;
-  let response;
+  const controller = new AbortController();
+  const signal = controller.signal;
+  const timeoutHandle = setTimeout(
+    () => controller.abort(new DOMException('Bootstrap R2 read timed out', 'TimeoutError')),
+    timeoutMs,
+  );
+
   try {
-    signal = AbortSignal.timeout(timeoutMs);
-    const client = awsClientFactory({
-      accessKeyId: config.accessKeyId,
-      secretAccessKey: config.secretAccessKey,
-      service: 's3',
-      region: 'auto',
-      retries: 0,
-    });
-    response = await client.fetch(
-      `${config.endpoint}/${encodeURIComponent(config.bucket)}/${tier}.json`,
-      {
-        method: 'GET',
-        headers: { 'User-Agent': 'WorldMonitor Bootstrap/1.0' },
-        signal,
-      },
-    );
-  } catch (error) {
-    const timedOut = signal?.aborted
-      || error?.name === 'TimeoutError'
-      || error?.name === 'AbortError';
-    return fallback(timedOut ? 'timeout' : 'unreadable', startedAt);
-  }
+    let response;
+    try {
+      const client = awsClientFactory({
+        accessKeyId: config.accessKeyId,
+        secretAccessKey: config.secretAccessKey,
+        service: 's3',
+        region: 'auto',
+        retries: 0,
+      });
+      response = await client.fetch(
+        `${config.endpoint}/${encodeURIComponent(config.bucket)}/${tier}.json`,
+        {
+          method: 'GET',
+          headers: { 'User-Agent': 'WorldMonitor Bootstrap/1.0' },
+          signal,
+        },
+      );
+    } catch (error) {
+      const timedOut = signal.aborted
+        || error?.name === 'TimeoutError'
+        || error?.name === 'AbortError';
+      return fallback(timedOut ? 'timeout' : 'unreadable', startedAt);
+    }
 
-  if (response.status === 404) return fallback('missing', startedAt);
-  if (!response.ok) return fallback('unreadable', startedAt);
+    if (response.status === 404) return fallback('missing', startedAt);
+    if (!response.ok) return fallback('unreadable', startedAt);
 
-  let envelope;
-  try {
-    envelope = await response.json();
-  } catch (error) {
-    const timedOut = signal?.aborted
-      || error?.name === 'TimeoutError'
-      || error?.name === 'AbortError';
-    return fallback(timedOut ? 'timeout' : 'invalid', startedAt);
-  }
+    let envelope;
+    try {
+      envelope = await response.json();
+    } catch (error) {
+      const timedOut = signal.aborted
+        || error?.name === 'TimeoutError'
+        || error?.name === 'AbortError';
+      return fallback(timedOut ? 'timeout' : 'invalid', startedAt);
+    }
 
-  if (!isValidEnvelope(envelope, tier, nowMs)) {
-    return fallback('invalid', startedAt);
-  }
-  if (nowMs - envelope.generatedAt > MAX_AGE_MS[tier]) {
-    return fallback('stale', startedAt);
-  }
+    if (!isValidEnvelope(envelope, tier, nowMs)) {
+      return fallback('invalid', startedAt);
+    }
+    if (nowMs - envelope.generatedAt > MAX_AGE_MS[tier]) {
+      return fallback('stale', startedAt);
+    }
 
-  return {
-    status: 'ok',
-    payload: envelope.payload,
-    generatedAt: envelope.generatedAt,
-    durationMs: Math.max(0, performance.now() - startedAt),
-  };
+    return {
+      status: 'ok',
+      payload: envelope.payload,
+      generatedAt: envelope.generatedAt,
+      durationMs: Math.max(0, performance.now() - startedAt),
+    };
+  } finally {
+    clearTimeout(timeoutHandle);
+  }
 }

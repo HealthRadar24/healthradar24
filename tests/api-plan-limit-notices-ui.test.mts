@@ -25,7 +25,7 @@ describe('API plan-limit notice UI wiring', () => {
     assert.match(settings, /handlePlanLimitNoticeCta/);
     assert.match(settings, /openBillingPortal/);
     assert.match(settings, /startCheckout/);
-    assert.match(settings, /mailto:support@worldmonitor\.app/);
+    assert.match(settings, /window\.location\.href = ['"]\/support['"]/);
   });
 
   it('defines bounded responsive notice styles', () => {

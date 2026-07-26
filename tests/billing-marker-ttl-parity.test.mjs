@@ -88,7 +88,7 @@ test('entitlement cache key prefix is derived identically by every writer and re
   // in the file to interpolate that exact name.
   for (const [file, src] of sources) {
     const derivation = src.match(
-      /const ([A-Za-z_][A-Za-z0-9_]*) = process\.env\.DODO_PAYMENTS_ENVIRONMENT === ['"]live_mode['"]\s*\?\s*['"]live['"]\s*:\s*['"]test['"]/,
+      /const ([A-Za-z_][A-Za-z0-9_]*) =\s*\(process\.env\.BILLING_ENVIRONMENT \?\? process\.env\.DODO_PAYMENTS_ENVIRONMENT\) === ['"]live_mode['"]\s*\?\s*['"]live['"]\s*:\s*['"]test['"]/,
     );
     assert.ok(
       derivation,
@@ -113,7 +113,7 @@ test('entitlement cache key prefix is derived identically by every writer and re
     // adds `const legacy = 'test'` and keys off it would otherwise be caught
     // above, but one that re-derives the prefix a second way would not.
     const derivations = [
-      ...src.matchAll(/process\.env\.DODO_PAYMENTS_ENVIRONMENT === ['"]live_mode['"]/g),
+      ...src.matchAll(/\(process\.env\.BILLING_ENVIRONMENT \?\? process\.env\.DODO_PAYMENTS_ENVIRONMENT\) === ['"]live_mode['"]/g),
     ];
     assert.equal(
       derivations.length,

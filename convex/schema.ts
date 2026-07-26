@@ -751,6 +751,15 @@ export default defineSchema({
     // subscription.expired events skip the normal downgrade-to-free so
     // goodwill credits outlive Dodo subscription cancellations.
     compUntil: v.optional(v.number()),
+    // Fork-owned provider-neutral projection. Existing upstream Dodo rows have
+    // neither field and continue to behave exactly as before. Stripe writes
+    // both fields so cancellation only revokes entitlements it owns.
+    billingProvider: v.optional(v.union(
+      v.literal("dodo"),
+      v.literal("stripe"),
+      v.literal("manual"),
+    )),
+    providerSubscriptionId: v.optional(v.string()),
     updatedAt: v.number(),
   })
     .index("by_userId", ["userId"])
@@ -827,6 +836,52 @@ export default defineSchema({
     .index("by_userId", ["userId"])
     .index("by_dodoCustomerId", ["dodoCustomerId"])
     .index("by_normalized_email", ["normalizedEmail"]),
+
+  // Additive provider-neutral billing projection for HealthRadar24. The
+  // inherited Dodo tables remain untouched so upstream payment changes can be
+  // merged without translating their schema.
+  billingCustomers: defineTable({
+    userId: v.string(),
+    provider: v.union(v.literal("dodo"), v.literal("stripe")),
+    providerCustomerId: v.string(),
+    email: v.optional(v.string()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_user_provider", ["userId", "provider"])
+    .index("by_provider_customer", ["provider", "providerCustomerId"]),
+
+  billingSubscriptions: defineTable({
+    userId: v.string(),
+    provider: v.union(v.literal("dodo"), v.literal("stripe")),
+    providerSubscriptionId: v.string(),
+    providerCustomerId: v.optional(v.string()),
+    providerPriceId: v.optional(v.string()),
+    planKey: v.string(),
+    status: subscriptionStatus,
+    currentPeriodStart: v.number(),
+    currentPeriodEnd: v.number(),
+    eventCreatedAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_user_provider", ["userId", "provider"])
+    .index("by_provider_subscription", ["provider", "providerSubscriptionId"])
+    .index("by_provider_customer", ["provider", "providerCustomerId"]),
+
+  billingWebhookEvents: defineTable({
+    provider: v.union(v.literal("dodo"), v.literal("stripe")),
+    providerEventId: v.string(),
+    eventType: v.string(),
+    eventCreatedAt: v.number(),
+    processedAt: v.number(),
+  }).index("by_provider_event", ["provider", "providerEventId"]),
+
+  // Pre-seeded OCC locks serialize first-seen webhook IDs. Convex index reads
+  // do not serialize concurrent inserts into an empty result set.
+  billingProviderLocks: defineTable({
+    provider: v.union(v.literal("dodo"), v.literal("stripe")),
+    lastEventAt: v.number(),
+  }).index("by_provider", ["provider"]),
 
   // Canonical per-Clerk-user record. Populated on first authenticated session
   // by client → `users:ensureRecord` (see convex/users.ts). Distinct from

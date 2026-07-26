@@ -1,6 +1,10 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
+import {
+  applyHealthRadarHtmlBrand,
+  applyHealthRadarTextBrand,
+} from '../pro-test/healthradar-brand.mjs';
 
 const welcomeHtml = () => readFileSync(new URL('../public/pro/welcome.html', import.meta.url), 'utf8');
 const prerenderSrc = () => readFileSync(new URL('../pro-test/prerender.mjs', import.meta.url), 'utf8');
@@ -40,7 +44,7 @@ test('welcome.html #seo-prerender stays in sync with prerender.mjs (run npm run 
   const template = extractTemplate(prerenderSrc(), 'welcomeSeoPrerender');
 
   // Static chunks: drop ${…} interpolations, keep meaningful literal fragments.
-  const staticChunks = template
+  const staticChunks = applyHealthRadarHtmlBrand(template)
     .replace(/\$\{[^}]*\}/g, '\n')
     .split('\n')
     .map((line) => line.trim())
@@ -55,12 +59,13 @@ test('welcome.html #seo-prerender stays in sync with prerender.mjs (run npm run 
 
   // Interpolated prose + FAQ come from en.json and are injected raw (unescaped).
   const en = enLocale();
-  for (const value of [en.welcome.hero.sub, en.welcome.moments.sub]) {
+  for (const value of [en.welcome.hero.sub, en.welcome.moments.sub].map(applyHealthRadarTextBrand)) {
     assert.ok(html.includes(value), `welcome.html missing interpolated locale prose — rebuild: ${JSON.stringify(value.slice(0, 48))}`);
   }
   for (let n = 1; n <= 9; n += 1) {
     for (const key of [`q${n}`, `a${n}`]) {
-      assert.ok(html.includes(en.welcome.faq[key]), `welcome.html missing FAQ ${key} — rebuild via npm run build:pro`);
+      const expected = applyHealthRadarTextBrand(en.welcome.faq[key]);
+      assert.ok(html.includes(expected), `welcome.html missing FAQ ${key} — rebuild via npm run build:pro`);
     }
   }
 });
@@ -94,7 +99,7 @@ test('built welcome page ships the real hero in #root before JavaScript', () => 
   assert.match(rootContent, /Launch the dashboard/);
   assert.match(rootContent, /Open source · AGPL-3\.0/);
   assert.match(rootContent, /href="\/blog\/posts\/worldmonitor-is-not-palantir\/"/);
-  assert.match(rootContent, /WorldMonitor is not an open-source Palantir/);
+  assert.match(rootContent, /HealthRadar24 is not an open-source Palantir/);
   assert.match(rootContent, /Map layers/);
   const headlineIndex = rootContent.indexOf('By the time it&#x27;s news,');
   assert.ok(headlineIndex > 0, 'welcome headline should be in the prerendered root');

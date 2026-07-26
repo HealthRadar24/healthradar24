@@ -153,7 +153,16 @@ describe('/api/notification-channels relay timeout recovery', () => {
     });
 
     AbortSignal.timeout = ((delay: number) => {
-      const signal = originalAbortSignalTimeout(Math.min(delay, 10));
+      // Node's native AbortSignal.timeout() timer is unref'ed. When this test's
+      // mocked relay is the only pending work, Node 22 can end the suite before
+      // that timer fires and cancel every remaining test. Use a referenced test
+      // timer while preserving the production timeout API and duration checks.
+      const controller = new AbortController();
+      setTimeout(
+        () => controller.abort(new DOMException('Timed out', 'TimeoutError')),
+        Math.min(delay, 10),
+      );
+      const signal = controller.signal;
       timeoutDurations.set(signal, delay);
       return signal;
     }) as typeof AbortSignal.timeout;

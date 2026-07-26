@@ -11,6 +11,17 @@ import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createServer } from 'vite';
+import { PRO_BUILD_OUTPUT } from './build-output.mjs';
+import {
+  applyHealthRadarHtmlBrand,
+  applyHealthRadarTextBrand,
+  HEALTHRADAR_COMPANY,
+  HEALTHRADAR_FORK_URL,
+  HEALTHRADAR_NAME,
+  HEALTHRADAR_ORIGIN,
+  HEALTHRADAR_SUPPORT_URL,
+  HEALTHRADAR_UPSTREAM_URL,
+} from './healthradar-brand.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -21,46 +32,28 @@ const STATIC_SCRIPT_NONCE = 'wm-static-bootstrap';
 // structured data, injected into BOTH pro pages (see PAGES) so the homepage and
 // /pro can't drift. Nonce'd to match the static-bootstrap CSP trust (otherwise
 // deploy-config.test.mjs would demand a script-src sha256 hash for it).
-const WM_SAMEAS = [
-  'https://github.com/koala73/worldmonitor',
-  'https://www.npmjs.com/package/worldmonitor',
-  'https://x.com/worldmonitorai',
-  'https://x.com/eliehabib',
-  'https://discord.gg/re63kWKxaz',
-  'https://www.wired.com/story/world-monitor-elie-habib/',
+const HEALTHRADAR_SAMEAS = [
+  HEALTHRADAR_FORK_URL,
+  HEALTHRADAR_UPSTREAM_URL,
 ];
 const ORGANIZATION_JSONLD = `    <script type="application/ld+json" nonce="${STATIC_SCRIPT_NONCE}">${JSON.stringify({
   '@context': 'https://schema.org',
   '@type': 'Organization',
-  name: 'World Monitor',
-  alternateName: 'WorldMonitor',
-  url: 'https://www.worldmonitor.app/',
-  logo: 'https://www.worldmonitor.app/favico/apple-touch-icon.png',
-  description: 'Open-source real-time global intelligence platform aggregating conflicts, military movements, markets, infrastructure, and geopolitical data. Used by 2M+ people across 190+ countries.',
-  founder: {
-    '@type': 'Person',
-    name: 'Elie Habib',
-    url: 'https://x.com/eliehabib',
-    sameAs: [
-      'https://x.com/eliehabib',
-      'https://github.com/koala73',
-      'https://www.linkedin.com/in/elie-habib-7047b931',
-      'https://www.wikidata.org/wiki/Q121365724',
-      'https://www.crunchbase.com/person/elie-habib-2',
-    ],
+  name: HEALTHRADAR_NAME,
+  alternateName: 'Health Radar 24',
+  url: `${HEALTHRADAR_ORIGIN}/`,
+  logo: `${HEALTHRADAR_ORIGIN}/favico/apple-touch-icon.png`,
+  description: 'Real-time health, life-science and global-risk intelligence platform operated by Kernelius and built as an attributed open-source fork.',
+  parentOrganization: {
+    '@type': 'Organization',
+    name: HEALTHRADAR_COMPANY,
   },
-  sameAs: WM_SAMEAS,
+  sameAs: HEALTHRADAR_SAMEAS,
   contactPoint: {
     '@type': 'ContactPoint',
     contactType: 'customer support',
-    email: 'support@worldmonitor.app',
-    url: 'https://www.worldmonitor.app/pro',
+    url: HEALTHRADAR_SUPPORT_URL,
     availableLanguage: 'English',
-  },
-  address: {
-    '@type': 'PostalAddress',
-    addressLocality: 'Dubai',
-    addressCountry: 'AE',
   },
 })}</script>`;
 const DASHBOARD_SCREENSHOT_BASENAME = 'worldmonitor-7-mar-2026';
@@ -168,7 +161,7 @@ async function renderWelcomeRoot() {
 }
 
 function builtAssetHref(filenamePrefix, extension) {
-  const assetsDir = resolve(__dirname, '../public/pro/assets');
+  const assetsDir = resolve(PRO_BUILD_OUTPUT, 'assets');
   const file = readdirSync(assetsDir).find((candidate) => (
     candidate.startsWith(`${filenamePrefix}-`) && candidate.endsWith(extension)
   ));
@@ -504,7 +497,7 @@ for (const { file, content, rootAttributes, beforeRoot = '' } of PAGES) {
     process.exit(1);
   }
 
-  const htmlPath = resolve(__dirname, '../public/pro', file);
+  const htmlPath = resolve(PRO_BUILD_OUTPUT, file);
   let html = readFileSync(htmlPath, 'utf-8');
   html = inlineCriticalCss(html, file);
   if (!html.includes('</head>')) {
@@ -516,7 +509,11 @@ for (const { file, content, rootAttributes, beforeRoot = '' } of PAGES) {
     console.error(`[prerender] ERROR: ${file} has no empty <div id="root"></div> to inject into.`);
     process.exit(1);
   }
-  html = html.replace('<div id="root"></div>', `${beforeRoot}<div id="root"${rootAttributes}>${content}</div>`);
+  html = html.replace(
+    '<div id="root"></div>',
+    `${applyHealthRadarHtmlBrand(beforeRoot)}<div id="root"${rootAttributes}>${applyHealthRadarHtmlBrand(content)}</div>`,
+  );
+  html = applyHealthRadarTextBrand(html);
   writeFileSync(htmlPath, html, 'utf-8');
-  console.log(`[prerender] Injected SEO content into public/pro/${file}`);
+  console.log(`[prerender] Injected HealthRadar SEO content into ${htmlPath}`);
 }

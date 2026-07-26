@@ -8,6 +8,8 @@ const EXPECTED_HOSTS = Object.freeze({
   webBaseUrl: 'www.healthradar24.com',
   apiBaseUrl: 'api.healthradar24.com',
   healthUrl: 'api.healthradar24.com',
+  buildReadinessUrl: 'www.healthradar24.com',
+  proBuildReadinessUrl: 'www.healthradar24.com',
 });
 
 function assertObject(value, label) {
@@ -57,6 +59,30 @@ export function validateReadinessConfig(config) {
   const healthUrl = new URL(config.identity.healthUrl);
   if (healthUrl.pathname !== '/api/health' || healthUrl.searchParams.get('compact') !== '1') {
     throw new Error('identity.healthUrl must target /api/health?compact=1');
+  }
+  const buildReadinessUrl = new URL(config.identity.buildReadinessUrl);
+  if (buildReadinessUrl.pathname !== '/healthradar-build.json') {
+    throw new Error('identity.buildReadinessUrl must target /healthradar-build.json');
+  }
+  const proBuildReadinessUrl = new URL(config.identity.proBuildReadinessUrl);
+  if (proBuildReadinessUrl.pathname !== '/pro/healthradar-pro-build.json') {
+    throw new Error(
+      'identity.proBuildReadinessUrl must target /pro/healthradar-pro-build.json',
+    );
+  }
+
+  assertObject(config.requiredProductChecks, 'requiredProductChecks');
+  if (config.requiredProductChecks.product !== 'HealthRadar24') {
+    throw new Error('requiredProductChecks.product must be HealthRadar24');
+  }
+  if (config.requiredProductChecks.clerkPublishableKeyConfigured !== true) {
+    throw new Error('requiredProductChecks.clerkPublishableKeyConfigured must be true');
+  }
+  if (typeof config.requiredProductChecks.commerceBrowserEnabled !== 'boolean') {
+    throw new Error('requiredProductChecks.commerceBrowserEnabled must be a boolean');
+  }
+  if (!['disabled', 'dodo', 'stripe'].includes(config.requiredProductChecks.commerceProvider)) {
+    throw new Error('requiredProductChecks.commerceProvider must be disabled, dodo, or stripe');
   }
 
   if (!Number.isFinite(config.maxHealthAgeMinutes) || config.maxHealthAgeMinutes <= 0) {
@@ -138,6 +164,40 @@ export function evaluateReadinessPayload(config, payload, now = Date.now()) {
   return { failures, providerBlockers, advisoryProblems };
 }
 
+export function evaluateBuildReadinessPayload(config, payload, surface = 'main') {
+  validateReadinessConfig(config);
+  assertObject(payload, 'Build readiness payload');
+  assertObject(payload.auth, 'Build readiness payload auth');
+  assertObject(payload.commerce, 'Build readiness payload commerce');
+
+  const failures = [];
+  const required = config.requiredProductChecks;
+  if (payload.schemaVersion !== 1) failures.push('Build readiness schemaVersion must be 1');
+  if (payload.product !== required.product) {
+    failures.push(`Built product is ${payload.product ?? 'unknown'}; expected ${required.product}`);
+  }
+  if (surface === 'pro' && payload.surface !== 'pro') {
+    failures.push(`Built Pro surface is ${payload.surface ?? 'unknown'}; expected pro`);
+  }
+  if (payload.auth.clerkPublishableKeyConfigured
+      !== required.clerkPublishableKeyConfigured) {
+    failures.push('Clerk publishable key was not compiled into the browser build');
+  }
+  if (payload.commerce.browserEnabled !== required.commerceBrowserEnabled) {
+    failures.push(
+      `Browser commerce gate is ${payload.commerce.browserEnabled ? 'enabled' : 'disabled'}; `
+      + `expected ${required.commerceBrowserEnabled ? 'enabled' : 'disabled'}`,
+    );
+  }
+  if (payload.commerce.provider !== required.commerceProvider) {
+    failures.push(
+      `Browser commerce provider is ${payload.commerce.provider ?? 'unknown'}; `
+      + `expected ${required.commerceProvider}`,
+    );
+  }
+  return { failures };
+}
+
 export async function loadReadinessConfig() {
   const config = JSON.parse(await readFile(CONFIG_URL, 'utf8'));
   validateReadinessConfig(config);
@@ -178,12 +238,34 @@ async function main() {
 
   const webBaseUrl = process.env.WM_WEB_BASE_URL || config.identity.webBaseUrl;
   const healthUrl = process.env.WM_HEALTH_URL || config.identity.healthUrl;
+  const buildReadinessUrl = process.env.WM_BUILD_READINESS_URL
+    || config.identity.buildReadinessUrl;
+  const proBuildReadinessUrl = process.env.WM_PRO_BUILD_READINESS_URL
+    || config.identity.proBuildReadinessUrl;
   assertHttpsUrl(webBaseUrl, 'WM_WEB_BASE_URL', EXPECTED_HOSTS.webBaseUrl);
   assertHttpsUrl(healthUrl, 'WM_HEALTH_URL', EXPECTED_HOSTS.healthUrl);
+  assertHttpsUrl(
+    buildReadinessUrl,
+    'WM_BUILD_READINESS_URL',
+    EXPECTED_HOSTS.buildReadinessUrl,
+  );
+  assertHttpsUrl(
+    proBuildReadinessUrl,
+    'WM_PRO_BUILD_READINESS_URL',
+    EXPECTED_HOSTS.proBuildReadinessUrl,
+  );
 
   await requireReachableWeb(webBaseUrl);
-  const payload = await fetchJson(healthUrl);
+  const [payload, buildPayload, proBuildPayload] = await Promise.all([
+    fetchJson(healthUrl),
+    fetchJson(buildReadinessUrl),
+    fetchJson(proBuildReadinessUrl),
+  ]);
   const result = evaluateReadinessPayload(config, payload);
+  const buildResult = evaluateBuildReadinessPayload(config, buildPayload);
+  const proBuildResult = evaluateBuildReadinessPayload(config, proBuildPayload, 'pro');
+  result.failures.push(...buildResult.failures);
+  result.failures.push(...proBuildResult.failures);
 
   for (const blocker of result.providerBlockers) {
     console.warn(

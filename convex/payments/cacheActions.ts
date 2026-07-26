@@ -23,7 +23,10 @@ const REDIS_FETCH_TIMEOUT_MS = 5000;
  * Prevents live/test data from clobbering each other.
  */
 function getEntitlementKey(userId: string): string {
-  const envPrefix = process.env.DODO_PAYMENTS_ENVIRONMENT === 'live_mode' ? 'live' : 'test';
+  const envPrefix =
+    (process.env.BILLING_ENVIRONMENT ?? process.env.DODO_PAYMENTS_ENVIRONMENT) === 'live_mode'
+      ? 'live'
+      : 'test';
   return `entitlements:${envPrefix}:${userId}`;
 }
 

@@ -47,6 +47,7 @@ import {
 } from '@/config';
 import { resolveNewsCategories, enabledNewsCategoryKeys } from '@/config/feed-resolution';
 import { VARIANT_META } from '@/config/variant-meta';
+import { PRODUCT_BRAND } from '@/config/product-brand';
 import { isDesktopRuntime } from '@/services/runtime';
 import {
   MISSION_PRESETS,
@@ -1353,7 +1354,7 @@ export class EventHandlerManager implements AppModule {
 
     const preview = document.createElement('iframe');
     preview.className = 'embed-preview-frame';
-    preview.title = 'World Monitor live map preview';
+    preview.title = `${PRODUCT_BRAND.name} live map preview`;
     preview.loading = 'lazy';
     preview.referrerPolicy = 'strict-origin-when-cross-origin';
     preview.src = embedUrl;

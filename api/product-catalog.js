@@ -21,12 +21,20 @@ import { timingSafeEqualSecret } from './_crypto.js';
 import { FALLBACK_PRICES } from './_product-fallback-prices.js';
 // @ts-expect-error — JS module
 import { unwrapEnvelope } from './_seed-envelope.js';
+// @ts-expect-error — JS module
+import {
+  assertStripeTestMode,
+  billingProvider,
+  resolvePlanKey,
+  stripePriceForPlan,
+} from './_billing-provider.js';
 
 const UPSTASH_URL = process.env.UPSTASH_REDIS_REST_URL ?? '';
 const UPSTASH_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN ?? '';
 const DODO_API_KEY = process.env.DODO_API_KEY ?? '';
 const DODO_ENV = process.env.DODO_PAYMENTS_ENVIRONMENT ?? 'test_mode';
 const PAYMENTS_ENABLED = process.env.PAYMENTS_ENABLED === 'true';
+const BILLING_PROVIDER = billingProvider();
 const RELAY_SECRET = process.env.RELAY_SHARED_SECRET ?? '';
 
 const CACHE_KEY = 'product-catalog:v2';
@@ -132,7 +140,31 @@ async function getFromCache() {
 }
 
 function publicCatalog(data) {
-  if (PAYMENTS_ENABLED) return { ...data, commerceEnabled: true };
+  if (PAYMENTS_ENABLED) {
+    if (BILLING_PROVIDER !== 'stripe') {
+      return {
+        ...data,
+        commerceEnabled: true,
+        commerceProvider: 'dodo',
+      };
+    }
+    return {
+      ...data,
+      commerceEnabled: true,
+      commerceProvider: 'stripe',
+      tiers: Array.isArray(data?.tiers)
+        ? data.tiers.map((tier) => ({
+          ...tier,
+          ...(tier.monthlyProductId
+            ? { monthlyProductId: resolvePlanKey(tier.monthlyProductId) }
+            : {}),
+          ...(tier.annualProductId
+            ? { annualProductId: resolvePlanKey(tier.annualProductId) }
+            : {}),
+        }))
+        : [],
+    };
+  }
   return {
     ...data,
     commerceEnabled: false,
@@ -146,6 +178,40 @@ function publicCatalog(data) {
       }) => tier)
       : [],
   };
+}
+
+async function fetchPricesFromStripe() {
+  const stripe = assertStripeTestMode();
+  if (!stripe.ok) return {};
+  const prices = {};
+  await Promise.all(Object.entries(CATALOG).map(async ([legacyProductId, entry]) => {
+    if (entry.billingPeriod === 'none') return;
+    const priceId = stripePriceForPlan(entry.planKey);
+    if (!priceId) return;
+    try {
+      const res = await fetch(`https://api.stripe.com/v1/prices/${encodeURIComponent(priceId)}`, {
+        headers: {
+          Authorization: `Bearer ${stripe.secret}`,
+          'User-Agent': 'healthradar24-product-catalog-edge/1.0',
+        },
+        signal: AbortSignal.timeout(5000),
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const price = await res.json();
+      if (Number.isInteger(price.unit_amount) && price.unit_amount >= 0) {
+        prices[legacyProductId] = {
+          priceCents: price.unit_amount,
+          currency: String(price.currency ?? 'usd').toUpperCase(),
+        };
+      }
+    } catch (error) {
+      console.warn('[product-catalog] Stripe price fetch failed', {
+        planKey: entry.planKey,
+        message: error instanceof Error ? error.message : String(error),
+      });
+    }
+  }));
+  return prices;
 }
 
 async function setCache(data) {
@@ -287,9 +353,30 @@ export default async function handler(req) {
   }
 
   // Read from Redis (populated by Railway ais-relay seed loop)
-  const cached = await getFromCache();
+  // The inherited Railway seed contains Dodo product IDs and price source, so
+  // it must never be served as a Stripe catalog.
+  const cached = BILLING_PROVIDER === 'dodo' ? await getFromCache() : null;
   if (cached) {
     return json(publicCatalog(cached), 200, cors, 'public, max-age=300, s-maxage=600, stale-while-revalidate=300', 'cache');
+  }
+
+  if (PAYMENTS_ENABLED && BILLING_PROVIDER === 'stripe') {
+    const stripePrices = await fetchPricesFromStripe();
+    const tiers = buildTiers(stripePrices);
+    const now = Date.now();
+    const result = {
+      tiers,
+      fetchedAt: now,
+      cachedUntil: now + 60_000,
+      priceSource: Object.keys(stripePrices).length > 0 ? 'stripe' : 'fallback',
+    };
+    return json(
+      publicCatalog(result),
+      200,
+      cors,
+      'public, max-age=60, s-maxage=60',
+      result.priceSource,
+    );
   }
 
   // Redis empty (purged or seed hasn't run). Try Dodo directly as backup.

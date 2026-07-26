@@ -661,23 +661,30 @@
     {
       "path": "api/create-checkout.ts",
       "category": "deferred",
-      "reason": "Creates a Dodo Payments checkout session. Payments domain is still stabilizing (Clerk + Dodo integration); migrate once shape is frozen.",
+      "reason": "Creates a checkout session through the configured billing provider. Payments remain behind the provider-neutral billing boundary; migrate once the HealthRadar billing contract is frozen.",
       "owner": "@SebastienMelki",
       "removal_issue": "TBD"
     },
     {
       "path": "api/customer-portal.ts",
       "category": "deferred",
-      "reason": "Issues a Dodo customer-portal redirect URL. Paired with create-checkout.ts; migrate together.",
+      "reason": "Issues a billing-provider customer-portal redirect URL. Paired with create-checkout.ts; migrate together once the HealthRadar billing contract is frozen.",
       "owner": "@SebastienMelki",
       "removal_issue": "TBD"
     },
     {
       "path": "api/product-catalog.js",
       "category": "deferred",
-      "reason": "Returns Dodo product catalog (pricing tiers). Migrate alongside the rest of the payments surface.",
+      "reason": "Returns the configured billing-provider product catalog. Migrate alongside the rest of the payments surface once the HealthRadar billing contract is frozen.",
       "owner": "@SebastienMelki",
       "removal_issue": "TBD"
+    },
+    {
+      "path": "api/stripe-webhook.ts",
+      "category": "external-protocol",
+      "reason": "Stripe webhook receiver. The signed request body and event envelope are dictated by Stripe, require raw-body signature verification, and therefore cannot be represented as a product sebuf RPC.",
+      "owner": "@yamz8",
+      "removal_issue": null
     },
     {
       "path": "api/referral/me.ts",

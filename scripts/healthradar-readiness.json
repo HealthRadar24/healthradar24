@@ -3,7 +3,15 @@
   "identity": {
     "webBaseUrl": "https://www.healthradar24.com",
     "apiBaseUrl": "https://api.healthradar24.com",
-    "healthUrl": "https://api.healthradar24.com/api/health?compact=1"
+    "healthUrl": "https://api.healthradar24.com/api/health?compact=1",
+    "buildReadinessUrl": "https://www.healthradar24.com/healthradar-build.json",
+    "proBuildReadinessUrl": "https://www.healthradar24.com/pro/healthradar-pro-build.json"
+  },
+  "requiredProductChecks": {
+    "product": "HealthRadar24",
+    "clerkPublishableKeyConfigured": true,
+    "commerceBrowserEnabled": false,
+    "commerceProvider": "disabled"
   },
   "maxHealthAgeMinutes": 5,
   "minimumHealthRegistrySize": 200,

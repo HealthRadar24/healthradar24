@@ -164,7 +164,10 @@ const _inFlight = new Map<string, Promise<CachedEntitlements | null>>();
 // Environment-aware Redis key prefix (P2-3)
 // ---------------------------------------------------------------------------
 
-const ENV_PREFIX = process.env.DODO_PAYMENTS_ENVIRONMENT === 'live_mode' ? 'live' : 'test';
+const ENV_PREFIX =
+  (process.env.BILLING_ENVIRONMENT ?? process.env.DODO_PAYMENTS_ENVIRONMENT) === 'live_mode'
+    ? 'live'
+    : 'test';
 
 // Cache TTL: 15 min — short enough that subscription expiry is reflected promptly (P2-5)
 const ENTITLEMENT_CACHE_TTL_SECONDS = 900;

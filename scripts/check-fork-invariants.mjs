@@ -41,7 +41,38 @@ const checks = [
   },
   {
     file: 'api/create-checkout.ts',
-    required: ["const PAYMENTS_ENABLED = process.env.PAYMENTS_ENABLED === 'true';"],
+    required: [
+      "const PAYMENTS_ENABLED = process.env.PAYMENTS_ENABLED === 'true';",
+      'const BILLING_PROVIDER = billingProvider();',
+      "if (BILLING_PROVIDER === 'stripe')",
+    ],
+    forbidden: [],
+  },
+  {
+    file: 'api/customer-portal.ts',
+    required: [
+      "const PAYMENTS_ENABLED = process.env.PAYMENTS_ENABLED === 'true';",
+      "if (!PAYMENTS_ENABLED)",
+      "if (BILLING_PROVIDER === 'stripe')",
+    ],
+    forbidden: [],
+  },
+  {
+    file: 'api/stripe-webhook.ts',
+    required: [
+      "const STRIPE_WEBHOOK_ENABLED = process.env.STRIPE_WEBHOOK_ENABLED === 'true';",
+      'verifyStripeSignature',
+      '/relay/billing-event',
+    ],
+    forbidden: [],
+  },
+  {
+    file: 'api/_billing-provider.js',
+    required: [
+      "const value = (env.BILLING_PROVIDER ?? 'dodo')",
+      'STRIPE_LIVE_MODE_APPROVED',
+      'STRIPE_TEST_KEY_REQUIRED',
+    ],
     forbidden: [],
   },
   {
@@ -50,6 +81,90 @@ const checks = [
       "const PAYMENTS_ENABLED = process.env.PAYMENTS_ENABLED === 'true';",
       "href: 'https://healthradar24.com/dashboard'",
       "href: 'https://healthradar24.com/pro#enterprise-contact'",
+    ],
+    forbidden: [],
+  },
+  {
+    file: 'package.json',
+    required: [
+      '"build:pro:dist": "cd pro-test && npm ci && PRO_BUILD_OUT_DIR=../dist/pro npm run build"',
+      'vite build && npm run build:pro:dist',
+    ],
+    forbidden: [],
+  },
+  {
+    file: 'pro-test/.env.production',
+    required: ['VITE_CLERK_PUBLISHABLE_KEY='],
+    forbidden: ['pk_live_'],
+  },
+  {
+    file: 'scripts/healthradar-readiness.json',
+    required: [
+      '"webBaseUrl": "https://www.healthradar24.com"',
+      '"proBuildReadinessUrl": "https://www.healthradar24.com/pro/healthradar-pro-build.json"',
+      '"commerceBrowserEnabled": false',
+      '"commerceProvider": "disabled"',
+    ],
+    forbidden: [],
+  },
+  {
+    file: 'public/.well-known/security.txt',
+    required: [
+      'Canonical: https://www.healthradar24.com/.well-known/security.txt',
+      'https://github.com/HealthRadar24/healthradar24/security/advisories/new',
+    ],
+    forbidden: [
+      'Canonical: https://www.worldmonitor.app/.well-known/security.txt',
+    ],
+  },
+  {
+    file: 'vercel.json',
+    required: [
+      '"source": "/support"',
+      '"destination": "/healthradar/support.html"',
+      '"source": "/privacy"',
+      '"destination": "/healthradar/privacy.html"',
+      '"source": "/terms"',
+      '"destination": "/healthradar/terms.html"',
+    ],
+    forbidden: [],
+  },
+  {
+    file: 'README.md',
+    required: [
+      '# HealthRadar24',
+      'docs/healthradar-operations.md',
+      'docs/healthradar-provider-policy.md',
+      'docs/healthradar-commercial-launch.md',
+      'docs/healthradar-healthcare-foundation.md',
+    ],
+    forbidden: [],
+  },
+  {
+    file: 'convex/schema.ts',
+    required: [
+      'billingCustomers: defineTable({',
+      'billingSubscriptions: defineTable({',
+      'billingWebhookEvents: defineTable({',
+      'billingProviderLocks: defineTable({',
+      'billingProvider: v.optional(v.union(',
+    ],
+    forbidden: [],
+  },
+  {
+    file: 'shared/healthradar-health-sources.json',
+    required: [
+      '"protectedHealthInformation": "prohibited"',
+      '"id": "diseaseOutbreaks"',
+      '"id": "healthAirQuality"',
+    ],
+    forbidden: [],
+  },
+  {
+    file: '.github/workflows/fork-invariants.yml',
+    required: [
+      'npm run fork:readiness:config',
+      'npm run health:governance',
     ],
     forbidden: [],
   },
