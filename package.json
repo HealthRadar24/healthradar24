@@ -29,6 +29,8 @@
     "sync:bootstrap-tier-keys": "node scripts/sync-bootstrap-tier-keys.mjs",
     "sync:bootstrap-tier-keys:check": "node scripts/sync-bootstrap-tier-keys.mjs --check",
     "fork:check": "node scripts/check-fork-invariants.mjs",
+    "fork:readiness": "node scripts/check-fork-readiness.mjs",
+    "fork:readiness:config": "node scripts/check-fork-readiness.mjs --config-only",
     "sandbox:fixtures": "node scripts/generate-sandbox-fixtures.mjs",
     "sandbox:fixtures:check": "node scripts/generate-sandbox-fixtures.mjs --check",
     "docs:stats": "node scripts/docs-stats.mjs",

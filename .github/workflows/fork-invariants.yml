@@ -18,3 +18,5 @@ jobs:
           node-version: '24'
       - name: Check HealthRadar24 operational boundaries
         run: node scripts/check-fork-invariants.mjs
+      - name: Validate HealthRadar24 readiness policy
+        run: npm run fork:readiness:config
