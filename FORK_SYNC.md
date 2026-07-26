@@ -83,3 +83,46 @@ explicitly enabled after fork-owned products and webhooks are verified:
 
 Until then, production and preview must keep both values `false`; catalog
 responses must omit prices and product IDs.
+
+## Stable-fork readiness
+
+The inherited `/api/health` registry describes every WorldMonitor capability.
+HealthRadar24 intentionally does not operate every upstream provider, so the
+aggregate `HEALTHY`/`UNHEALTHY` verdict is diagnostic and is not, by itself, a
+release gate for this fork.
+
+The fork release gate is defined in
+`scripts/healthradar-readiness.json` and checked by:
+
+```bash
+npm run fork:readiness:config
+npm run fork:readiness
+```
+
+The first command is deterministic and runs on pull requests. The second checks
+the owned HealthRadar24 web/API domains and the intentionally operated health
+signals against production. GitHub runs the live check every 30 minutes through
+`.github/workflows/fork-readiness.yml`.
+
+Provider-blocked checks remain in the upstream health response and in the
+readiness policy with their unblock condition. They are advisory until the
+provider is deliberately enabled. When a provider becomes part of the supported
+product, move its check to `requiredHealthChecks`; do not silently treat a paid
+or authorization-gated provider as core.
+
+Current provider-dependent capabilities are:
+
+| Health check | Provider | Current disposition |
+|---|---|---|
+| `unrestEvents` | ACLED and GDELT | Optional; ACLED event access is 403 and GDELT needs an approved CONNECT proxy |
+| `acledIntel` | ACLED | Optional until the account has event API authorization |
+| `ucdpEvents`, `ucdpEventsBootstrap` | UCDP | Optional until API access and a token are approved |
+| `militaryFlights` | OpenSky | Optional while Railway-to-OpenSky fetches are unreliable |
+| `intlDelays` | AviationStack | Optional; do not upgrade solely for fork readiness |
+| `notamClosures` | ICAO API Data Service | Optional until this feed is deliberately operated |
+
+This separation keeps upstream observability intact while making HealthRadar24's
+own stability claim precise. The initial required set includes inherited
+infrastructure, markets, cyber, weather, insight, forecast, correlation and
+regional pipelines, plus disease outbreaks and health air quality as the
+foundation for healthcare and life-science work.

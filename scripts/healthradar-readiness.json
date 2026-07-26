@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "identity": {
+    "webBaseUrl": "https://www.healthradar24.com",
+    "apiBaseUrl": "https://api.healthradar24.com",
+    "healthUrl": "https://api.healthradar24.com/api/health?compact=1"
+  },
+  "maxHealthAgeMinutes": 5,
+  "minimumHealthRegistrySize": 200,
+  "requiredHealthChecks": [
+    {
+      "name": "outages",
+      "reason": "Core infrastructure awareness"
+    },
+    {
+      "name": "marketQuotes",
+      "reason": "Core inherited market context"
+    },
+    {
+      "name": "commodityQuotes",
+      "reason": "Core inherited commodity context"
+    },
+    {
+      "name": "cyberThreats",
+      "reason": "Core inherited cyber awareness"
+    },
+    {
+      "name": "weatherAlerts",
+      "reason": "Core safety and environmental awareness"
+    },
+    {
+      "name": "newsInsights",
+      "reason": "Core intelligence synthesis"
+    },
+    {
+      "name": "forecasts",
+      "reason": "Core forecast pipeline"
+    },
+    {
+      "name": "correlationCards",
+      "reason": "Core cross-domain signal pipeline"
+    },
+    {
+      "name": "regionalSnapshots",
+      "reason": "Core regional intelligence summaries"
+    },
+    {
+      "name": "diseaseOutbreaks",
+      "reason": "Healthcare and life-science foundation"
+    },
+    {
+      "name": "healthAirQuality",
+      "reason": "Healthcare and environmental-health foundation"
+    }
+  ],
+  "providerBlockedChecks": [
+    {
+      "name": "unrestEvents",
+      "provider": "ACLED and GDELT",
+      "unblock": "ACLED event API authorization or an approved CONNECT proxy for GDELT"
+    },
+    {
+      "name": "acledIntel",
+      "provider": "ACLED",
+      "unblock": "ACLED event API authorization for the existing account"
+    },
+    {
+      "name": "ucdpEvents",
+      "provider": "UCDP",
+      "unblock": "UCDP API access approval and token"
+    },
+    {
+      "name": "ucdpEventsBootstrap",
+      "provider": "UCDP",
+      "unblock": "UCDP API access approval and token"
+    },
+    {
+      "name": "militaryFlights",
+      "provider": "OpenSky",
+      "unblock": "Reliable OpenSky access from Railway; credentials alone do not resolve current egress fetch failures"
+    },
+    {
+      "name": "intlDelays",
+      "provider": "AviationStack",
+      "unblock": "A provider plan that supports the required production endpoint"
+    },
+    {
+      "name": "notamClosures",
+      "provider": "ICAO API Data Service",
+      "unblock": "ICAO API credentials and an explicit decision to operate this feed"
+    }
+  ]
+}

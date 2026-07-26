@@ -1,0 +1,24 @@
+name: HealthRadar24 Readiness
+
+on:
+  schedule:
+    - cron: '7,37 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  readiness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
+        with:
+          node-version: '24'
+      - name: Check the intentional HealthRadar24 production baseline
+        env:
+          WM_HEALTH_URL: ${{ vars.WM_HEALTH_URL }}
+          WM_WEB_BASE_URL: ${{ vars.WM_WEB_BASE_URL }}
+        run: npm run fork:readiness
