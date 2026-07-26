@@ -2,6 +2,7 @@
 
 import { loadEnvFile, runSeed, getRedisCredentials, loadSharedConfig } from './_seed-utils.mjs';
 import { resolveIso2, normalizeCountryToken } from './_country-resolver.mjs';
+import { unwrapEnvelope } from './_seed-envelope-source.mjs';
 
 loadEnvFile(import.meta.url);
 
@@ -22,6 +23,15 @@ const INPUT_KEYS = [
   'news:insights:v1',
 ];
 
+export function parseCorrelationInput(raw) {
+  if (!raw) return null;
+  try {
+    return unwrapEnvelope(JSON.parse(raw)).data;
+  } catch {
+    return null;
+  }
+}
+
 async function fetchInputData() {
   const { url, token } = getRedisCredentials();
   const pipeline = INPUT_KEYS.map(k => ['GET', k]);
@@ -36,9 +46,8 @@ async function fetchInputData() {
   const data = {};
   for (let i = 0; i < INPUT_KEYS.length; i++) {
     const raw = results[i]?.result;
-    if (raw) {
-      try { data[INPUT_KEYS[i]] = JSON.parse(raw); } catch { /* skip */ }
-    }
+    const parsed = parseCorrelationInput(raw);
+    if (parsed != null) data[INPUT_KEYS[i]] = parsed;
   }
   return data;
 }
