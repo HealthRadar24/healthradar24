@@ -79,8 +79,16 @@ const checks = [
     file: 'api/product-catalog.js',
     required: [
       "const PAYMENTS_ENABLED = process.env.PAYMENTS_ENABLED === 'true';",
-      "href: 'https://healthradar24.com/dashboard'",
-      "href: 'https://healthradar24.com/pro#enterprise-contact'",
+      'const BILLING_PROVIDER = billingProvider();',
+      'function publicCatalog(payload)',
+    ],
+    forbidden: [],
+  },
+  {
+    file: 'scripts/generate-product-config.mjs',
+    required: [
+      "tier.href = 'https://healthradar24.com/dashboard'",
+      "tier.href = 'https://healthradar24.com/pro#enterprise-contact'",
     ],
     forbidden: [],
   },

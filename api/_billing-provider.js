@@ -6,11 +6,13 @@
  * keys before selecting a provider-specific price.
  */
 
-import { PRODUCT_PLAN_KEYS } from './_product-fallback-prices.js';
+import { PRODUCT_CATALOG } from './_product-catalog.generated.js';
 
 const STRIPE_PRICE_ENV_BY_PLAN = Object.freeze({
   pro_monthly: 'STRIPE_PRICE_PRO_MONTHLY',
   pro_annual: 'STRIPE_PRICE_PRO_ANNUAL',
+  pro_business_monthly: 'STRIPE_PRICE_PRO_BUSINESS_MONTHLY',
+  pro_business_annual: 'STRIPE_PRICE_PRO_BUSINESS_ANNUAL',
   api_starter: 'STRIPE_PRICE_API_STARTER_MONTHLY',
   api_starter_annual: 'STRIPE_PRICE_API_STARTER_ANNUAL',
   api_business: 'STRIPE_PRICE_API_BUSINESS_MONTHLY',
@@ -32,7 +34,10 @@ export function billingEnvironment(env = process.env) {
 export function resolvePlanKey(productIdOrPlanKey) {
   if (typeof productIdOrPlanKey !== 'string') return null;
   if (SUPPORTED_PLAN_KEYS.has(productIdOrPlanKey)) return productIdOrPlanKey;
-  return PRODUCT_PLAN_KEYS[productIdOrPlanKey] ?? null;
+  const generated = PRODUCT_CATALOG[productIdOrPlanKey];
+  return generated?.planKey && SUPPORTED_PLAN_KEYS.has(generated.planKey)
+    ? generated.planKey
+    : null;
 }
 
 export function stripePriceForPlan(planKey, env = process.env) {

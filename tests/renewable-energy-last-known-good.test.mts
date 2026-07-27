@@ -113,7 +113,11 @@ function createTestService(
 }
 
 async function flushPersistence(): Promise<void> {
-  await new Promise(resolve => setTimeout(resolve, 0));
+  // The first persistent write includes a cold dynamic import. Give that
+  // fire-and-forget boundary a bounded window under a loaded full-suite run.
+  for (let attempt = 0; attempt < 20; attempt++) {
+    await new Promise(resolve => setTimeout(resolve, 5));
+  }
 }
 
 const originalGlobals = {
