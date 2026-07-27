@@ -1,7 +1,9 @@
 import { strict as assert } from 'node:assert';
 import { afterEach, test } from 'node:test';
+import { PUBLIC_PRODUCT_FACTS } from './_product-catalog.generated.js';
 
 const ORIGINAL_ENV = { ...process.env };
+const ORIGINAL_FETCH = globalThis.fetch;
 
 function restoreEnv() {
   for (const key of Object.keys(process.env)) {
@@ -10,9 +12,15 @@ function restoreEnv() {
   Object.assign(process.env, ORIGINAL_ENV);
 }
 
-async function importHandler({ relaySecret }) {
-  delete process.env.UPSTASH_REDIS_REST_URL;
-  delete process.env.UPSTASH_REDIS_REST_TOKEN;
+async function importHandler({ relaySecret, upstash = false }) {
+  if (upstash) {
+    process.env.UPSTASH_REDIS_REST_URL = 'https://upstash.example';
+    process.env.UPSTASH_REDIS_REST_TOKEN = 'test-token';
+  } else {
+    delete process.env.UPSTASH_REDIS_REST_URL;
+    delete process.env.UPSTASH_REDIS_REST_TOKEN;
+  }
+  delete process.env.DODO_API_KEY;
   if (relaySecret == null) {
     delete process.env.RELAY_SHARED_SECRET;
   } else {
@@ -20,6 +28,12 @@ async function importHandler({ relaySecret }) {
   }
   const mod = await import(`./product-catalog.js?test=${Date.now()}-${Math.random()}`);
   return mod.default;
+}
+
+function getRequest() {
+  return new Request('https://api.worldmonitor.app/api/product-catalog', {
+    method: 'GET',
+  });
 }
 
 function deleteRequest(authHeader) {
@@ -32,6 +46,7 @@ function deleteRequest(authHeader) {
 }
 
 afterEach(() => {
+  globalThis.fetch = ORIGINAL_FETCH;
   restoreEnv();
 });
 
@@ -57,4 +72,60 @@ test('DELETE purge fails closed when RELAY_SHARED_SECRET is missing', async () =
 
   const noAuth = await handler(deleteRequest(null));
   assert.equal(noAuth.status, 401);
+});
+
+test('GET fallback publishes generated lifecycle, pricing, and capability facts', async () => {
+  const handler = await importHandler({ relaySecret: null });
+
+  const response = await handler(getRequest());
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get('x-product-catalog-source'), 'fallback');
+
+  const body = await response.json();
+  assert.equal(body.product.name, 'HealthRadar24');
+  assert.equal(body.product.lifecycle, 'prelaunch');
+  assert.equal(body.product.pricingUrl, 'https://www.healthradar24.com/pro#pricing');
+  assert.equal(body.currency, 'USD');
+  assert.equal(body.commerceEnabled, false);
+  assert.equal(body.capabilities.mcpTools, PUBLIC_PRODUCT_FACTS.capabilities.mcpTools);
+  const publishedPro = body.plans.find((plan) => plan.planKey === 'pro_monthly');
+  assert.equal(publishedPro.billingDuration, 'P1M');
+  assert.equal('price' in publishedPro, false);
+  assert.ok(body.tiers.some((tier) => (
+    tier.name === 'Pro'
+    && !('monthlyPrice' in tier)
+    && !('annualPrice' in tier)
+    && !('monthlyProductId' in tier)
+    && !('annualProductId' in tier)
+  )));
+});
+
+test('GET cache cannot override generated public lifecycle and capability facts', async () => {
+  globalThis.fetch = async () => new Response(JSON.stringify({
+    result: JSON.stringify({
+      product: { lifecycle: 'waitlist', pricingUrl: '/stale' },
+      currency: 'EUR',
+      plans: [],
+      capabilities: { mcpTools: 1 },
+      tiers: [{ name: 'Cached tier' }],
+      fetchedAt: 123,
+    }),
+  }));
+  const handler = await importHandler({ relaySecret: null, upstash: true });
+
+  const response = await handler(getRequest());
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get('x-product-catalog-source'), 'cache');
+
+  const body = await response.json();
+  assert.equal(body.product.lifecycle, PUBLIC_PRODUCT_FACTS.product.lifecycle);
+  assert.equal(body.product.pricingUrl, PUBLIC_PRODUCT_FACTS.product.pricingUrl);
+  assert.equal(body.currency, PUBLIC_PRODUCT_FACTS.currency);
+  assert.deepEqual(
+    body.plans,
+    PUBLIC_PRODUCT_FACTS.plans.map(({ price: _price, ...plan }) => plan),
+  );
+  assert.equal(body.commerceEnabled, false);
+  assert.equal(body.capabilities.mcpTools, PUBLIC_PRODUCT_FACTS.capabilities.mcpTools);
+  assert.deepEqual(body.tiers, [{ name: 'Cached tier' }]);
 });

@@ -55,9 +55,6 @@ console.log(`[Relay] Heap limit: ${(_heapStats.heap_size_limit / 1024 / 1024).to
 const AISSTREAM_URL = 'wss://stream.aisstream.io/v0/stream';
 const API_KEY = process.env.AISSTREAM_API_KEY || process.env.VITE_AISSTREAM_API_KEY;
 const PORT = process.env.PORT || 3004;
-// Self-hosted forks can point relay-originated API calls at their own gateway.
-// Keep upstream as the default so upstream deployments and local development
-// remain unchanged when API_BASE_URL is not configured.
 const API_BASE_URL = (process.env.API_BASE_URL || 'https://api.worldmonitor.app').replace(/\/+$/, '');
 
 if (!API_KEY) {
@@ -4606,9 +4603,9 @@ function startTheaterPostureSeedLoop() {
 }
 
 // ─────────────────────────────────────────────────────────────
-// Warm-ping shared auth — relay → configured API gateway
+// Warm-ping shared auth — relay → api.worldmonitor.app
 //
-// All warm-pings call API_BASE_URL/api/* edge functions. These are
+// All warm-pings call api.worldmonitor.app/api/* edge functions. These are
 // non-premium but NOT anonymous: in normal traffic they require a browser
 // session token or an API key. Origin-trust used to satisfy them, but the
 // gateway dropped all Origin/Referer trust in the #3541 hardening — Origin
@@ -6640,48 +6637,22 @@ function startPizzintSeedLoop() {
 // ─────────────────────────────────────────────────────────────
 const DODO_PRICE_SEED_INTERVAL_MS = 6 * 60 * 60 * 1000; // 6 hours
 const DODO_PRICE_SEED_TTL = 43200; // 12h (2× interval)
-const DODO_PRICE_REDIS_KEY = 'product-catalog:v2';
+const DODO_PRICE_REDIS_KEY = 'product-catalog:v3';
 const DODO_LIVE_URL = 'https://live.dodopayments.com';
 const DODO_TEST_URL = 'https://test.dodopayments.com';
 const DODO_PRICE_API_KEY = process.env.DODO_API_KEY || '';
 const DODO_PRICE_ENV = process.env.DODO_PAYMENTS_ENVIRONMENT || 'test_mode';
 
-const DODO_PRODUCT_IDS = [
-  'pdt_0Nbtt71uObulf7fGXhQup', // Pro Monthly
-  'pdt_0NbttMIfjLWC10jHQWYgJ', // Pro Annual
-  'pdt_0NbttVmG1SERrxhygbbUq', // API Starter Monthly
-  'pdt_0Nbu2lawHYE3dv2THgSEV', // API Starter Annual
-  'pdt_0Nbttg7NuOJrhbyBGCius', // API Business Monthly (#4945)
-];
-
-// ⚠ MANUAL MIRROR of TIER_CONFIG in api/product-catalog.js (and ultimately
-// convex/config/productCatalog.ts marketingFeatures). This seeder's Redis
-// payload is the PRIMARY live catalog — it wins over the edge fallback on
-// cache hits — so drift here silently changes the /pro pricing page (#4946
-// P0, #4974). Parity enforced by tests/product-catalog-freshness.test.mjs.
-const DODO_TIER_CONFIG = {
-  free: { name: 'Free', localeKey: 'free', description: 'Get started with the essentials', features: ['Core dashboard panels', 'Global news feed', 'Earthquake & weather alerts', 'Basic map view'], cta: 'Get Started', href: 'https://healthradar24.com/dashboard', highlighted: false },
-  pro: { name: 'Pro', localeKey: 'pro', description: 'Full intelligence dashboard', features: ['Everything in Free', 'AI stock analysis & backtesting', 'Daily market briefs', 'Military & geopolitical tracking', 'Custom widget builder', 'MCP + SDK access for Claude Desktop & other AI clients (50 calls/day)', 'Priority data refresh'], highlighted: true },
-  api_starter: { name: 'API Starter', localeKey: 'api', description: 'Programmatic access to intelligence data', features: ['REST API + official SDKs (npm, PyPI, RubyGems, Go)', 'License / API key included', 'Real-time data streams', '60 requests/minute', '1,000 requests/day included', 'Webhook notifications'], highlightFeatures: ['No commercial use'], highlighted: false },
-  api_business: { name: 'API Business', localeKey: 'apiBusiness', description: 'High-volume API for teams', features: ['Everything in API Starter', '300 requests/minute', '10,000 requests/day included', '5 Pro licenses included', 'Same company email required', 'Priority support'], highlightFeatures: ['Commercial use applicable'], highlighted: false },
-  enterprise: { name: 'Enterprise', localeKey: 'enterprise', description: 'Custom solutions for organizations', features: ['Everything in Pro + API', 'Unlimited API requests', 'Dedicated support', 'Custom integrations', 'SLA guarantee', 'On-premise option'], cta: 'Contact Sales', href: 'https://healthradar24.com/pro#enterprise-contact', highlighted: false },
-};
-
-const DODO_PRODUCT_META = {
-  'pdt_0Nbtt71uObulf7fGXhQup': { tierGroup: 'pro', billingPeriod: 'monthly' },
-  'pdt_0NbttMIfjLWC10jHQWYgJ': { tierGroup: 'pro', billingPeriod: 'annual' },
-  'pdt_0NbttVmG1SERrxhygbbUq': { tierGroup: 'api_starter', billingPeriod: 'monthly' },
-  'pdt_0Nbu2lawHYE3dv2THgSEV': { tierGroup: 'api_starter', billingPeriod: 'annual' },
-  'pdt_0Nbttg7NuOJrhbyBGCius': { tierGroup: 'api_business', billingPeriod: 'monthly' },
-};
-
-const DODO_FALLBACK_PRICES = {
-  'pdt_0Nbtt71uObulf7fGXhQup': 3999,
-  'pdt_0NbttMIfjLWC10jHQWYgJ': 39999,
-  'pdt_0NbttVmG1SERrxhygbbUq': 9999,
-  'pdt_0Nbu2lawHYE3dv2THgSEV': 99900,
-  'pdt_0Nbttg7NuOJrhbyBGCius': 29999,
-};
+// Generated from convex/config/productCatalog.ts. The Railway Redis writer and
+// the Edge fallback consume the same artifact so cache hits cannot silently
+// revert plan copy, lifecycle metadata, or fallback prices.
+const GENERATED_PRODUCT_CATALOG = requireShared('product-catalog.generated.json');
+const DODO_PRODUCT_META = GENERATED_PRODUCT_CATALOG.products;
+const DODO_PRODUCT_IDS = Object.keys(GENERATED_PRODUCT_CATALOG.fallbackPrices);
+const DODO_TIER_CONFIG = GENERATED_PRODUCT_CATALOG.tierConfig;
+const DODO_PUBLIC_TIER_GROUPS = GENERATED_PRODUCT_CATALOG.publicTierGroups;
+const DODO_FALLBACK_PRICES = GENERATED_PRODUCT_CATALOG.fallbackPrices;
+const DODO_PUBLIC_PRODUCT_FACTS = GENERATED_PRODUCT_CATALOG.facts;
 
 let dodoPriceSeedInFlight = false;
 
@@ -6748,8 +6719,7 @@ async function seedDodoPrices() {
 
     // Build tier view model
     const tiers = [];
-    const publicGroups = ['free', 'pro', 'api_starter', 'api_business', 'enterprise'];
-    for (const group of publicGroups) {
+    for (const group of DODO_PUBLIC_TIER_GROUPS) {
       const config = DODO_TIER_CONFIG[group];
       if (!config) continue;
       if (group === 'free') { tiers.push({ ...config, price: 0, period: 'forever' }); continue; }
@@ -6765,7 +6735,13 @@ async function seedDodoPrices() {
 
     const priceSource = fallbackCount === 0 ? 'dodo' : fetchedCount > 0 ? 'partial' : 'fallback';
     const now = Date.now();
-    const payload = { tiers, fetchedAt: now, cachedUntil: now + DODO_PRICE_SEED_TTL * 1000, priceSource };
+    const payload = {
+      ...DODO_PUBLIC_PRODUCT_FACTS,
+      tiers,
+      fetchedAt: now,
+      cachedUntil: now + DODO_PRICE_SEED_TTL * 1000,
+      priceSource,
+    };
 
     // Only write to Redis when ALL prices came from Dodo (no fallback contamination).
     // Partial/fallback results are not persisted — edge endpoint serves them directly with short cache.
