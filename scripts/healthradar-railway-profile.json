@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "environment": "production",
+  "connectedServices": [
+    {
+      "name": "relay",
+      "repository": "HealthRadar24/healthradar24",
+      "branch": "main",
+      "cronSchedule": null
+    }
+  ],
+  "pausedServices": {
+    "namePrefixes": [
+      "seed-"
+    ],
+    "sourceConnected": false,
+    "cronSchedule": null
+  }
+}

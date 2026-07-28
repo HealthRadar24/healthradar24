@@ -31,6 +31,8 @@
     "fork:check": "node scripts/check-fork-invariants.mjs",
     "fork:readiness": "node scripts/check-fork-readiness.mjs",
     "fork:readiness:config": "node scripts/check-fork-readiness.mjs --config-only",
+    "fork:railway": "node scripts/check-healthradar-railway-profile.mjs",
+    "fork:railway:config": "node scripts/check-healthradar-railway-profile.mjs --config-only",
     "health:governance": "node scripts/check-healthradar-health-governance.mjs",
     "sandbox:fixtures": "node scripts/generate-sandbox-fixtures.mjs",
     "sandbox:fixtures:check": "node scripts/generate-sandbox-fixtures.mjs --check",

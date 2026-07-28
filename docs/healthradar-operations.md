@@ -23,6 +23,24 @@ Do not add a second relay merely to match a product label. The existing
 be aligned in the hosting dashboard when useful, but topology and behavior—not
 duplicate compute—define parity.
 
+The initial production profile keeps only the Railway service named `relay`
+connected to the fork's `main` branch. Every inherited `seed-*` service is
+retained but has no GitHub source and no cron. This prevents upstream sync
+merges from rebuilding a deferred fleet while preserving each service's
+variables and deployment history for later promotion. The machine-readable
+contract is `scripts/healthradar-railway-profile.json`; verify it with:
+
+```bash
+npm run fork:railway
+```
+
+To promote a capability, first update the readiness classification and Railway
+profile in a reviewed pull request. Then reconnect only its owning service to
+`HealthRadar24/healthradar24` on `main`, apply the upstream registry's exact
+watch paths and cron, verify its required environment without printing values,
+and run at least one successful freshness window. Do not reconnect the entire
+seed fleet merely to reproduce upstream dashboard coverage.
+
 ## Environment ownership
 
 Never commit, print, or copy secret values into documentation. Environment
@@ -86,6 +104,11 @@ or commerce gates differ from the approved disabled state.
 7. Merge only after explicit user approval and green required checks.
 8. Observe Vercel, Convex, Railway, Cloudflare, and the live fork-readiness
    workflow after `main` deploys.
+
+Before a release that changes infrastructure or promotes a data capability,
+also run `npm run fork:railway`. This live check requires an authenticated
+Railway CLI and intentionally remains an operator check rather than a
+credentialed pull-request job.
 
 The machine-readable release policy is
 `scripts/healthradar-readiness.json`. Both the main build and `/pro` publish a
