@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "identity": {
     "webBaseUrl": "https://www.healthradar24.com",
     "apiBaseUrl": "https://api.healthradar24.com",
@@ -15,50 +15,62 @@
   },
   "maxHealthAgeMinutes": 5,
   "minimumHealthRegistrySize": 200,
-  "requiredHealthChecks": [
+  "requiredHealthChecks": [],
+  "deferredHealthChecks": [
     {
       "name": "outages",
-      "reason": "Core infrastructure awareness"
+      "reason": "Inherited infrastructure-awareness coverage is not part of the initial healthcare platform promise",
+      "activateWhen": "a committed HealthRadar workflow depends on internet-outage intelligence"
     },
     {
       "name": "marketQuotes",
-      "reason": "Core inherited market context"
+      "reason": "Inherited market context is not part of the initial healthcare platform promise",
+      "activateWhen": "a committed healthcare or life-science workflow depends on market context"
     },
     {
       "name": "commodityQuotes",
-      "reason": "Core inherited commodity context"
+      "reason": "Inherited commodity context is not part of the initial healthcare platform promise",
+      "activateWhen": "a committed healthcare supply-chain workflow depends on commodity context"
     },
     {
       "name": "cyberThreats",
-      "reason": "Core inherited cyber awareness"
+      "reason": "Inherited cyber-awareness coverage is not part of the initial healthcare platform promise",
+      "activateWhen": "a committed healthcare infrastructure workflow depends on cyber intelligence"
     },
     {
       "name": "weatherAlerts",
-      "reason": "Core safety and environmental awareness"
+      "reason": "Inherited weather-alert coverage remains available for future health-context features",
+      "activateWhen": "a committed environmental-health workflow depends on live weather alerts"
     },
     {
       "name": "newsInsights",
-      "reason": "Core intelligence synthesis"
+      "reason": "Inherited LLM intelligence synthesis is not required for the stable platform foundation",
+      "activateWhen": "HealthRadar ships a reviewed healthcare synthesis feature"
     },
     {
       "name": "forecasts",
-      "reason": "Core forecast pipeline"
+      "reason": "Inherited forecast generation is not required for the stable platform foundation",
+      "activateWhen": "HealthRadar ships a validated healthcare forecasting feature"
     },
     {
       "name": "correlationCards",
-      "reason": "Core cross-domain signal pipeline"
+      "reason": "Inherited cross-domain correlation is not required before its healthcare use is defined",
+      "activateWhen": "a committed health-intelligence workspace consumes correlation cards"
     },
     {
       "name": "regionalSnapshots",
-      "reason": "Core regional intelligence summaries"
+      "reason": "Inherited regional summaries are not required before their healthcare use is defined",
+      "activateWhen": "a committed health-intelligence workspace consumes regional summaries"
     },
     {
       "name": "diseaseOutbreaks",
-      "reason": "Healthcare and life-science foundation"
+      "reason": "Governed healthcare candidate; its Railway cadence is intentionally paused during platform stabilization",
+      "activateWhen": "the first HealthRadar outbreak workspace enters implementation"
     },
     {
       "name": "healthAirQuality",
-      "reason": "Healthcare and environmental-health foundation"
+      "reason": "Governed environmental-health candidate; its Railway cadence is intentionally paused during platform stabilization",
+      "activateWhen": "the first HealthRadar environmental-health workspace enters implementation"
     }
   ],
   "providerBlockedChecks": [

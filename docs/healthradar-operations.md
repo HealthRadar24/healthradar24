@@ -11,7 +11,7 @@ which systems HealthRadar24 operates and where the fork deliberately differs.
 | Vercel `healthradar24` | Kernelius | SPA, `/pro`, Edge APIs, static trust pages | Git integration after a branch or `main` update |
 | Convex | Kernelius | Authentication-adjacent application state and the inherited Pro backend | `Convex Deploy` after `convex/` changes reach `main` |
 | Railway `ais-relay` | Kernelius | Long-running relay and network/provider work unsuitable for Vercel Edge | Railway Git deployment |
-| Railway seed services | Kernelius | Scheduled cache hydration using the inherited seed programs | Railway Git deployment or schedule |
+| Railway seed services | Kernelius | Capability-driven cache hydration; paused until a selected product feature requires the corresponding feed | Railway Git deployment or schedule |
 | Upstash Redis | Kernelius | Shared API/relay cache and seed state | Managed integration; no code deployment |
 | Cloudflare Worker | Kernelius | CORS preflight at `api.healthradar24.com` | `Deploy API CORS Worker` after Worker changes reach `main` |
 | GitHub Actions | HealthRadar24 repository | CI, fork invariants, readiness, Convex and Worker deployment | Pull request, `main`, schedule, or manual dispatch |
@@ -46,6 +46,25 @@ Current known configuration gate: Vercel Preview must expose a public Convex
 deployment URL through one of the accepted names above. Production values pulled
 through Vercel CLI may be masked and must not be treated as transferable secret
 material.
+
+## Readiness classes
+
+The live readiness workflow separates platform stability from inherited data
+coverage:
+
+- `requiredHealthChecks` are promoted product promises. An unhealthy required
+  check fails the release gate.
+- `deferredHealthChecks` are governed capabilities whose services are
+  intentionally not operated yet. They remain visible without failing the
+  platform gate.
+- `providerBlockedChecks` require external authorization, credentials, terms,
+  or network access. They remain visible with an explicit unblock condition.
+- all other upstream health problems are advisory.
+
+Even with no promoted data feed, readiness fails when Redis is unavailable, the
+health registry shrinks below its integrity floor, the health snapshot is stale,
+the deployed product identity is wrong, Clerk is absent from the browser build,
+or commerce gates differ from the approved disabled state.
 
 ## Release sequence
 
@@ -108,9 +127,10 @@ The detailed staged procedure is
 
 ## Healthcare launch boundary
 
-The initial healthcare foundation includes disease outbreaks and environmental
+The initial healthcare foundation governs disease outbreaks and environmental
 health/air quality because those feeds already fit the inherited situational
-awareness model. New healthcare sources must document:
+awareness model. Their operating cadences remain deferred until a committed
+workspace promotes them. New healthcare sources must document:
 
 - provenance, update cadence, licensing, and geographical scope;
 - whether the data is public, aggregate, de-identified, or personal;

@@ -9,7 +9,7 @@
   "capabilities": [
     {
       "id": "diseaseOutbreaks",
-      "status": "required_baseline",
+      "status": "deferred_candidate",
       "apiRoute": "/api/health/v1/list-disease-outbreaks",
       "canonicalKey": "health:disease-outbreaks:v1",
       "seedMetaKey": "seed-meta:health:disease-outbreaks",
@@ -50,7 +50,7 @@
     },
     {
       "id": "healthAirQuality",
-      "status": "required_baseline",
+      "status": "deferred_candidate",
       "apiRoute": "/api/health/v1/list-air-quality-alerts",
       "canonicalKey": "health:air-quality:v1",
       "seedMetaKey": "seed-meta:health:air-quality",

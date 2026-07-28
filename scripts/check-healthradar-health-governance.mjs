@@ -29,6 +29,9 @@ if (policy.productBoundary?.protectedHealthInformation !== 'prohibited') {
 const requiredChecks = new Set(
   (readiness.requiredHealthChecks ?? []).map((entry) => entry.name),
 );
+const deferredChecks = new Set(
+  (readiness.deferredHealthChecks ?? []).map((entry) => entry.name),
+);
 const capabilities = Array.isArray(policy.capabilities) ? policy.capabilities : [];
 for (const capability of capabilities) {
   for (const field of [
@@ -43,6 +46,14 @@ for (const capability of capabilities) {
   }
   if (capability.status === 'required_baseline' && !requiredChecks.has(capability.id)) {
     failures.push(`${capability.id} is baseline but absent from readiness.requiredHealthChecks`);
+  }
+  if (capability.status === 'deferred_candidate' && !deferredChecks.has(capability.id)) {
+    failures.push(
+      `${capability.id} is deferred but absent from readiness.deferredHealthChecks`,
+    );
+  }
+  if (!['required_baseline', 'deferred_candidate'].includes(capability.status)) {
+    failures.push(`${capability.id}.status must be required_baseline or deferred_candidate`);
   }
   if (!Number.isFinite(capability.cadenceMinutes) || capability.cadenceMinutes <= 0) {
     failures.push(`${capability.id}.cadenceMinutes must be positive`);
@@ -89,7 +100,6 @@ if (failures.length > 0) {
   process.exitCode = 1;
 } else {
   console.log(
-    `HealthRadar healthcare governance passed (${capabilities.length} baseline capabilities).`,
+    `HealthRadar healthcare governance passed (${capabilities.length} governed capabilities).`,
   );
 }
-

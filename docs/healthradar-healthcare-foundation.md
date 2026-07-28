@@ -1,9 +1,11 @@
 # HealthRadar24 healthcare foundation
 
-HealthRadar24 begins with two inherited, already freshness-tracked capabilities:
-disease-outbreak advisories and environmental air-quality measurements. This is
-the stable technical baseline for later healthcare and life-science work; it is
-not yet a clinical product.
+HealthRadar24 begins with two inherited, freshness-tracked capability
+candidates: disease-outbreak advisories and environmental air-quality
+measurements. Their contracts, provenance, health signals, and seed programs are
+the governed technical starting point for later healthcare and life-science
+work. Their Railway cadences remain deferred until a committed product slice
+needs them; neither capability is yet a clinical product promise.
 
 The machine-readable source policy is
 `shared/healthradar-health-sources.json`. Validate it with:
@@ -12,17 +14,19 @@ The machine-readable source policy is
 npm run health:governance
 ```
 
-## Baseline capability contract
+## Governed capability contract
 
-| Capability | Canonical data | Cadence | Freshness gate | Product role |
+| Capability | Canonical data | Cadence when active | Freshness gate | Initial state |
 |---|---|---:|---:|---|
-| Disease outbreaks | `health:disease-outbreaks:v1` | Daily | 48 hours | Public outbreak and advisory awareness |
-| Health air quality | `health:air-quality:v1` | Hourly | 3 hours | PM2.5/environmental-health awareness |
+| Disease outbreaks | `health:disease-outbreaks:v1` | Daily | 48 hours | Deferred until the outbreak workspace is implemented |
+| Health air quality | `health:air-quality:v1` | Hourly | 3 hours | Deferred until the environmental-health workspace is implemented |
 
 Both capabilities already have typed Health RPCs, Redis seed metadata, health
-registry entries, bootstrap/MCP integration, and upstream regression tests. The
-fork readiness policy requires them so an upstream sync cannot silently remove
-the healthcare starting point.
+registry entries, bootstrap/MCP integration, and upstream regression tests.
+Healthcare governance and fork invariants preserve those contracts while the
+readiness policy reports their operational coverage as explicitly deferred.
+Promoting one to the release baseline requires enabling only its owned seed
+cadence and proving a full freshness window in production.
 
 ## Interpretation boundary
 
