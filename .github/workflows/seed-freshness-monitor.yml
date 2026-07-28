@@ -36,7 +36,7 @@ jobs:
             echo "Skipping seed freshness alert because main gate is $gate_state."
           fi
 
-      - name: Check seed metadata freshness
+      - name: Check ingestion operational acceptance
         if: github.event_name == 'workflow_dispatch' || steps.gate.outputs.should_run == 'true'
         env:
           HEALTH_URL: ${{ vars.WM_HEALTH_URL }}
