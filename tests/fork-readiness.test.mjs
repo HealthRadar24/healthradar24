@@ -19,6 +19,7 @@ function healthyPayload(overrides = {}) {
     summary: { total: 239, ok: 160, warn: 12, onDemandWarn: 10, crit: 57 },
     checkedAt: '2026-07-26T18:00:00.000Z',
     problems: {
+      outages: { status: 'EMPTY' },
       unrestEvents: { status: 'EMPTY' },
       unrelatedOptionalFeed: { status: 'STALE_SEED' },
     },
@@ -27,7 +28,7 @@ function healthyPayload(overrides = {}) {
 }
 
 describe('HealthRadar24 fork readiness', () => {
-  it('pins production identity to HealthRadar24 and keeps required checks disjoint', () => {
+  it('pins production identity to HealthRadar24 and keeps classifications disjoint', () => {
     const sets = validateReadinessConfig(config);
 
     assert.equal(new URL(config.identity.webBaseUrl).hostname, 'www.healthradar24.com');
@@ -42,6 +43,8 @@ describe('HealthRadar24 fork readiness', () => {
       '/pro/healthradar-pro-build.json',
     );
     assert.equal([...sets.required].some((name) => sets.blocked.has(name)), false);
+    assert.equal([...sets.required].some((name) => sets.deferred.has(name)), false);
+    assert.equal([...sets.deferred].some((name) => sets.blocked.has(name)), false);
   });
 
   it('requires the deployed browser build to contain Clerk while commerce stays disabled', () => {
@@ -74,7 +77,7 @@ describe('HealthRadar24 fork readiness', () => {
     assert.deepEqual(pro.failures, []);
   });
 
-  it('accepts provider-blocked and advisory upstream gaps when the intentional baseline is healthy', () => {
+  it('accepts deferred, provider-blocked, and advisory gaps when the platform is healthy', () => {
     const result = evaluateReadinessPayload(
       config,
       healthyPayload(),
@@ -82,6 +85,10 @@ describe('HealthRadar24 fork readiness', () => {
     );
 
     assert.deepEqual(result.failures, []);
+    assert.deepEqual(
+      result.deferredCapabilities.map(({ name, status }) => ({ name, status })),
+      [{ name: 'outages', status: 'EMPTY' }],
+    );
     assert.deepEqual(
       result.providerBlockers.map(({ name, status }) => ({ name, status })),
       [{ name: 'unrestEvents', status: 'EMPTY' }],
@@ -92,8 +99,18 @@ describe('HealthRadar24 fork readiness', () => {
   });
 
   it('fails when a required pipeline is unhealthy or the health snapshot is stale', () => {
+    const requiredConfig = structuredClone(config);
+    const diseaseOutbreaks = requiredConfig.deferredHealthChecks
+      .find((check) => check.name === 'diseaseOutbreaks');
+    requiredConfig.deferredHealthChecks = requiredConfig.deferredHealthChecks
+      .filter((check) => check.name !== 'diseaseOutbreaks');
+    requiredConfig.requiredHealthChecks = [{
+      name: diseaseOutbreaks.name,
+      reason: 'Promoted outbreak workspace',
+    }];
+
     const result = evaluateReadinessPayload(
-      config,
+      requiredConfig,
       healthyPayload({
         checkedAt: '2026-07-26T17:40:00.000Z',
         problems: { diseaseOutbreaks: { status: 'STALE_SEED' } },
@@ -124,6 +141,7 @@ describe('HealthRadar24 fork readiness', () => {
     const healthSource = readFileSync(new URL('../api/health.js', import.meta.url), 'utf8');
     for (const check of [
       ...config.requiredHealthChecks,
+      ...config.deferredHealthChecks,
       ...config.providerBlockedChecks,
     ]) {
       assert.match(healthSource, new RegExp(`^\\s*${check.name}:`, 'm'), check.name);

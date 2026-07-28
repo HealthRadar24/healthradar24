@@ -13,18 +13,20 @@ The authoritative machine-readable split is
 | Capability | Current policy | Why |
 |---|---|---|
 | Vercel web and Edge API | Required | Public application and API runtime |
-| Railway relay and selected seeders | Required | Long-running/provider fetch work and cache hydration |
+| Railway relay and selected seeders | Capability-driven | Enable only when an accepted product capability requires long-running fetch or cache hydration |
 | Upstash Redis | Required | Shared API cache, seed state, and stampede protection |
 | Convex | Required for `/pro` | Inherited Pro application state |
 | Clerk | Required for `/pro` authentication | Identity provider |
 | Cloudflare API Worker | Required for the API domain | Fork-owned CORS preflight and edge routing |
-| Core markets, weather, cyber, forecast, correlation, regional and outage feeds | Required health checks | Stable inherited situational-awareness baseline |
-| Disease outbreaks and health air quality | Required health checks | First healthcare/life-science foundation |
+| Core markets, weather, cyber, forecast, correlation, regional and outage feeds | Deferred health checks | Inherited capability coverage, not proof that the HealthRadar platform is deployable |
+| Disease outbreaks and health air quality | Deferred governed candidates | First healthcare/life-science contracts; promote individually when their product workspace is implemented |
 | Stripe | Staged but disabled | Future billing; not a stability dependency |
 
-Required does not mean every upstream seed service must run. Operate the smallest
-set that satisfies the required readiness checks and product promises. Add a
-service only when its absence creates a measurable capability gap.
+Platform readiness fails closed on deployment identity, Clerk build
+configuration, commerce gates, Redis availability, health-registry integrity,
+and health-snapshot freshness. Feature feeds remain visible as deferred until
+HealthRadar makes a product promise that depends on them. Operate the smallest
+service set that satisfies current product promises.
 
 ## Provider-blocked capabilities
 
@@ -52,8 +54,8 @@ To move a provider from optional to required:
 3. Add bounded timeouts, caching, stale fallback, rate-limit handling, and a
    provider-specific health signal.
 4. Document expected free-tier limits and the approved monthly budget ceiling.
-5. Add it to `requiredHealthChecks` and remove it from
-   `providerBlockedChecks` in the same pull request.
+5. Add it to `requiredHealthChecks` and remove it from either
+   `deferredHealthChecks` or `providerBlockedChecks` in the same pull request.
 6. Verify bootstrap hydration when the new source is user-visible.
 
 Removing or downgrading a provider follows the inverse process and must identify

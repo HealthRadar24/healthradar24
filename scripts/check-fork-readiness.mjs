@@ -32,9 +32,9 @@ function assertHttpsUrl(value, label, expectedHost) {
   return parsed;
 }
 
-function assertUniqueNames(entries, label) {
-  if (!Array.isArray(entries) || entries.length === 0) {
-    throw new Error(`${label} must be a non-empty array`);
+function assertUniqueNames(entries, label, { allowEmpty = false } = {}) {
+  if (!Array.isArray(entries) || (!allowEmpty && entries.length === 0)) {
+    throw new Error(`${label} must be ${allowEmpty ? 'an array' : 'a non-empty array'}`);
   }
   const seen = new Set();
   for (const [index, entry] of entries.entries()) {
@@ -50,7 +50,7 @@ function assertUniqueNames(entries, label) {
 
 export function validateReadinessConfig(config) {
   assertObject(config, 'Readiness config');
-  if (config.schemaVersion !== 1) throw new Error('Readiness config schemaVersion must be 1');
+  if (config.schemaVersion !== 2) throw new Error('Readiness config schemaVersion must be 2');
   assertObject(config.identity, 'Readiness config identity');
 
   for (const [field, expectedHost] of Object.entries(EXPECTED_HOSTS)) {
@@ -92,7 +92,12 @@ export function validateReadinessConfig(config) {
     throw new Error('minimumHealthRegistrySize must be a positive integer');
   }
 
-  const required = assertUniqueNames(config.requiredHealthChecks, 'requiredHealthChecks');
+  const required = assertUniqueNames(
+    config.requiredHealthChecks,
+    'requiredHealthChecks',
+    { allowEmpty: true },
+  );
+  const deferred = assertUniqueNames(config.deferredHealthChecks, 'deferredHealthChecks');
   const blocked = assertUniqueNames(config.providerBlockedChecks, 'providerBlockedChecks');
   for (const entry of config.requiredHealthChecks) {
     if (typeof entry.reason !== 'string' || entry.reason.length === 0) {
@@ -103,6 +108,9 @@ export function validateReadinessConfig(config) {
     if (required.has(entry.name)) {
       throw new Error(`${entry.name} cannot be both required and provider-blocked`);
     }
+    if (deferred.has(entry.name)) {
+      throw new Error(`${entry.name} cannot be both deferred and provider-blocked`);
+    }
     if (typeof entry.provider !== 'string' || entry.provider.length === 0) {
       throw new Error(`providerBlockedChecks.${entry.name}.provider must be a non-empty string`);
     }
@@ -110,7 +118,20 @@ export function validateReadinessConfig(config) {
       throw new Error(`providerBlockedChecks.${entry.name}.unblock must be a non-empty string`);
     }
   }
-  return { required, blocked };
+  for (const entry of config.deferredHealthChecks) {
+    if (required.has(entry.name)) {
+      throw new Error(`${entry.name} cannot be both required and deferred`);
+    }
+    if (typeof entry.reason !== 'string' || entry.reason.length === 0) {
+      throw new Error(`deferredHealthChecks.${entry.name}.reason must be a non-empty string`);
+    }
+    if (typeof entry.activateWhen !== 'string' || entry.activateWhen.length === 0) {
+      throw new Error(
+        `deferredHealthChecks.${entry.name}.activateWhen must be a non-empty string`,
+      );
+    }
+  }
+  return { required, deferred, blocked };
 }
 
 export function evaluateReadinessPayload(config, payload, now = Date.now()) {
@@ -152,8 +173,15 @@ export function evaluateReadinessPayload(config, payload, now = Date.now()) {
       ...check,
       status: problems[check.name].status || 'unhealthy',
     }));
+  const deferredCapabilities = config.deferredHealthChecks
+    .filter((check) => problems[check.name])
+    .map((check) => ({
+      ...check,
+      status: problems[check.name].status || 'unhealthy',
+    }));
   const classifiedNames = new Set([
     ...config.requiredHealthChecks.map((check) => check.name),
+    ...config.deferredHealthChecks.map((check) => check.name),
     ...config.providerBlockedChecks.map((check) => check.name),
   ]);
   const advisoryProblems = Object.entries(problems)
@@ -161,7 +189,7 @@ export function evaluateReadinessPayload(config, payload, now = Date.now()) {
     .map(([name, problem]) => ({ name, status: problem?.status || 'unhealthy' }))
     .sort((a, b) => a.name.localeCompare(b.name));
 
-  return { failures, providerBlockers, advisoryProblems };
+  return { failures, deferredCapabilities, providerBlockers, advisoryProblems };
 }
 
 export function evaluateBuildReadinessPayload(config, payload, surface = 'main') {
@@ -231,6 +259,7 @@ async function main() {
     console.log(
       `HealthRadar24 readiness config passed `
       + `(${config.requiredHealthChecks.length} required, `
+      + `${config.deferredHealthChecks.length} deferred, `
       + `${config.providerBlockedChecks.length} provider-blocked).`,
     );
     return;
@@ -273,6 +302,12 @@ async function main() {
       + `${blocker.provider}; ${blocker.unblock}`,
     );
   }
+  for (const capability of result.deferredCapabilities) {
+    console.warn(
+      `[deferred] ${capability.name}: ${capability.status}; `
+      + `${capability.reason}; activate when ${capability.activateWhen}`,
+    );
+  }
   if (result.advisoryProblems.length > 0) {
     console.log(
       `Advisory upstream health problems: ${result.advisoryProblems.length} `
@@ -287,7 +322,9 @@ async function main() {
   }
   console.log(
     `HealthRadar24 readiness passed at ${payload.checkedAt}: `
-    + `${config.requiredHealthChecks.length} required checks are healthy.`,
+    + `platform safeguards passed; `
+    + `${config.requiredHealthChecks.length} data capabilities are currently promoted; `
+    + `${config.deferredHealthChecks.length} capabilities remain explicitly deferred.`,
   );
 }
 
