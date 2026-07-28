@@ -231,7 +231,7 @@ describe('create-checkout 200 with an unparsable body (WORLDMONITOR-XV)', () => 
     assert.equal(await checkout.startCheckout('prod_monthly'), false);
     // The graceful surface for this behavior is the pricing page; what must
     // never happen is navigating somewhere derived from the broken payload.
-    assert.deepEqual(globalThis.__xvHarness.assignedUrls, ['https://worldmonitor.app/pro']);
+    assert.deepEqual(globalThis.__xvHarness.assignedUrls, ['https://www.healthradar24.com/pro']);
 
     const report = soleReport();
     // The decisive assertion: `exception` here means the DOMException escaped
