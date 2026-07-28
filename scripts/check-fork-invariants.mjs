@@ -116,6 +116,20 @@ const checks = [
     forbidden: [],
   },
   {
+    file: 'scripts/healthradar-railway-profile.json',
+    required: [
+      '"name": "relay"',
+      '"repository": "HealthRadar24/healthradar24"',
+      '"namePrefixes"',
+      '"seed-"',
+      '"sourceConnected": false',
+      '"cronSchedule": null',
+    ],
+    forbidden: [
+      '"repository": "koala73/worldmonitor"',
+    ],
+  },
+  {
     file: 'public/.well-known/security.txt',
     required: [
       'Canonical: https://www.healthradar24.com/.well-known/security.txt',
@@ -172,6 +186,7 @@ const checks = [
     file: '.github/workflows/fork-invariants.yml',
     required: [
       'npm run fork:readiness:config',
+      'npm run fork:railway:config',
       'npm run health:governance',
     ],
     forbidden: [],
