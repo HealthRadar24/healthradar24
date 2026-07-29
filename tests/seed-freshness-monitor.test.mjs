@@ -318,6 +318,11 @@ describe('scheduled seed freshness monitor', () => {
       'the monitor must run only on a schedule or an explicit manual dispatch',
     );
     assert.equal(on.schedule[0].cron, '*/15 * * * *');
+    assert.equal(
+      parsed.jobs.monitor.if,
+      "github.event_name == 'workflow_dispatch' || github.repository != 'HealthRadar24/healthradar24'",
+      'HealthRadar scheduled runs must skip the inherited full-fleet monitor while manual diagnostics remain available',
+    );
     assert.match(workflow, /actions\/setup-node@[a-f0-9]+/);
     assert.match(workflow, /node-version:\s*['"]24['"]/);
     assert.match(workflow, /context\s*==\s*"gate"/);

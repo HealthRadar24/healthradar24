@@ -122,14 +122,20 @@ incident note.
 
 ### Merged does not mean deployed
 
-`.github/workflows/seed-freshness-monitor.yml` runs every 15 minutes on the
-default branch. Scheduled runs first require the latest `main` commit's `gate`
-status to be green; manual runs execute directly. The monitor checks public
-compact health and fails on every actionable problem, including `SEED_ERROR`,
-`STALE_SEED`, `STALE_CONTENT`, and degraded composed coverage. Statuses that
-explicitly end in `_ON_DEMAND` remain informational. It deliberately does not
-run on an ingestion push because Railway may not have deployed or executed that
-revision yet. This is the operational acceptance gate for the "merged and
+`.github/workflows/seed-freshness-monitor.yml` is scheduled every 15 minutes on
+the default branch. In the upstream repository, scheduled runs first require
+the latest `main` commit's `gate` status to be green; manual runs execute
+directly. HealthRadar intentionally skips the scheduled job because its
+capability policy keeps the inherited seed fleet deferred. Manual dispatch
+remains available for diagnostics, while the scheduled
+`HealthRadar24 Readiness` workflow is the fork's release authority.
+
+When it runs, the monitor checks public compact health and fails on every
+actionable problem, including `SEED_ERROR`, `STALE_SEED`, `STALE_CONTENT`, and
+degraded composed coverage. Statuses that explicitly end in `_ON_DEMAND` remain
+informational. It deliberately does not run on an ingestion push because
+Railway may not have deployed or executed that revision yet. For an operated
+full seed fleet, this is the operational acceptance gate for the "merged and
 green, but production data is still unhealthy" gap.
 
 Do not use `railway redeploy` to recover a bad or stale source deployment.
