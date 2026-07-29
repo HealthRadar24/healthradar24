@@ -11,6 +11,10 @@ permissions:
 
 jobs:
   monitor:
+    # HealthRadar intentionally operates only the relay while inherited seed
+    # capabilities are deferred. Keep manual diagnostics available, but do not
+    # page every 15 minutes for a full fleet this fork does not claim to run.
+    if: github.event_name == 'workflow_dispatch' || github.repository != 'HealthRadar24/healthradar24'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
