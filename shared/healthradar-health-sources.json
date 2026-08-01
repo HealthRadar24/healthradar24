@@ -1,14 +1,135 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
+  "openSource": {
+    "project": "HealthRadar24",
+    "positioning": "open_source_healthcare_and_life_science_intelligence",
+    "license": "AGPL-3.0-only",
+    "charterDoc": "docs/healthradar-open-source.md",
+    "contributionGuide": "CONTRIBUTING.md",
+    "sourceProposalTemplate": ".github/ISSUE_TEMPLATE/health_data_source.yml",
+    "upstreamRepository": "https://github.com/koala73/worldmonitor",
+    "selfHostingSupported": true
+  },
   "productBoundary": {
     "purpose": "aggregate situational awareness and research",
     "clinicalUse": "not_for_diagnosis_treatment_or_emergency_guidance",
     "personalData": "not_collected",
-    "protectedHealthInformation": "prohibited"
+    "protectedHealthInformation": "prohibited",
+    "medicalDeviceClaim": "prohibited",
+    "clinicalDecisionSupport": "prohibited"
   },
+  "domains": [
+    {
+      "id": "publicHealthSurveillance",
+      "name": "Public health surveillance",
+      "scope": "Outbreak advisories, epidemic case and death trends, vaccine-preventable disease, and immunisation coverage",
+      "primarySourceClasses": [
+        "who",
+        "ecdc",
+        "cdc",
+        "paho",
+        "national_public_health_agency"
+      ],
+      "exclusions": [
+        "patient_level_case_records",
+        "clinical_risk_scoring"
+      ]
+    },
+    {
+      "id": "environmentalHealth",
+      "name": "Environmental health",
+      "scope": "Air quality, heat, water quality, and radiation exposure treated as population health screening signals",
+      "primarySourceClasses": [
+        "openaq",
+        "waqi",
+        "who_guideline_threshold",
+        "national_environment_agency"
+      ],
+      "exclusions": [
+        "individual_exposure_assessment",
+        "clinical_exposure_guidance"
+      ]
+    },
+    {
+      "id": "pathogenGenomics",
+      "name": "Pathogen genomics",
+      "scope": "Population-level pathogen lineage and variant surveillance summaries",
+      "primarySourceClasses": [
+        "nextstrain_open_build",
+        "who_weekly_epidemiological_record",
+        "public_consortium_summary"
+      ],
+      "exclusions": [
+        "identifiable_human_genomic_data",
+        "restricted_sequence_redistribution"
+      ]
+    },
+    {
+      "id": "clinicalResearch",
+      "name": "Clinical research",
+      "scope": "Registered trial starts, status changes, and posted aggregate results",
+      "primarySourceClasses": [
+        "clinicaltrials_gov",
+        "who_ictrp",
+        "eu_ctis",
+        "isrctn"
+      ],
+      "exclusions": [
+        "participant_level_data",
+        "trial_eligibility_recommendations"
+      ]
+    },
+    {
+      "id": "regulatoryAndSafety",
+      "name": "Regulatory and safety",
+      "scope": "Approvals, recalls, safety communications, and aggregate adverse-event signal summaries",
+      "primarySourceClasses": [
+        "openfda",
+        "ema",
+        "mhra",
+        "national_regulator"
+      ],
+      "exclusions": [
+        "individual_adverse_event_reports_with_identifiers",
+        "prescribing_guidance"
+      ]
+    },
+    {
+      "id": "biomedicalLiterature",
+      "name": "Biomedical literature",
+      "scope": "Peer-reviewed publications and explicitly labelled preprints",
+      "primarySourceClasses": [
+        "europe_pmc",
+        "pubmed",
+        "medrxiv",
+        "biorxiv",
+        "journal_feed"
+      ],
+      "exclusions": [
+        "paywalled_full_text_redistribution",
+        "preprints_presented_as_peer_reviewed"
+      ]
+    },
+    {
+      "id": "healthSupplyChain",
+      "name": "Health supply chain",
+      "scope": "Drug and device shortages plus manufacturing and logistics disruption context",
+      "primarySourceClasses": [
+        "fda_shortage_database",
+        "ema_shortage_catalogue",
+        "regulator_notice",
+        "inherited_logistics_layer"
+      ],
+      "exclusions": [
+        "procurement_advice",
+        "substitution_recommendations"
+      ]
+    }
+  ],
   "capabilities": [
     {
       "id": "diseaseOutbreaks",
+      "domain": "publicHealthSurveillance",
       "status": "deferred_candidate",
       "apiRoute": "/api/health/v1/list-disease-outbreaks",
       "canonicalKey": "health:disease-outbreaks:v1",
@@ -50,6 +171,7 @@
     },
     {
       "id": "healthAirQuality",
+      "domain": "environmentalHealth",
       "status": "deferred_candidate",
       "apiRoute": "/api/health/v1/list-air-quality-alerts",
       "canonicalKey": "health:air-quality:v1",
@@ -73,6 +195,346 @@
           "credential": "WAQI_API_KEY_optional",
           "commercialTermsReview": "required_before_enablement"
         }
+      ]
+    }
+  ],
+  "roadmapCapabilities": [
+    {
+      "id": "epidemicTrends",
+      "domain": "publicHealthSurveillance",
+      "status": "roadmap_candidate",
+      "proposedApiRoute": "/api/health/v1/list-epidemic-trends",
+      "proposedCanonicalKey": "health:epidemic-trends:v1",
+      "proposedSeedMetaKey": "seed-meta:health:epidemic-trends",
+      "cadenceMinutes": 1440,
+      "maxStaleMinutes": 2880,
+      "dataClass": "public_aggregate_statistics",
+      "decisionUse": "situational_awareness_only",
+      "rationale": "Turns an outbreak advisory dot into a case and death trajectory per disease and country",
+      "sources": [
+        {
+          "id": "who-gho",
+          "name": "WHO Global Health Observatory indicator API",
+          "role": "primary_aggregate_statistics",
+          "credential": "none",
+          "commercialTermsReview": "required_before_republication_expansion"
+        },
+        {
+          "id": "owid-disease",
+          "name": "Our World in Data disease datasets",
+          "role": "harmonised_series_supplement",
+          "credential": "none",
+          "commercialTermsReview": "required"
+        },
+        {
+          "id": "cdc-socrata",
+          "name": "CDC open surveillance datasets",
+          "role": "national_surveillance_supplement",
+          "credential": "none",
+          "commercialTermsReview": "required_before_republication_expansion"
+        }
+      ],
+      "requiredPlumbing": [
+        "proto/worldmonitor/health/v1 RPC and make generate",
+        "server/worldmonitor/health handler using cachedFetchJson",
+        "server/_shared/cache-keys.ts canonical key",
+        "api/health.js canonical and seed-meta keys",
+        "api/bootstrap.js hydration",
+        "scripts/seed-epidemic-trends.mjs via runSeed",
+        "scripts/healthradar-readiness.json entry"
+      ],
+      "promotionGates": [
+        "per-item provenance with source URL and observation period",
+        "explicit revision handling for restated national counts",
+        "trend labels documented as arithmetic, not epidemiological modelling",
+        "full freshness window proven in production before cadence enablement"
+      ]
+    },
+    {
+      "id": "vaccinationCoverage",
+      "domain": "publicHealthSurveillance",
+      "status": "roadmap_candidate",
+      "proposedApiRoute": "/api/health/v1/get-vaccination-coverage",
+      "proposedCanonicalKey": "health:vaccination-coverage:v1",
+      "proposedSeedMetaKey": "seed-meta:health:vaccination-coverage",
+      "cadenceMinutes": 10080,
+      "maxStaleMinutes": 20160,
+      "dataClass": "public_aggregate_statistics",
+      "decisionUse": "situational_awareness_only",
+      "rationale": "Immunisation coverage gaps are the standing context for outbreak risk in a country",
+      "sources": [
+        {
+          "id": "who-immunization-data",
+          "name": "WHO Immunization Data portal",
+          "role": "primary_coverage_statistics",
+          "credential": "none",
+          "commercialTermsReview": "required_before_republication_expansion"
+        },
+        {
+          "id": "unicef-immunization",
+          "name": "UNICEF immunisation coverage estimates",
+          "role": "low_income_coverage_supplement",
+          "credential": "none",
+          "commercialTermsReview": "required"
+        }
+      ],
+      "requiredPlumbing": [
+        "proto/worldmonitor/health/v1 RPC and make generate",
+        "server/worldmonitor/health handler using cachedFetchJson",
+        "server/_shared/cache-keys.ts canonical key",
+        "api/health.js canonical and seed-meta keys",
+        "api/bootstrap.js hydration",
+        "scripts/seed-vaccination-coverage.mjs via runSeed",
+        "scripts/healthradar-readiness.json entry"
+      ],
+      "promotionGates": [
+        "reporting year rendered alongside every coverage value",
+        "herd-immunity thresholds attributed to their publishing body",
+        "estimate versus administrative coverage distinguished per item",
+        "full freshness window proven in production before cadence enablement"
+      ]
+    },
+    {
+      "id": "pathogenSurveillance",
+      "domain": "pathogenGenomics",
+      "status": "roadmap_candidate",
+      "proposedApiRoute": "/api/health/v1/list-pathogen-alerts",
+      "proposedCanonicalKey": "health:pathogen-surveillance:v1",
+      "proposedSeedMetaKey": "seed-meta:health:pathogen-surveillance",
+      "cadenceMinutes": 720,
+      "maxStaleMinutes": 1440,
+      "dataClass": "public_genomic_surveillance",
+      "decisionUse": "situational_awareness_only",
+      "rationale": "Lineage and variant movement is the earliest open signal ahead of an advisory",
+      "sources": [
+        {
+          "id": "nextstrain",
+          "name": "Nextstrain open builds",
+          "role": "primary_lineage_surveillance",
+          "credential": "none",
+          "commercialTermsReview": "required"
+        },
+        {
+          "id": "who-wer",
+          "name": "WHO Weekly Epidemiological Record",
+          "role": "primary_public_advisory",
+          "credential": "none",
+          "commercialTermsReview": "required_before_republication_expansion"
+        }
+      ],
+      "requiredPlumbing": [
+        "proto/worldmonitor/health/v1 RPC and make generate",
+        "server/worldmonitor/health handler using cachedFetchJson",
+        "server/_shared/cache-keys.ts canonical key",
+        "api/health.js canonical and seed-meta keys",
+        "api/bootstrap.js hydration",
+        "scripts/seed-pathogen-surveillance.mjs via runSeed",
+        "scripts/healthradar-readiness.json entry"
+      ],
+      "promotionGates": [
+        "no sequence-level redistribution beyond source terms",
+        "risk wording attributed to the publishing body or marked as unassessed",
+        "build date and dataset revision rendered per item",
+        "full freshness window proven in production before cadence enablement"
+      ]
+    },
+    {
+      "id": "clinicalTrialSignals",
+      "domain": "clinicalResearch",
+      "status": "roadmap_candidate",
+      "proposedApiRoute": "/api/health/v1/list-clinical-trial-signals",
+      "proposedCanonicalKey": "health:clinical-trials:v1",
+      "proposedSeedMetaKey": "seed-meta:health:clinical-trials",
+      "cadenceMinutes": 1440,
+      "maxStaleMinutes": 2880,
+      "dataClass": "public_registry_record",
+      "decisionUse": "research_awareness_only",
+      "rationale": "Trial registrations, phase transitions, terminations, and posted results are the life-science pipeline signal",
+      "sources": [
+        {
+          "id": "clinicaltrials-gov",
+          "name": "ClinicalTrials.gov API v2",
+          "role": "primary_trial_registry",
+          "credential": "none",
+          "commercialTermsReview": "required_before_republication_expansion"
+        },
+        {
+          "id": "who-ictrp",
+          "name": "WHO International Clinical Trials Registry Platform",
+          "role": "global_registry_supplement",
+          "credential": "none",
+          "commercialTermsReview": "required"
+        },
+        {
+          "id": "eu-ctis",
+          "name": "EU Clinical Trials Information System",
+          "role": "eu_registry_supplement",
+          "credential": "none",
+          "commercialTermsReview": "required"
+        }
+      ],
+      "requiredPlumbing": [
+        "proto/worldmonitor/health/v1 RPC and make generate",
+        "server/worldmonitor/health handler using cachedFetchJson",
+        "server/_shared/cache-keys.ts canonical key",
+        "api/health.js canonical and seed-meta keys",
+        "api/bootstrap.js hydration",
+        "scripts/seed-clinical-trials.mjs via runSeed",
+        "api/mcp.ts tool cache keys",
+        "scripts/healthradar-readiness.json entry"
+      ],
+      "promotionGates": [
+        "no participant-level fields ingested or stored",
+        "registry id, sponsor, phase, and status change date rendered per item",
+        "no eligibility, enrolment, or treatment guidance in any surface",
+        "full freshness window proven in production before cadence enablement"
+      ]
+    },
+    {
+      "id": "regulatoryActions",
+      "domain": "regulatoryAndSafety",
+      "status": "roadmap_candidate",
+      "proposedApiRoute": "/api/health/v1/list-regulatory-actions",
+      "proposedCanonicalKey": "health:regulatory-actions:v1",
+      "proposedSeedMetaKey": "seed-meta:health:regulatory-actions",
+      "cadenceMinutes": 720,
+      "maxStaleMinutes": 1440,
+      "dataClass": "public_regulatory_record",
+      "decisionUse": "situational_awareness_only",
+      "rationale": "Approvals, recalls, and safety communications move health and life-science risk faster than news coverage",
+      "sources": [
+        {
+          "id": "openfda-enforcement",
+          "name": "openFDA enforcement and recall endpoints",
+          "role": "primary_regulatory_record",
+          "credential": "none",
+          "commercialTermsReview": "required_before_republication_expansion"
+        },
+        {
+          "id": "fda-safety-communications",
+          "name": "FDA safety communications and press announcements",
+          "role": "primary_regulatory_advisory",
+          "credential": "none",
+          "commercialTermsReview": "required_before_republication_expansion"
+        },
+        {
+          "id": "ema-medicines",
+          "name": "EMA medicines and referrals updates",
+          "role": "eu_regulatory_record",
+          "credential": "none",
+          "commercialTermsReview": "required"
+        }
+      ],
+      "requiredPlumbing": [
+        "proto/worldmonitor/health/v1 RPC and make generate",
+        "server/worldmonitor/health handler using cachedFetchJson",
+        "server/_shared/cache-keys.ts canonical key",
+        "api/health.js canonical and seed-meta keys",
+        "api/bootstrap.js hydration",
+        "scripts/seed-regulatory-actions.mjs via runSeed",
+        "api/mcp.ts tool cache keys",
+        "scripts/healthradar-readiness.json entry"
+      ],
+      "promotionGates": [
+        "regulator, action class, and effective date rendered per item",
+        "recall classification quoted from the regulator, never re-derived",
+        "no prescribing, dispensing, or substitution guidance in any surface",
+        "full freshness window proven in production before cadence enablement"
+      ]
+    },
+    {
+      "id": "biomedicalLiteratureSignals",
+      "domain": "biomedicalLiterature",
+      "status": "roadmap_candidate",
+      "proposedApiRoute": "/api/health/v1/list-literature-signals",
+      "proposedCanonicalKey": "health:literature-signals:v1",
+      "proposedSeedMetaKey": "seed-meta:health:literature-signals",
+      "cadenceMinutes": 360,
+      "maxStaleMinutes": 1080,
+      "dataClass": "public_scientific_literature",
+      "decisionUse": "research_awareness_only",
+      "rationale": "Peer-reviewed and preprint volume around a pathogen, therapeutic, or exposure is a leading research signal",
+      "sources": [
+        {
+          "id": "europe-pmc",
+          "name": "Europe PMC REST API",
+          "role": "primary_literature_index",
+          "credential": "none",
+          "commercialTermsReview": "required_before_republication_expansion"
+        },
+        {
+          "id": "medrxiv",
+          "name": "medRxiv preprint API",
+          "role": "preprint_early_signal",
+          "credential": "none",
+          "commercialTermsReview": "required"
+        },
+        {
+          "id": "biorxiv",
+          "name": "bioRxiv preprint API",
+          "role": "preprint_early_signal",
+          "credential": "none",
+          "commercialTermsReview": "required"
+        }
+      ],
+      "requiredPlumbing": [
+        "proto/worldmonitor/health/v1 RPC and make generate",
+        "server/worldmonitor/health handler using cachedFetchJson",
+        "server/_shared/cache-keys.ts canonical key",
+        "api/health.js canonical and seed-meta keys",
+        "api/bootstrap.js hydration",
+        "scripts/seed-literature-signals.mjs via runSeed",
+        "scripts/healthradar-readiness.json entry"
+      ],
+      "promotionGates": [
+        "peer-review state labelled per item, preprints never implied as reviewed",
+        "abstract and metadata only, no paywalled full-text redistribution",
+        "DOI or registry id and publication date rendered per item",
+        "full freshness window proven in production before cadence enablement"
+      ]
+    },
+    {
+      "id": "medicalSupplyShortages",
+      "domain": "healthSupplyChain",
+      "status": "roadmap_candidate",
+      "proposedApiRoute": "/api/health/v1/list-supply-shortages",
+      "proposedCanonicalKey": "health:supply-shortages:v1",
+      "proposedSeedMetaKey": "seed-meta:health:supply-shortages",
+      "cadenceMinutes": 720,
+      "maxStaleMinutes": 1440,
+      "dataClass": "public_supply_notice",
+      "decisionUse": "situational_awareness_only",
+      "rationale": "Drug and device shortages connect the inherited supply-chain layers to a healthcare outcome",
+      "sources": [
+        {
+          "id": "fda-drug-shortages",
+          "name": "FDA drug shortages database",
+          "role": "primary_shortage_record",
+          "credential": "none",
+          "commercialTermsReview": "required_before_republication_expansion"
+        },
+        {
+          "id": "ema-shortages",
+          "name": "EMA shortages catalogue",
+          "role": "eu_shortage_record",
+          "credential": "none",
+          "commercialTermsReview": "required"
+        }
+      ],
+      "requiredPlumbing": [
+        "proto/worldmonitor/health/v1 RPC and make generate",
+        "server/worldmonitor/health handler using cachedFetchJson",
+        "server/_shared/cache-keys.ts canonical key",
+        "api/health.js canonical and seed-meta keys",
+        "api/bootstrap.js hydration",
+        "scripts/seed-supply-shortages.mjs via runSeed",
+        "scripts/healthradar-readiness.json entry"
+      ],
+      "promotionGates": [
+        "shortage status and resolution date quoted from the regulator",
+        "no substitution, rationing, or procurement guidance in any surface",
+        "regional applicability rendered so a national notice is not read as global",
+        "full freshness window proven in production before cadence enablement"
       ]
     }
   ]
