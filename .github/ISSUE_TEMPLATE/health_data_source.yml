@@ -1,0 +1,118 @@
+name: Healthcare / Life-Science Data Source
+description: Propose a new health, epidemiology, clinical-research, regulatory, or biomedical source
+labels: ["data-source", "healthcare"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        HealthRadar24 is an open-source healthcare and life-science intelligence
+        platform. Read the charter before filing: [docs/healthradar-open-source.md](https://github.com/HealthRadar24/healthradar24/blob/main/docs/healthradar-open-source.md).
+
+        Proposals that require patient-identifiable data, protected health
+        information, or clinical decision support are out of scope and will be
+        closed.
+
+  - type: dropdown
+    id: domain
+    attributes:
+      label: Governed domain
+      description: Which charter domain does this source belong to?
+      options:
+        - publicHealthSurveillance — outbreaks, epidemic trends, immunisation coverage
+        - environmentalHealth — air quality, heat, water, radiation exposure
+        - pathogenGenomics — lineage and variant surveillance
+        - clinicalResearch — trial registries and posted results
+        - regulatoryAndSafety — approvals, recalls, safety communications
+        - biomedicalLiterature — peer-reviewed publications and preprints
+        - healthSupplyChain — drug and device shortages, logistics disruption
+        - None of these (explain below)
+    validations:
+      required: true
+
+  - type: input
+    id: source-name
+    attributes:
+      label: Source name
+      description: Publishing organisation, as it should appear in provenance.
+      placeholder: e.g. Europe PMC, ECDC, FDA drug shortages database
+    validations:
+      required: true
+
+  - type: dropdown
+    id: role
+    attributes:
+      label: Source role
+      description: How authoritative is this source for the data it carries?
+      options:
+        - Primary — the publishing authority, registry, or direct measurement
+        - Peer-reviewed literature
+        - Preprint or other pre-review research
+        - Secondary reporting or news aggregation
+        - Geolocation or enrichment supplement
+    validations:
+      required: true
+
+  - type: input
+    id: url
+    attributes:
+      label: API or feed URL
+      description: Direct endpoint, not a landing page.
+      placeholder: https://www.ebi.ac.uk/europepmc/webservices/rest/search
+    validations:
+      required: true
+
+  - type: dropdown
+    id: credential
+    attributes:
+      label: Credential requirement
+      options:
+        - None — fully public
+        - Free API key
+        - Paid or contracted access
+    validations:
+      required: true
+
+  - type: textarea
+    id: licensing
+    attributes:
+      label: Licensing and redistribution terms
+      description: Link the terms and state what they allow. Unreviewed terms block a commercial launch.
+      placeholder: e.g. Public domain (US government work); attribution requested for...
+    validations:
+      required: true
+
+  - type: input
+    id: cadence
+    attributes:
+      label: Update cadence
+      description: How often the source itself publishes new data.
+      placeholder: e.g. hourly, daily, weekly, annual
+    validations:
+      required: true
+
+  - type: textarea
+    id: value
+    attributes:
+      label: What signal does this add?
+      description: What does it cover that the existing governed sources do not?
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: boundary
+    attributes:
+      label: Charter boundary
+      description: Confirm the proposal stays inside scope.
+      options:
+        - label: The source publishes aggregate or population-level data only — no patient identifiers or protected health information.
+          required: true
+        - label: The data is not used for diagnosis, treatment, triage, or emergency guidance.
+          required: true
+        - label: Severity or risk wording can be attributed to the publishing body, or will be labelled as an editorial classification.
+          required: true
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional notes
+      description: Rate limits, timestamp quirks, revision behaviour, coverage gaps, or geolocation caveats.
